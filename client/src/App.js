@@ -17,7 +17,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/logout" element={<Logout />} />
-
+          {/* <Route path="playlist/:id" /> */}
         </Routes>
       </Router>
     </div>

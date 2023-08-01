@@ -1,42 +1,119 @@
-.App {
-  text-align: center;
+/* global styles */
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+  background: #FFFFFF;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+:root {
+  --default-white: #f2f2f2;
+  --default-black: #1C1C1E;
+  --default-green: #04AA6D;
+  --default-red: #e35b5b;
+
+
+  --hover-white: #ddd;
+  --fullwidth: 100%;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+button {
+  transition-duration: 0.4s;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+
+/* NavBar css */
+
+.NavBar {
+  overflow: hidden;
+  background-color: #333;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  justify-content: space-between;
+}
+
+.NavBar a {
+
+  float: left;
+  color: var(--default-white);
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.NavBar a:hover {
+  background-color: var(--default-white);
+  color: black;
+}
+
+.NavBar a.active {
+  background-color: var(--default-green);
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+
+/* Forms */
+.form {
+  /* margin: 10px;
+  padding: 10px; */
+  background-color: white;
+  padding: 0px 60px;
+  border-radius: 10px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+input {
+  width: 100%;
+  max-width: 400px;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
 }
 
-.container {
-  padding: 30px 0px;
+.form-button {
+  background-color: var(--default-green); /* Green */
+  color: var(--default-white);
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border:2px solid var(--default-green);
+}
+
+.form-button:hover {
+  background-color: var(--default-white);; /* Green */
+  color: var(--default-black);
+}
+
+
+/* page */
+.page  {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: linear-gradient(145deg, var(--default-green) -10%, var(--default-black));
+  background-size: cover;
+background-position: center;
+}
+
+.submit-button {
+  width: 100%;
+  height: 50px;
+  padding: 10px;
+  border: none;
+  background-color: var(--default-green);
+  color: white;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 18px;
+  cursor: pointer;
+  margin: 15px 0px 30px 0px;
+  border:2px solid var(--default-green);
+}
+
+.submit-button:hover {
+  background-color: var(--default-white);; /* Green */
+  color: var(--default-black);
 }

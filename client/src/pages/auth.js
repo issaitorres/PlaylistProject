@@ -2,27 +2,24 @@ import { useState } from 'react'
 import axios from 'axios'
 import { useCookies } from 'react-cookie'
 import { useNavigate } from 'react-router-dom'
-
+import FormInput from '../components/FormInput'
 
 
 
 const Auth = () => {
+  const [loginData, setLoginData] = useState({
+    email: "",
+    password: ""
+  })
 
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
   const [cookies, setCookies] = useCookies(["access_token"])
   const navigate = useNavigate()
 
-
-
-  const onSubmit = async (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
 
     try {
-      const res = await axios.post("http://localhost:3500/auth", {
-        email,
-        password
-      },
+      const res = await axios.post("http://localhost:3500/auth", loginData,
       {
         withCredentials: true
       })
@@ -32,27 +29,54 @@ const Auth = () => {
       })
       window.localStorage.setItem("userID", res.data.userID)
       alert("successful login")
-
       navigate('/')
-
 
     } catch (err) {
       console.log(err)
     }
-
   }
+
+  const onChange = (e) => {
+    setLoginData({...loginData, [e.target.name]: e.target.value})
+  }
+
+  const inputs = [
+    {
+      id: 1,
+      name: "email",
+      type: "email",
+      placeholder: "Email",
+      label: "Email",
+      required: true,
+      errorMessage: "Email cannot be empty and must have valid format ex: test@gmail.com"
+    },
+    {
+      id: 2,
+      name: "password",
+      type: "password",
+      placeholder: "Password",
+      label: "Password",
+      required: true,
+      errorMessage: ""
+    }
+  ]
 
 
   return (
-    <div>
-      <form onSubmit={onSubmit}>
-        <label>email</label>
-        <input type="text" value={email} onChange={(event) => setEmail(event.target.value)}/>
-
-        <label>password</label>
-        <input type="text" value={password} onChange={(event) => setPassword(event.target.value)}/>
-      
-        <button type="submit">Login</button>
+    <div className="page">
+      <form onSubmit={handleSubmit} className="form">
+        <h1> Login</h1>
+        {inputs.map((input) => (
+          <FormInput
+            key={input.id}
+            value={loginData[input.name]}
+            onChange={onChange}
+            {...input} // pass all other key: values
+          />
+        ))}
+        <button className="submit-button">
+          Submit
+        </button>
       </form>
     </div>
   )

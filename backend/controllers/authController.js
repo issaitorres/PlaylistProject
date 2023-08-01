@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 // http://localhost:3500/auth
 // http://localhost:3500/playlists/user
-// user1 {"email": "test1@gmail.com", "password": "password"}
+// user1 {"email": "test1@gmail.com", "password": "Pass!@#4"}
 // user2 {"email": "test2@gmail.com", "password": "password"}
 
 const handleLogin = async (req, res) => {

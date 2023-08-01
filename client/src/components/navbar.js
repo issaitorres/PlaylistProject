@@ -1,6 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Link } from "react-router-dom"
+import { NavLink } from "react-router-dom"
 import { useCookies} from 'react-cookie'
 
 
@@ -10,15 +10,21 @@ const Navbar = () => {
     const navigate = useNavigate()
 
   return (
-    <div>
-        <Link to="/">Home </Link>
-        <Link to="/register">Register </Link>
+    <div className="NavBar">
+      <div>
+        <NavLink exact to="/" activeClassName="active">Home </NavLink>
+      </div>
+      <div>
         {!cookies.access_token
-            ? <Link to="/auth">Login </Link>
-
-            : <Link to="/logout">Logout </Link>
+            ? <div>
+                <NavLink exact to="/register" activeClassName="active">Register </NavLink>
+                <NavLink exact to="/auth" activeClassName="active">Login </NavLink>
+              </div>
+            : <div>
+                <NavLink exact to="/logout" activeClassName="active">Logout </NavLink>
+              </div>
         }
-        
+      </div>
     </div>
   )
 }
