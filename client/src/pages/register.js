@@ -93,6 +93,7 @@ const Register = () => {
             key={input.id}
             value={registerUserData[input.name]}
             onChange={onChange}
+            className="formInput formInput-register-login-width"
             {...input} // pass all other key: values
           />
         ))}

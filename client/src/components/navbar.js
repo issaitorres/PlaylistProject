@@ -12,16 +12,16 @@ const Navbar = () => {
   return (
     <div className="NavBar">
       <div>
-        <NavLink exact to="/" activeClassName="active">Home </NavLink>
+        <NavLink to="/" activeclassname="active">Home </NavLink>
       </div>
       <div>
         {!cookies.access_token
             ? <div>
-                <NavLink exact to="/register" activeClassName="active">Register </NavLink>
-                <NavLink exact to="/auth" activeClassName="active">Login </NavLink>
+                <NavLink to="/register" activeclassname="active">Register </NavLink>
+                <NavLink to="/auth" activeclassname="active">Login </NavLink>
               </div>
             : <div>
-                <NavLink exact to="/logout" activeClassName="active">Logout </NavLink>
+                <NavLink to="/logout" activeclassname="active">Logout </NavLink>
               </div>
         }
       </div>

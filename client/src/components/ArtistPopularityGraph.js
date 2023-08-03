@@ -29,40 +29,47 @@ const ArtistPopularityGraph = ({ frequency, graphTitle, xTitleText, YTitleText }
     const options = {
         responsive: true,
         plugins: {
-        legend: {
-            display: false,
-        },
-        title: {
-            display: true,
-            text: graphTitle,
-            font: {
-            size: 25
-            }
-        },
-        tooltip: {
-            enabled: true,
-            callbacks: {
-                // title: (context) => {
-                //     const truncateString = (str, truncateLength) => {
-                //         if( str.length <= truncateLength) {
-                //             return str
-                //         }
+            legend: {
+                display: false,
+            },
+            title: {
+                display: true,
+                text: graphTitle,
+                font: {
+                size: 25
+                }
+            },
+            subtitle: {
+                display: true,
+                text: "bro",
+                font: {
+                    size: 25
+                    }
+            },
+            tooltip: {
+                enabled: true,
+                callbacks: {
+                    // title: (context) => {
+                    //     const truncateString = (str, truncateLength) => {
+                    //         if( str.length <= truncateLength) {
+                    //             return str
+                    //         }
 
-                //         return `${str.slice(0,truncateLength)}...`
-                //     }
+                    //         return `${str.slice(0,truncateLength)}...`
+                    //     }
 
-                //     var songs = `${context[0].label}\n`
-                //     frequency[Number(context[0].label)].tracks.forEach((name) => {
-                //         songs += `\n${truncateString(name, 40)}`
-                //     })
+                    //     var songs = `${context[0].label}\n`
+                    //     frequency[Number(context[0].label)].tracks.forEach((name) => {
+                    //         songs += `\n${truncateString(name, 40)}`
+                    //     })
 
-                //     return songs
-                // },
-                // label: (context) => {
-                //     return `${context.formattedValue} ${context.formattedValue > 1 ? 'songs' : 'song'}`
-                // },
-            }
-        },
+                    //     return songs
+                    // },
+                    // label: (context) => {
+                    //     return `${context.formattedValue} ${context.formattedValue > 1 ? 'songs' : 'song'}`
+                    // },
+                }
+            },
         },
         scales: {
             x: {

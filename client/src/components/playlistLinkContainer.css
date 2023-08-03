@@ -1,0 +1,46 @@
+.playlistLinkContainer {
+    margin: 10px;
+    background-color: var(--default-gray);
+    border-radius: 10px;
+    text-align: center;
+    max-width: 250px;
+    color: black;
+}
+
+.playlistLinkContainer:hover {
+    -webkit-filter: brightness(85%);
+    -webkit-transition: all 10ms ease;
+    -moz-transition: all 10ms ease;
+    -o-transition: all 10ms ease;
+    -ms-transition: all 10ms ease;
+    transition: all 10ms ease;
+}
+
+.playlistLinkContainer img {
+    border-radius: 10px;
+    padding: 18px;
+}
+
+.playlistLinkContainer a div {
+    color: var(--default-white);
+    font-size: 18px;;
+    margin: 0px 0px 10px 0px;
+    text-decoration: none;
+    text-decoration-line: none;
+}
+
+.playlistLinkContainer a:link {
+    text-decoration: none;
+}
+
+.playlistLinkContainer a:visited {
+    text-decoration: none;
+}
+
+.playlistLinkContainer a:hover {
+    text-decoration: none;
+}
+
+.playlistLinkContainer a:active {
+    text-decoration: none;
+}

@@ -3,9 +3,6 @@ const { GenerateAccessTokenOrGetFromEnvVar } = require('./GetAccessToken')
 
 
 const getPlaylistInfo = async (playlistId) => {
-
-    // get cover image for the playlist!!
-
     const accessToken = await GenerateAccessTokenOrGetFromEnvVar()
     const playlistTrackIds = []
     const playlistArtistNameFrequency = {}

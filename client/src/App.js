@@ -5,6 +5,7 @@ import Register from './pages/register';
 import Auth from './pages/auth';
 import Logout from './pages/logout';
 import Navbar from './components/navbar';
+import Playlist from './pages/playlist';
 
 
 function App() {
@@ -17,7 +18,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/logout" element={<Logout />} />
-          {/* <Route path="playlist/:id" /> */}
+          <Route path="/playlist/:id" element={<Playlist/>} />
         </Routes>
       </Router>
     </div>

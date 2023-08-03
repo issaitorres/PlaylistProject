@@ -71,6 +71,7 @@ const Auth = () => {
             key={input.id}
             value={loginData[input.name]}
             onChange={onChange}
+            className="formInput formInput-register-login-width"
             {...input} // pass all other key: values
           />
         ))}

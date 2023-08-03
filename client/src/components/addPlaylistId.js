@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import FormInput from './FormInput'
 
 const AddPlaylistId = ({ accessToken, fetchPlaylists }) => {
   const [playlistId, setPlaylistId] = useState("")
@@ -38,12 +39,39 @@ const AddPlaylistId = ({ accessToken, fetchPlaylists }) => {
   return (
     <div>
       {accessToken 
-        ? <form onSubmit={submitPlaylistId}>
-            <label>playlistId</label>
-            <input type="text" value={playlistId} onChange={(event) => setPlaylistId(event.target.value)}/>
+        ? <div>
+            <form
+              onSubmit={submitPlaylistId}
+              // className="add-playlist-form"
+              className="add-playlist-form"
+            >
+              <h1> Submit a playlist!</h1>
+              {/* <label>playlistId</label> */}
+              {/* <input type="text" value={playlistId} onChange={(event) => setPlaylistId(event.target.value)}/> */}
+              {/* <input
+                type="text"
+                value={playlistId}
+                onChange={(event) => setPlaylistId(event.target.value)}
+                pattern="playlist\/.{22}|.{22}"
+                errorMessage=""
+              /> */}
+              <FormInput
+                key={1}
+                value={playlistId}
+                onChange={(event) => setPlaylistId(event.target.value)}
+                pattern=".*playlist\/.{22}|.{22}"
+                placeholder="Playlist URL or playlist ID"
+                className="formInput add-playlist-formInput-overrides"
+                errorMessage="Please submit playlist URL or playlist ID ex: https://open.spotify.com/playlist/3cT4tGoRr5eC3jGUZT5MTD or  3cT4tGoRr5eC3jGUZT5MTD"
+              />
 
-            <button type="submit"> submit</button>
-          </form>
+              <button
+                type="submit"
+                className="submit-button add-playlist-button-override">
+                Submit
+              </button>
+            </form>
+          </div>
         : null
       }
     </div>

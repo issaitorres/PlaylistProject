@@ -5,6 +5,7 @@ import {
   LinearScale,
   BarElement,
   Title,
+  SubTitle,
   Tooltip,
   Legend,
 } from 'chart.js';
@@ -17,6 +18,7 @@ const FrequencyBarGraph = ({ frequency, graphTitle, xTitleText, YTitleText }) =>
         LinearScale,
         BarElement,
         Title,
+        SubTitle,
         Tooltip,
         Legend
     );
@@ -31,8 +33,19 @@ const FrequencyBarGraph = ({ frequency, graphTitle, xTitleText, YTitleText }) =>
             display: true,
             text: graphTitle,
             font: {
-            size: 25
-            }
+                size: 25
+            },
+            color: "black"
+
+        },
+        subtitle: {
+            display: true,
+            text: "hover for more info.",
+            font: {
+                size: 14
+            },
+            color: "black"
+
         },
         tooltip: {
             enabled: true,
@@ -56,7 +69,9 @@ const FrequencyBarGraph = ({ frequency, graphTitle, xTitleText, YTitleText }) =>
                     text: xTitleText,
                     font: {
                         size: 20
-                    }
+                    },
+                    color: "black"
+
                 },
                 ticks: {
                     callback: function(label) {
@@ -65,17 +80,27 @@ const FrequencyBarGraph = ({ frequency, graphTitle, xTitleText, YTitleText }) =>
                             shortenXLabel.push("...")
                         }
                         return shortenXLabel
+                    },
+                    color: "black",
+                    font: {
+                        size: 12.5
                     }
-                }
+                },
             },
             y: {
                 title: {
-                display: true,
-                text: YTitleText,
-                font: {
-                    size: 20
-                }
+                    display: true,
+                    text: YTitleText,
+                    font: {
+                        size: 20
+                    },
+                    color: "black"
+
                 },
+                ticks: {
+                    color: "black"
+
+                }
             },
         },
     };

@@ -1,13 +1,15 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useCookies } from 'react-cookie'
 import FrequencyBarGraph from './FrequencyBarGraph';
 import YearsBarGraph from './YearsBarGraph';
 import ArtistPopularityGraph from './ArtistPopularityGraph';
+import GridContent from './gridContent';
+import "./playlistContainer.css"
 
 
 // const PlaylistContainer = ({ playlistId, playlistObjectId, fetchPlaylists }) => {
-  const PlaylistContainer = ({ playlist, fetchPlaylists }) => {
+  const PlaylistContainer = ({ playlist, fetchPlaylists=null }) => {
   const { 
     _id: playlistObjectId,
     playlistId, 
@@ -50,13 +52,11 @@ import ArtistPopularityGraph from './ArtistPopularityGraph';
   const convertMStoFormat = (durationInMs, keepSeconds=false) => {
     var durationInMs = Number(durationInMs)
     const seconds = Math.floor((durationInMs / 1000) % 60);
-
     const minutes = Math.floor((durationInMs / 1000 / 60) % 60);
     const hours = Math.floor((durationInMs / 1000 / 60 / 60) % 24);
 
     var res = ""
-    if(!keepSeconds) res += "about "
-
+    if(!keepSeconds) res += "~ "
     if(hours) res += `${hours} ${hours > 1 ? "hrs": "hr"} `
     if(minutes) res += `${minutes} ${minutes > 1 ? "mins": "min"} `
     if(keepSeconds && seconds) res += `${seconds} ${seconds > 1 ? "secs": "sec"} `
@@ -66,58 +66,61 @@ import ArtistPopularityGraph from './ArtistPopularityGraph';
 
   return (
     <div className="container">
-        <div>
-            <label> playlistObjectId: </label> <span>{playlistObjectId}</span>
+      <div className="flex-container">
+        <div className="sidebar">
+          <img src={playlistImage} alt="Playlist Image" height="200" widht="200"/>
         </div>
-        <div>
-            <label> playlistId: </label> <span>{playlistId}</span>
-        </div>
-        <div>
-            <label> playlistName: </label> <span>{playlistName}</span>
-        </div>
-        <div>
-            {/* <label> playlistImage: </label> <span>{playlistImage}</span> */}
-            <img src={playlistImage} alt="Playlist Image" height="300" widht="300"/>
-        </div>
+        <div className="sidebar">
+          <div>
+            <div>
+              <h2 className="playlist-title">
+                {playlistName}
+              </h2>
+            </div>
+            <div className='playlist-author'>
+              by <b>{playlistOwner}</b>
+            </div>
 
-        <div>
-            <label> playlistOwner: </label> <span>{playlistOwner}</span>
+            <div>
+              <b>{songCount}</b> tracks by <b>{artistCount}</b> artists
+            </div>
+            <div>
+              <label> {`Top Artist${topArtist.length > 1 ? 's' : ''}:`} </label> <span><b>{topArtist.join(" & ")}</b></span>
+            </div>
+            <div>
+              <label> {`Top Genre${topGenre.length > 1 ? 's' : ''}:`} </label> <span><b>{topGenre.join(" & ")}</b></span>
+            </div>
+            <div>
+              <label> {`Top Year${topYear.length > 1 ? 's' : ''}:`} </label> <span><b>{topYear.join(" & ")}</b></span>
+            </div>
+            <div>
+              <label> Total Duration: </label> <span><b>{convertMStoFormat(playlistDuration)}</b></span>
+            </div>
+            <div>
+                <label> Avg. Track length: </label> <span><b>{convertMStoFormat(averageTrackDuration)}</b></span>
+            </div>
+          </div>
         </div>
-        <div>
-            <label> songCount: </label> <span>{songCount}</span>
-        </div>
-        <div>
-            <label> artistCount: </label> <span>{artistCount}</span>
-        </div>
-        {/* still need to account for multiple topyears, topgenres, topartists */}
-        <div>
-            <label> topArtist: </label> <span>{topArtist.join(" & ")}</span>
-        </div>        
-        <div>
-            <label> topGenre: </label> <span>{topGenre.join(" & ")}</span>
-        </div>
-        <div>
-            <label> topYear: </label> <span>{topYear.join(" & ")}</span>
-        </div>
-        <div>
-            <label> playlistDuration: </label> <span>{convertMStoFormat(playlistDuration)}</span>
-        </div>
-        <div>
-            <label> averageTrackDuration: </label> <span>{convertMStoFormat(averageTrackDuration)}</span>
-        </div>
-        <div>
-            <label> shortestTrack name: </label> <span>{shortestTrack.name}</span>
-            <label> shortestTrack duration: </label> <span>{convertMStoFormat(shortestTrack.duration, true)}</span>
-        </div>
-        <div>
-            <label> longestTrack name: </label> <span>{longestTrack.name}</span>
-            <label> longestTrack duration: </label> <span>{convertMStoFormat(longestTrack.duration, true)}</span>
-        </div>
-        <div>
-          <button onClick={() => removePlaylist(playlistObjectId)}>
-            Remove
-          </button>
-        </div>
+      </div>
+
+      <div>
+          <label> shortestTrack name: </label> <span>{shortestTrack.name}</span>
+          <label> shortestTrack duration: </label> <span>{convertMStoFormat(shortestTrack.duration, true)}</span>
+      </div>
+      <div>
+          <label> longestTrack name: </label> <span>{longestTrack.name}</span>
+          <label> longestTrack duration: </label> <span>{convertMStoFormat(longestTrack.duration, true)}</span>
+      </div>
+      <div>
+        <button onClick={() => removePlaylist(playlistObjectId)}>
+          Remove
+        </button>
+      </div>
+
+      <div className="graph-container">
+        <h2>
+          Artist Information
+        </h2>
         {artistFrequency ? 
                 <FrequencyBarGraph
                 frequency={artistFrequency}
@@ -127,6 +130,19 @@ import ArtistPopularityGraph from './ArtistPopularityGraph';
               />
               : "spinner"
         }
+        <h3>
+          More Details
+        </h3>
+        <p>
+          These are the most common artists from your playlist. Below you can find more infromation
+        </p>
+        <GridContent
+          frequency={artistFrequency}
+          headers={["Artists", "# of songs", "songs"]}
+        />
+
+      </div>
+
 
         {genreFrequency ? 
                   <FrequencyBarGraph
@@ -157,6 +173,12 @@ import ArtistPopularityGraph from './ArtistPopularityGraph';
               />
               : "spinner"
         }
+                <h3>
+          More Details
+        </h3>
+        <p>
+          Artist Popularity is calculated by the Spotify Algorithm
+        </p>
 
     </div>
   )

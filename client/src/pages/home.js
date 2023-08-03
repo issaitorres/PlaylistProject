@@ -3,6 +3,7 @@ import { useCookies } from 'react-cookie'
 import axios from 'axios'
 import PlaylistContainer from '../components/playlistContainer'
 import AddPlaylistId from '../components/addPlaylistId'
+import PlaylistLinkContainer from '../components/playlistLinkContainer'
 
 
 const Home = () => {
@@ -54,6 +55,8 @@ const Home = () => {
   }, [])
 
   useEffect(()=> {
+    // need to figure out how to keep state between pages!
+    // so we aren't calling to fetch playlists when the state never changed
     if(cookies.access_token && userID) {
       fetchPlaylists()
     }
@@ -70,15 +73,20 @@ const Home = () => {
             ? <div>
                 Add a playlist to see info here!
               </div>
-            : <div>
-              { playlists.map((playlist) => {
+            : <div className="playlistLinksWrapper">
+              <h1> Your Playlists</h1>
+              <div className="playlistLinksContainer">
+                {playlists.map((playlist, index) => (
+                  <PlaylistLinkContainer
+                    key={index}
+                    playlist={playlist}
+                  />
+                ))}
+              </div>
+              {/* { playlists.map((playlist) => {
                   return (
                     <div key={playlist._id}>
-                      {/* <PlaylistContainer 
-                        playlistId={playlist.playlistId}
-                        playlistObjectId={playlist._id}
-                        fetchPlaylists={fetchPlaylists}
-                      /> */}
+
                       <PlaylistContainer 
                         playlist={playlist}
                         fetchPlaylists={fetchPlaylists}
@@ -86,7 +94,7 @@ const Home = () => {
                     </div>
                   )
                 })
-              }
+              } */}
               </div> 
             )
       }
