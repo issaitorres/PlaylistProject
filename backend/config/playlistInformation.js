@@ -5,10 +5,9 @@ const { GenerateAccessTokenOrGetFromEnvVar } = require('./GetAccessToken')
 const getPlaylistInfo = async (playlistId) => {
     const accessToken = await GenerateAccessTokenOrGetFromEnvVar()
     const playlistTrackIds = []
-    const playlistArtistNameFrequency = {}
+    // const playlistArtistNameFrequency = {}
     const playlistAlbumReleaseYearFrequency = {}
     const playlistArtistIds = new Set()
-    // var spotify_tracks_url = `https://api.spotify.com/v1/playlists/${playlistId}/tracks`
     var spotify_tracks_url = `https://api.spotify.com/v1/playlists/${playlistId}`
 
     var playlistInfo = {}
@@ -20,6 +19,7 @@ const getPlaylistInfo = async (playlistId) => {
     var playlistImage
     var itemsPath
     var nextPath
+    var artistSongsInfo = {}
 
     var loop = true
     while(loop) {
@@ -43,6 +43,7 @@ const getPlaylistInfo = async (playlistId) => {
         }
 
         for(const [position, itemObject] of Object.entries(itemsPath)) {
+            const track = itemObject.track
             const trackId = itemObject.track.id
             const trackArtists = itemObject.track.artists
             playlistTrackIds.push(trackId)
@@ -60,7 +61,13 @@ const getPlaylistInfo = async (playlistId) => {
 
             for(const [position, artistObject] of Object.entries(trackArtists)) {
                 playlistArtistIds.add(artistObject.id)
-                playlistArtistNameFrequency[artistObject.name] = (playlistArtistNameFrequency[artistObject.name] + 1) || 1
+
+                if (artistSongsInfo[artistObject.id]){
+                    artistSongsInfo[artistObject.id]["songCount"] += 1
+                    artistSongsInfo[artistObject.id]["songs"].push(track.name)
+                } else {
+                    artistSongsInfo[artistObject.id] = {"artistName": artistObject.name, "songCount": 1, "songs": [track.name]}
+                }
             }
         }
 
@@ -83,8 +90,7 @@ const getPlaylistInfo = async (playlistId) => {
     // playlistInfo["yearFrequency"] = groupObjectValuesByFrequency(playlistAlbumReleaseYearFrequency)
     playlistInfo["yearFrequency"] = playlistAlbumReleaseYearFrequency
     playlistInfo["topYear"] = groupTopYearsByTrackcount(playlistInfo["yearFrequency"])
-    playlistInfo["artistFrequency"] = groupObjectValuesByFrequency(playlistArtistNameFrequency)
-    playlistInfo["topArtist"] = playlistInfo["artistFrequency"][Math.max(...Object.keys(playlistInfo["artistFrequency"]))]
+    playlistInfo["topArtist"] = groupTopItemByType(artistSongsInfo, "songCount", "artistName")
     playlistInfo["songCount"] = songCount
     playlistInfo["playlistName"] = playlistName
     playlistInfo["playlistOwner"] = playlistOwner
@@ -94,7 +100,7 @@ const getPlaylistInfo = async (playlistId) => {
     playlistInfo["topGenre"] = playlistInfo["genreFrequency"][Math.max(...Object.keys(playlistInfo["genreFrequency"]))]
     playlistInfo["artistPopularity"] = playlistArtistInfo.artistPopularity
     playlistInfo["artistCount"] = playlistArtistIds.size
-
+    playlistInfo["artistSongsInfo"] = artistSongsInfo
     return playlistInfo
 }
 
@@ -222,6 +228,21 @@ const groupTopYearsByTrackcount = (yearFrequency) => {
     }
 
     return topYears
+}
+
+const groupTopItemByType = (data, sortType, itemType) => {
+    var largestValue = 0
+    var topItems = []
+    for([key, value] of Object.entries(data)) {
+        if(value[sortType] > largestValue){
+            topItems = []
+            largestValue = value[sortType]
+            topItems.push(value[itemType])
+        } else if (value[sortType] == largestValue) {
+            topItems.push(value[itemType])
+        }
+    }
+    return topItems
 }
 
 module.exports = { getPlaylistInfo }

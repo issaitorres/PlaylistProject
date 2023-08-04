@@ -43,10 +43,10 @@ const addPlaylist = async (req, res) => {
             averageTrackDuration: playlistInfo.averageDuration,
             shortestTrack: playlistInfo.shortestDurationandName,
             longestTrack: playlistInfo.longestDurationandName,
-            artistFrequency: playlistInfo.artistFrequency,
             genreFrequency: playlistInfo.genreFrequency,
             yearFrequency: playlistInfo.yearFrequency,
-            artistPopularity: playlistInfo.artistPopularity
+            artistPopularity: playlistInfo.artistPopularity,
+            artistSongsInfo: playlistInfo.artistSongsInfo
         })
 
         addPlaylistObjectIdToUserPlaylistObjectIds(mongoUserId, playlistObject._id)

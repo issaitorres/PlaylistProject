@@ -34,12 +34,6 @@ const playlistSchema = new mongoose.Schema({
             type: String
         }]
     },
-    artistFrequency: {
-        type: Map,
-        of: [{
-            type: String
-        }]
-    },
     // yearFrequency: {
     //     type: Map,
     //     of: [{
@@ -58,6 +52,13 @@ const playlistSchema = new mongoose.Schema({
         type: Map,
         of: String
     }],
+    artistSongsInfo: {
+        type: Map,
+        of: {
+            type: Map,
+            of: mongoose.Schema.Types.Mixed
+        }
+    }
 })
 
 const Playlist = mongoose.model('Playlist', playlistSchema)

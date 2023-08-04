@@ -77,7 +77,14 @@
 }
 
 .grid-header {
-  font-size: 20px;;
+  font-size: 20px;
+  position: sticky;
+  top: 0;
+  background-color: var(--default-green);
+}
+
+.header-toggle-sort {
+  cursor: pointer;
 }
 
 .grid-item {

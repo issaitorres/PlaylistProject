@@ -3,6 +3,7 @@ import axios from 'axios'
 import { useCookies } from 'react-cookie'
 import FrequencyBarGraph from './FrequencyBarGraph';
 import YearsBarGraph from './YearsBarGraph';
+import ArtistBarGraph from './artistBarGraph';
 import ArtistPopularityGraph from './ArtistPopularityGraph';
 import GridContent from './gridContent';
 import "./playlistContainer.css"
@@ -25,10 +26,10 @@ import "./playlistContainer.css"
     averageTrackDuration,
     shortestTrack,
     longestTrack,
-    artistFrequency,
     genreFrequency,
     yearFrequency,
-    artistPopularity
+    artistPopularity,
+    artistSongsInfo
    } = playlist
 
   const [cookies, setCookies] = useCookies(["access_token"])
@@ -121,38 +122,30 @@ import "./playlistContainer.css"
         <h2>
           Artist Information
         </h2>
-        {artistFrequency ? 
+        {artistSongsInfo ?
+          <ArtistBarGraph
+            artistData={artistSongsInfo}
+            graphTitle={'Most common artists'}
+            xAxisTitle={'Artist'}
+            yAxisTitle={'# of songs'}
+          />
+          : "spinner"
+        }
+        <GridContent
+          data={artistSongsInfo}
+          headers={["Artist", "# of songs", "Songs"]}
+        />
+      </div>
+
+      {genreFrequency ?
                 <FrequencyBarGraph
-                frequency={artistFrequency}
-                graphTitle={'Most common artists'}
-                xTitleText={'Artist'}
+                frequency={genreFrequency}
+                graphTitle={'Most common genres'}
+                xTitleText={'Genre'}
                 YTitleText={'# of songs'}
               />
               : "spinner"
-        }
-        <h3>
-          More Details
-        </h3>
-        <p>
-          These are the most common artists from your playlist. Below you can find more infromation
-        </p>
-        <GridContent
-          frequency={artistFrequency}
-          headers={["Artists", "# of songs", "songs"]}
-        />
-
-      </div>
-
-
-        {genreFrequency ? 
-                  <FrequencyBarGraph
-                  frequency={genreFrequency}
-                  graphTitle={'Most common genres'}
-                  xTitleText={'Genre'}
-                  YTitleText={'# of songs'}
-                />
-                : "spinner"
-        }
+      }
 
 {/* update to the new playlist model where we can display the track names! */}
         {yearFrequency ? 
@@ -173,7 +166,7 @@ import "./playlistContainer.css"
               />
               : "spinner"
         }
-                <h3>
+        <h3>
           More Details
         </h3>
         <p>
