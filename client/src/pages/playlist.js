@@ -9,8 +9,7 @@ const Playlist = () => {
   const location = useLocation();
 
   const playlist = location?.state?.playlist
-  console.log("\n here is playlist")
-  console.log(playlist)
+
   return (
     <div>
       {playlist 

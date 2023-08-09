@@ -1,81 +1,134 @@
 
+
 import React, { useState, useEffect} from 'react'
 
-const GridContent = ({ data, headers}) => {
-
-    const [frequencyArray, setFrequencyArray] = useState([])
-    const [frequencyArrayToggle, setFrequencyArrayToggle] = useState(true)
-    const [frequencyArray2ndToggle, setFrequencyArray2ndToggle] = useState(true)
+const GridContent = ({ data, headers, columnTypes, columnSortable, columnValues, initialSort}) => {
+    const [dataArray, setDataArray] = useState([])
+    const [columnOneToggle, setColumnOneToggle] = useState(true)
+    const [columnTwoToggle, setColumnTwoToggle] = useState(true)
+    const [columnThreeToggle, setColumnThreeToggle] = useState(true)
     const [headerColumn1, headerColumn2, headerColumn3] = headers
+    const [colOneType, colTwoType, colThreeType] = columnTypes
+    const [colOneSort, colTwoSort, colThreeSort] = columnSortable
+    const [colOneVal, colTwoVal, colThreeVal] = columnValues
+    const [initialColValSort, initialType] = initialSort
 
-    // alphabetical
-    const gridHeaderColumn1OrderToggle = () => {
-        if(frequencyArray2ndToggle) {
-            setFrequencyArray([...frequencyArray].sort((a,b) => a.key < b.key ? -1 : 1))
-        } else {
-            setFrequencyArray([...frequencyArray].sort((a,b) => a.key < b.key ? 1 : -1))
-        }
-        setFrequencyArray2ndToggle(!frequencyArray2ndToggle)
+
+    const gridHeaderColOneOrderToggle = () => {
+        const sorted = determineColTypeAndSort(colOneType, dataArray, columnOneToggle, "colOneValue")
+        setDataArray(sorted)
+        setColumnOneToggle(!columnOneToggle)
     }
 
-    // numbers
-    const gridHeaderColumn2OrderToggle = () => {
-        if(frequencyArrayToggle) {
-            setFrequencyArray([...frequencyArray].sort((a, b) => b.value - a.value))
-        } else {
-            setFrequencyArray([...frequencyArray].sort((a, b) => a.value - b.value))
-        }
-        setFrequencyArrayToggle(!frequencyArrayToggle)
+    const gridHeaderColTwoOrderToggle = () => {
+        const sorted = determineColTypeAndSort(colTwoType, dataArray, columnTwoToggle, "colTwoValue")
+        setDataArray(sorted)
+        setColumnTwoToggle(!columnTwoToggle)
     }
+
+    const gridHeaderColThreeOrderToggle = () => {
+        const sorted = determineColTypeAndSort(colThreeType, dataArray, columnThreeToggle, "colThreeValue")
+        setDataArray(sorted)
+        setColumnThreeToggle(!columnThreeToggle)
+    }
+
+    const determineColTypeAndSort = (colType, dataArray, columnToggle, colVal) => {
+        if(colType == "string") {
+            return sortAlphabetically(dataArray, columnToggle, colVal)
+        } else if (colType == "number") {
+            return sortNumerically(dataArray, columnToggle, colVal)
+        } else { //array
+            return null
+        }
+    }
+
+    const sortAlphabetically = (dataArray, toggle, colVal) => {
+        const val = toggle ? -1 : 1
+        return ([...dataArray].sort((a,b) => a[colVal] < b[colVal] ? val * -1 : val * 1))
+    }
+
+    const sortNumerically = (dataArray, toggle, colVal) => {
+        const val = toggle ? -1 : 1
+        return ([...dataArray].sort((a, b) => val * b[colVal] - val * a[colVal]))
+    }
+
 
     useEffect(() => {
-        var newFrequencyArray = []
-    
-        Object.values(data).map((info) => (
-            newFrequencyArray.push({
-                key: info.artistName,
-                value: Number(info.songCount),
-                songs: info.songs
+        var initialDataArray = []
+        for (let [key, value] of Object.entries(data)) {
+            initialDataArray.push({
+                colOneValue: colOneVal =="useKey"
+                    ? key
+                    : typeof(value[colOneVal]) == Number
+                        ?  Number(value[colOneVal])
+                        : value[colOneVal],
+                colTwoValue: colTwoVal =="useKey"
+                    ? key
+                    : typeof(value[colTwoVal]) == Number
+                        ?  Number(value[colTwoVal])
+                        : value[colTwoVal],
+                colThreeValue: colThreeVal =="useKey"
+                    ? key
+                    : typeof(value[colThreeVal]) == Number
+                        ?  Number(value[colThreeVal])
+                        : value[colThreeVal],
             })
-        ))
+        }
 
-        newFrequencyArray.sort((a, b) => b.value - a.value)
-        setFrequencyArray(newFrequencyArray)
+        if (initialType == "Number") {
+            initialDataArray = sortNumerically(initialDataArray, false, initialColValSort)
+        } else {
+            initialDataArray = sortAlphabetically(initialDataArray, false, initialColValSort)
+        }
+
+        setDataArray(initialDataArray)
     }, [data])
 
   return (
     <>
         <div className="grid-container">
-            <div className="grid-header header-toggle-sort" onClick={() => gridHeaderColumn1OrderToggle()}>
+            <div
+                className={`grid-header ${colOneSort ? "header-toggle-sort ": null }`}
+                onClick={colOneSort ? () => gridHeaderColOneOrderToggle() : null}
+            >
             <b>
                 {headerColumn1}
             </b>
             </div>
-            <div className="grid-header header-toggle-sort" onClick={() => gridHeaderColumn2OrderToggle()}>
+            <div
+                className={`grid-header ${colTwoSort ? "header-toggle-sort ": null }`}
+                onClick={colTwoSort ? () => gridHeaderColTwoOrderToggle() : null}
+            >
             <b>
                 {headerColumn2}
             </b>
             </div>
-            <div className="grid-header">
+            <div
+                className={`grid-header ${colThreeSort ? "header-toggle-sort ": null }`}
+                onClick={colThreeSort ? () => gridHeaderColThreeOrderToggle() : null}
+            >
             <b>
                 {headerColumn3}
             </b>
             </div>
-            {frequencyArray.map((info) => (
+            {dataArray.map((info) => (
                 <>
                     <div className="grid-item">
-                        {info.key}
+                        {info.colOneValue}
                     </div>
                     <div className="grid-item">
-                        {info.value}
+                        {info.colTwoValue}
                     </div>
                     <div className="grid-item">
                         <ul>
-                        {info.songs.map((song) => (
-                            <li>
-                                {song}
-                            </li>
-                        ))}
+                            {Array.isArray(info.colThreeValue)
+                                ? info.colThreeValue.map((val) => (
+                                    <li>
+                                        {val}
+                                    </li>
+                                ))
+                                : info.colThreeValue
+                            }
                         </ul>
                     </div>
                 </>

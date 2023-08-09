@@ -4,111 +4,140 @@ const { GenerateAccessTokenOrGetFromEnvVar } = require('./GetAccessToken')
 
 const getPlaylistInfo = async (playlistId) => {
     const accessToken = await GenerateAccessTokenOrGetFromEnvVar()
-    const playlistTrackIds = []
-    // const playlistArtistNameFrequency = {}
-    const playlistAlbumReleaseYearFrequency = {}
+    var spotify_playlists_endpoint = `https://api.spotify.com/v1/playlists/${playlistId}`
+    var trackTable = {}
     const playlistArtistIds = new Set()
-    var spotify_tracks_url = `https://api.spotify.com/v1/playlists/${playlistId}`
-
+    const playlistAlbumIds = new Set()
     var playlistInfo = {}
-    var songCount = 0
-    var topArtist 
-    var playlistArtistInfo
+    var items
+    var next
     var playlistName
     var playlistOwner
     var playlistImage
-    var itemsPath
-    var nextPath
-    var artistSongsInfo = {}
 
+    var playlistPosition = 1
     var loop = true
     while(loop) {
-        const res = await axios.get(spotify_tracks_url, {
+        const res = await axios.get(spotify_playlists_endpoint, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }
         })
 
-        if(spotify_tracks_url.includes('/tracks')){
-            itemsPath = res.data.items
-            nextPath = res.data.next
+        if(spotify_playlists_endpoint.includes('/tracks')){
+            items = res.data.items
+            next = res.data.next
         } else {
-            // this should only run once - additional track info is found in endpoint which contains /tracks
-            // but we are coming from /playlistid
-            itemsPath = res.data.tracks.items
-            nextPath = res.data.tracks.next
-            playlistName = res.data.name
+            items = res.data.tracks.items
+            next = res.data.tracks.next
+            playlistName =  res.data.name
             playlistOwner = res.data.owner.display_name
             playlistImage = res.data.images[0]?.url || null
         }
 
-        for(const [position, itemObject] of Object.entries(itemsPath)) {
+        for(const [position, itemObject] of Object.entries(items)) {
+            var trackInfo = {}
             const track = itemObject.track
-            const trackId = itemObject.track.id
-            const trackArtists = itemObject.track.artists
-            playlistTrackIds.push(trackId)
-
-            const releaseYear = new Date(itemObject.track.album.release_date).getFullYear()
-            // playlistAlbumReleaseYearFrequency[releaseYear] = (playlistAlbumReleaseYearFrequency[releaseYear] + 1) || 1
-            if(playlistAlbumReleaseYearFrequency[releaseYear]) {
-                playlistAlbumReleaseYearFrequency[releaseYear]["trackCount"] += 1
-                playlistAlbumReleaseYearFrequency[releaseYear]["tracks"].push(itemObject.track.name)
-            } else {
-                playlistAlbumReleaseYearFrequency[releaseYear] = {"trackCount": 1}
-                playlistAlbumReleaseYearFrequency[releaseYear]["tracks"] = [itemObject.track.name]
-            }
-
-
-            for(const [position, artistObject] of Object.entries(trackArtists)) {
-                playlistArtistIds.add(artistObject.id)
-
-                if (artistSongsInfo[artistObject.id]){
-                    artistSongsInfo[artistObject.id]["songCount"] += 1
-                    artistSongsInfo[artistObject.id]["songs"].push(track.name)
-                } else {
-                    artistSongsInfo[artistObject.id] = {"artistName": artistObject.name, "songCount": 1, "songs": [track.name]}
+            var multipleArtists = {}
+            for(let artist of track.artists) {
+                multipleArtists[artist.id] = {
+                    "name": artist.name,
+                    "id": artist.id
                 }
             }
+
+            trackInfo["playlistPosition"] = playlistPosition
+            trackInfo["trackId"] = track.id
+            trackInfo["trackArtists"] = multipleArtists
+            trackInfo["trackDuration"] = track.duration_ms
+            trackInfo["trackExplicit"] = track.explicit
+            trackInfo["trackName"] = track.name
+            trackInfo["trackPopularity"] = track.popularity
+            trackInfo["trackPreview"] = track.preview_url
+            trackInfo["album"] = {
+                "albumId": track.album.id,
+                "albumName": track.album.name,
+                "albumReleaseYear": new Date(track.album.release_date).getFullYear(),
+                "albumPopularity": track.album.popularity,
+                "albumImage": track.album.images[0].url
+            }
+
+            // populate artistIds and albumIds
+            track.artists.map((artist) => playlistArtistIds.add(artist.id))
+            playlistAlbumIds.add(track.album.id)
+
+            playlistPosition += 1
+            trackTable[track.id] = trackInfo
         }
 
-        songCount += itemsPath.length
-
-        if(nextPath == null) {
+        if(next == null) {
             loop = false
         } else {
-            spotify_tracks_url = nextPath
+            spotify_playlists_endpoint = next
         }
-
     }
 
+    // get BPMs and merge into trackTable
+    //  - could get other attributes like energy, danceability, time_signature
+    const trackIds = Object.keys(trackTable)
+    var audioFeatures = await getAudioFeatures(accessToken, trackIds)
+    for (let [trackId, trackInfo] of Object.entries(trackTable)) {
+        trackInfo["trackTempo"] = audioFeatures[trackId].tempo
+    }
 
+    // get artist data and merge into trackTable
+    var artistInfo = await getArtistInfo(accessToken, playlistArtistIds)
+    for (let [trackId, trackInfo] of Object.entries(trackTable)) {
+        for(let artistId of Object.keys(trackInfo.trackArtists)) {
+            trackInfo.trackArtists[artistId]["artistPopularity"] = artistInfo[artistId].artistPopularity
+            trackInfo.trackArtists[artistId]["artistGenres"] = artistInfo[artistId].artistGenres
+        }
+    }
 
+    // get album data and merge data into trackTable
+    var albumInfo = await getAlbumPopularity(accessToken, playlistAlbumIds)
+    for (let [trackId, trackInfo] of Object.entries(trackTable)) {
+        trackInfo.album["albumPopularity"] = albumInfo[trackInfo.album.albumId].albumPopularity
+    }
 
-    playlistInfo = await getPlaylistDurationInfo(accessToken, playlistTrackIds)
-    playlistArtistInfo = await getArtistGenres(accessToken, playlistArtistIds)
-
-    // playlistInfo["yearFrequency"] = groupObjectValuesByFrequency(playlistAlbumReleaseYearFrequency)
-    playlistInfo["yearFrequency"] = playlistAlbumReleaseYearFrequency
-    playlistInfo["topYear"] = groupTopYearsByTrackcount(playlistInfo["yearFrequency"])
-    playlistInfo["topArtist"] = groupTopItemByType(artistSongsInfo, "songCount", "artistName")
-    playlistInfo["songCount"] = songCount
     playlistInfo["playlistName"] = playlistName
     playlistInfo["playlistOwner"] = playlistOwner
     playlistInfo["playlistImage"] = playlistImage
+    playlistInfo["trackTable"] = trackTable
 
-    playlistInfo["genreFrequency"] = playlistArtistInfo.genreFrequency
-    playlistInfo["topGenre"] = playlistInfo["genreFrequency"][Math.max(...Object.keys(playlistInfo["genreFrequency"]))]
-    playlistInfo["artistPopularity"] = playlistArtistInfo.artistPopularity
-    playlistInfo["artistCount"] = playlistArtistIds.size
-    playlistInfo["artistSongsInfo"] = artistSongsInfo
     return playlistInfo
 }
 
-const getArtistGenres = async (accessToken, playlistArtistIds) => {
+
+
+const getAlbumPopularity = async (accessToken, playlistAlbumIds) => {
+    const albumIdsArray = Array.from(playlistAlbumIds);
+    const maxIds = 20
+    var albumInfo = {}
+
+    for(let i = 0; i < albumIdsArray.length; i += maxIds) {
+        var upperLimit = ((i + maxIds) > albumIdsArray.length) ? albumIdsArray.length : (i + maxIds)
+        var albumIds = albumIdsArray.slice(i,upperLimit).join(",")
+        const spotify_multiple_albums_url = `https://api.spotify.com/v1/albums?ids=${albumIds}`
+
+        const multipleAlbumsRes = await axios.get(spotify_multiple_albums_url, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+
+        for (let albumObject of multipleAlbumsRes.data.albums) {
+            var albumGather = {}
+            albumGather["albumPopularity"] = albumObject.popularity
+            albumInfo[albumObject.id] = albumGather
+        }
+    }
+    return albumInfo
+}
+
+const getArtistInfo = async (accessToken, playlistArtistIds) => {
     const artistIdsArray = Array.from(playlistArtistIds);
     const maxIds = 50
-    const playlistArtistGenreFrequency = {}
-    const playlistArtistPopularity = []
     var playlistArtistInfo = {}
 
     for(let i = 0; i < artistIdsArray.length; i += maxIds) {
@@ -123,126 +152,39 @@ const getArtistGenres = async (accessToken, playlistArtistIds) => {
         })
 
         for (let artistObject of multipleArtistsRes.data.artists) {
-            playlistArtistPopularity.push({
-                "id": artistObject.id,
+            playlistArtistInfo[artistObject.id] = {
+                "artistId": artistObject.id,
                 "artistName": artistObject.name,
-                "popularity": artistObject.popularity
-            })
-
-            for(const genre of artistObject.genres) {
-                playlistArtistGenreFrequency[genre] = (playlistArtistGenreFrequency[genre] + 1) || 1
+                "artistPopularity": artistObject.popularity,
+                "artistGenres": artistObject.genres
             }
         }
-
     }
-
-    const playlistArtistGenresGroupedByFrequency = groupObjectValuesByFrequency(playlistArtistGenreFrequency)
-    playlistArtistInfo["genreFrequency"] = playlistArtistGenresGroupedByFrequency
-    playlistArtistInfo["artistPopularity"] = playlistArtistPopularity
     return playlistArtistInfo
 }
 
+const getAudioFeatures = async (accessToken, trackIds) => {
+    const maxIds = 100
+    var tracksIdsAndBPM = {}
 
-const getPlaylistDurationInfo = async (accessToken, playlistTrackIds) => {
-    const maxIds = 50 //max is 50 ids at a time!
-    var totalDuration = 0 // milliseconds
-    let playlistDurationInfo = {}
-    let shortestDuration = {
-        "name": "",
-        "duration": -1
-    }
-    let longestDuration = {
-        "name": "",
-        "duration": -1
-    }
-
-    for(let i = 0; i < playlistTrackIds.length; i += maxIds) {
-        var upperLimit = ((i + maxIds) > playlistTrackIds.length) ? playlistTrackIds.length : (i + maxIds)
-        var tracksIds = playlistTrackIds.slice(i, upperLimit).join(",")
-        const spotify_multiple_tracks_url = `https://api.spotify.com/v1/tracks?ids=${tracksIds}`
-    
-        const multipleTracksRes = await axios.get(spotify_multiple_tracks_url, {
+    for(let i = 0; i < trackIds.length; i += maxIds) {
+        var upperLimit = ((i + maxIds) > trackIds.length) ? trackIds.length : (i + maxIds)
+        var maxTrackIds = trackIds.slice(i,upperLimit).join(",")
+        var spotify_audio_features_endpoint = `https://api.spotify.com/v1/audio-features?ids=${maxTrackIds}`
+        const audioFeaturesResponse = await axios.get(spotify_audio_features_endpoint, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }
         })
-    
-        for (let trackInfo of multipleTracksRes.data.tracks) {
-            totalDuration += trackInfo.duration_ms
 
-            if (shortestDuration.duration == -1) {
-                shortestDuration["name"] = trackInfo.name
-                shortestDuration["duration"] = trackInfo.duration_ms
-            } else {
-                if(shortestDuration.duration > trackInfo.duration_ms) {
-                    shortestDuration["name"] = trackInfo.name
-                    shortestDuration["duration"] = trackInfo.duration_ms
-                }
-            }
-
-            if (longestDuration.duration == -1) {
-                longestDuration["name"] = trackInfo.name
-                longestDuration["duration"] = trackInfo.duration_ms
-            } else {
-                if(longestDuration.duration < trackInfo.duration_ms) {
-                    longestDuration["name"] = trackInfo.name
-                    longestDuration["duration"] = trackInfo.duration_ms
-                }
+        for (let audioFeatures of audioFeaturesResponse.data.audio_features) {
+            tracksIdsAndBPM[audioFeatures.id] = {
+                "trackId": audioFeatures.id,
+                "tempo": audioFeatures.tempo
             }
         }
-
     }
-
-    playlistDurationInfo["totalDuration"] = totalDuration
-    playlistDurationInfo["averageDuration"] = totalDuration / playlistTrackIds.length
-    playlistDurationInfo["shortestDurationandName"] = shortestDuration
-    playlistDurationInfo["longestDurationandName"] = longestDuration
-    return playlistDurationInfo
-}
-
-
-const groupObjectValuesByFrequency = (object) => {
-    const result = {}
-    for (let [key, value] of Object.entries(object)) {
-        if(result[value] != undefined) {
-            result[value].push(key)
-        } else {
-            result[value] = [key]
-        }
-    }
-    return result
-}
-
-const groupTopYearsByTrackcount = (yearFrequency) => {
-    var largestTrackcount = 0
-    var topYears = []
-    for([key, value] of Object.entries(yearFrequency)) {
-    // yearFrequency.forEach((key, value) => {
-        if(value.trackCount > largestTrackcount){
-            topYears = []
-            largestTrackcount = value.trackCount
-            topYears.push(key)
-        } else if (value.trackCount == largestTrackcount) {
-            topYears.push(key)
-        } 
-    }
-
-    return topYears
-}
-
-const groupTopItemByType = (data, sortType, itemType) => {
-    var largestValue = 0
-    var topItems = []
-    for([key, value] of Object.entries(data)) {
-        if(value[sortType] > largestValue){
-            topItems = []
-            largestValue = value[sortType]
-            topItems.push(value[itemType])
-        } else if (value[sortType] == largestValue) {
-            topItems.push(value[itemType])
-        }
-    }
-    return topItems
+    return tracksIdsAndBPM
 }
 
 module.exports = { getPlaylistInfo }
