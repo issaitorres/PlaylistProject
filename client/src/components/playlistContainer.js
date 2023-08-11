@@ -13,6 +13,7 @@ import {
 } from "../helper/PlaylistContainerHelperMethods"
 import TrackGridContent from './TrackGridContent';
 import "./playlistContainer.css"
+import Carousel from './Carousel';
 
 const PlaylistContainer = ({ playlist, fetchPlaylists=null }) => {
   const { 
@@ -72,6 +73,7 @@ const PlaylistContainer = ({ playlist, fetchPlaylists=null }) => {
         useValueForLabels: false
       },
       grid: {
+        title: "artist-information",
         data: artistSongsInfo,
         headers: ["Artist", "# of songs", "Songs"],
         columnTypes: ["string", "number", ["string"]],
@@ -96,6 +98,7 @@ const PlaylistContainer = ({ playlist, fetchPlaylists=null }) => {
         useValueForLabels: false
       },
       grid: {
+        title: "genre-information",
         data: genreSongs,
         headers: ["Genre", "# of songs", "Songs"],
         columnTypes: ["string", "number", ["string"]],
@@ -120,12 +123,13 @@ const PlaylistContainer = ({ playlist, fetchPlaylists=null }) => {
         useValueForLabels: false
       },
       grid: {
+        title: "year-information",
         data: yearSongs,
         headers: ["Year", "# of songs", "Songs"],
-        columnTypes: ["string", "number", ["string"]],
+        columnTypes: ["number", "number", ["string"]],
         columnSortable: [true, true, false],
         columnValues: ["useKey", "trackCount", "trackNames"],
-        initialSort: ["colOneValue", "Number"]
+        initialSort: ["colTwoValue", "Number"]
       }
     },
     {
@@ -144,6 +148,7 @@ const PlaylistContainer = ({ playlist, fetchPlaylists=null }) => {
         useValueForLabels: "artistName"
       },
       grid: {
+        title: "artist-popularity-information",
         data: artistSongsInfo,
         headers: ["Artist", "Popularity", "# of songs"],
         columnTypes: ["string", "number", "number"],
@@ -193,6 +198,10 @@ const PlaylistContainer = ({ playlist, fetchPlaylists=null }) => {
       </div>
 
       <div>
+        <Carousel graphGridData={graphGridData}/>
+      </div>
+
+      <div>
           <label> shortestTrack name: </label> <span>{shortestName}</span>
           <label> shortestTrack duration: </label> <span>{convertMStoFormat(shortestDuration, true)}</span>
       </div>
@@ -207,7 +216,7 @@ const PlaylistContainer = ({ playlist, fetchPlaylists=null }) => {
         </button>
       </div>
 
-      {graphGridData.map((graphGrid) => {
+      {/* {graphGridData.map((graphGrid) => {
         return (
           <div className="graph-container">
             <h2>
@@ -244,7 +253,7 @@ const PlaylistContainer = ({ playlist, fetchPlaylists=null }) => {
 
           </div>
         )})
-      }
+      } */}
 
     <TrackGridContent trackTable={trackTable}/>
 

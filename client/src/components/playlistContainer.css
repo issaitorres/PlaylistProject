@@ -37,12 +37,12 @@
 }
 
 .graph-container {
-  max-width: 1200px;
+  width: 1200px;
   max-height: 1200px; 
-  margin: 10px auto;
+  margin: 0px auto;
   background-color: var(--default-green);
-  border-radius: 10px;
-  padding: 1px 12px 12px 12px;
+  /* border-radius: 10px; */
+  /* padding: 1px 12px 12px 12px; */
 }
 
 .grid {
@@ -72,7 +72,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   height: 1000px;
-  max-height: 200px;
+  max-height: 400px;
   overflow: scroll;
 }
 
@@ -81,6 +81,11 @@
   position: sticky;
   top: 0;
   background-color: var(--default-green);
+  display: flex;
+}
+
+.grid-header-hoverable:hover {
+  background-color: var(--default-dark-green);
 }
 
 .header-toggle-sort {
@@ -109,4 +114,23 @@
   top: 0;
   background-color: var(--default-green);
   /* width: 20px; */
+}
+
+.sortable-icons {
+  display: flex;
+  flex-direction: column;
+  margin: auto 5px;
+}
+
+.table-header {
+  font-size: 25px;;
+}
+
+.arrow {
+  font-size: 10px;
+}
+
+.hidden-arrow {
+
+  visibility: hidden; /* visibility keeps space*/
 }

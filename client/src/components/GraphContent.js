@@ -5,10 +5,13 @@ import {
   LinearScale,
   BarElement,
   Title,
+  SubTitle,
   Tooltip,
   Legend,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
+import zoomPlugin from 'chartjs-plugin-zoom';
+
 
 
 const GraphContent = ({ 
@@ -36,8 +39,10 @@ const GraphContent = ({
         LinearScale,
         BarElement,
         Title,
+        SubTitle,
         Tooltip,
-        Legend
+        Legend,
+        zoomPlugin
     );
 
 
@@ -51,9 +56,15 @@ const GraphContent = ({
             }
 
             var songs = `${context[0].label}\n`
-            data[Number(context[0].label)].trackNames.forEach((name) => {
-                songs += `\n${truncateString(name, 40)}`
-            })
+            for( const [index, track] of data[Number(context[0].label)].trackNames.entries()) {
+                if(index > 25) {
+                    songs += "\n..."
+                    break
+                } else {
+                    songs += `\n${truncateString(track, 40)}`
+                }
+
+            }
             return songs
         },
         label: (context) => {
@@ -61,10 +72,25 @@ const GraphContent = ({
         },
     }
 
+    const nthIndex = (str, pat, n) => {
+        var L= str.length, i= -1;
+        while(n-- && i++<L){
+            i= str.indexOf(pat, i);
+            if (i < 0) break;
+        }
+        return i;
+    }
+
     const artistGenreTooltipCallback = {
         title: (context) => {
             if(context[0].label.includes(",")) {
-            return context[0].label.replaceAll(",", "\n")
+                var limit = nthIndex(context[0].label,',',25)
+                if (limit !== -1) {
+                    var sub = context[0].label.substring(0, limit)
+                    sub += ",..."
+                    return sub.replaceAll(",", "\n")
+                }
+                return context[0].label.replaceAll(",", "\n")
             }
             return context.dataset
         },
@@ -94,6 +120,7 @@ const GraphContent = ({
     }
 
     const options = {
+
         responsive: true,
         plugins: {
             legend: {
@@ -109,9 +136,9 @@ const GraphContent = ({
             },
             subtitle: {
                 display: true,
-                text: "hover for more info",
+                text: "zoom with scroll wheel, pan with click and drag or pinch",
                 font: {
-                    size: 14
+                    size: 18
                 },
                 color: "black"
             },
@@ -119,6 +146,23 @@ const GraphContent = ({
                 enabled: true,
                 callbacks: customTooltip ? customCallbacks[customTooltip] : {}
             },
+            zoom: {
+                pan: {
+                    enabled: true,
+                    mode: 'x',
+                    threshold: 1,
+                    scaleMode: 'x'
+                },
+                zoom: {
+                    pinch: {
+                        enabled: true       // Enable pinch zooming
+                    },
+                    wheel: {
+                        enabled: true       // Enable wheel zooming
+                    },
+                    mode: 'x',
+                }
+            }
         },
         scales: {
             x: {

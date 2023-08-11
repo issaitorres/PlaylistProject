@@ -59,7 +59,7 @@ const getPlaylistInfo = async (playlistId) => {
                 "albumName": track.album.name,
                 "albumReleaseYear": new Date(track.album.release_date).getFullYear(),
                 "albumPopularity": track.album.popularity,
-                "albumImage": track.album.images[0].url
+                "albumImage": track.album.images[0]?.url
             }
 
             // populate artistIds and albumIds

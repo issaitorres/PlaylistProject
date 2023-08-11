@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect} from 'react'
 
-const GridContent = ({ data, headers, columnTypes, columnSortable, columnValues, initialSort}) => {
+const GridContent = ({ data, title, headers, columnTypes, columnSortable, columnValues, initialSort}) => {
     const [dataArray, setDataArray] = useState([])
     const [columnOneToggle, setColumnOneToggle] = useState(true)
     const [columnTwoToggle, setColumnTwoToggle] = useState(true)
@@ -14,22 +14,44 @@ const GridContent = ({ data, headers, columnTypes, columnSortable, columnValues,
     const [initialColValSort, initialType] = initialSort
 
 
-    const gridHeaderColOneOrderToggle = () => {
+    const gridHeaderColOneOrderToggle = (title) => {
         const sorted = determineColTypeAndSort(colOneType, dataArray, columnOneToggle, "colOneValue")
         setDataArray(sorted)
+        setSortArrows(1, columnOneToggle, title)
+
         setColumnOneToggle(!columnOneToggle)
     }
 
-    const gridHeaderColTwoOrderToggle = () => {
+    const gridHeaderColTwoOrderToggle = (title) => {
         const sorted = determineColTypeAndSort(colTwoType, dataArray, columnTwoToggle, "colTwoValue")
         setDataArray(sorted)
+        setSortArrows(2, columnTwoToggle, title)
         setColumnTwoToggle(!columnTwoToggle)
+
     }
 
-    const gridHeaderColThreeOrderToggle = () => {
+    const gridHeaderColThreeOrderToggle = (title) => {
         const sorted = determineColTypeAndSort(colThreeType, dataArray, columnThreeToggle, "colThreeValue")
         setDataArray(sorted)
+        setSortArrows(3, columnThreeToggle, title)
         setColumnThreeToggle(!columnThreeToggle)
+    }
+
+    const setSortArrows = (num, toggle, title) => {
+
+        var current = document.getElementsByClassName(`${title}-arrow`);
+        for(const cur of current) {
+            cur.className = cur.className.replaceAll("hidden-arrow", "");
+        }
+
+        var triggerArrow = document.getElementsByClassName(`${title}-c${num}-arrow`);
+        var pos = toggle ? 0 : 1
+
+
+        triggerArrow[pos].className += "hidden-arrow"
+
+        // current[0].className = current[0].className.replaceAll("hidden-arrow", "");
+        // document.querySelector(`.cb${slideIndex}`).className += "carousel-button-active"
     }
 
     const determineColTypeAndSort = (colType, dataArray, columnToggle, colVal) => {
@@ -51,7 +73,6 @@ const GridContent = ({ data, headers, columnTypes, columnSortable, columnValues,
         const val = toggle ? -1 : 1
         return ([...dataArray].sort((a, b) => val * b[colVal] - val * a[colVal]))
     }
-
 
     useEffect(() => {
         var initialDataArray = []
@@ -88,28 +109,86 @@ const GridContent = ({ data, headers, columnTypes, columnSortable, columnValues,
     <>
         <div className="grid-container">
             <div
-                className={`grid-header ${colOneSort ? "header-toggle-sort ": null }`}
-                onClick={colOneSort ? () => gridHeaderColOneOrderToggle() : null}
+                className={`grid-header ${colOneSort ? "header-toggle-sort grid-header-hoverable ": null }`}
+                onClick={colOneSort ? () => gridHeaderColOneOrderToggle(title) : null}
             >
-            <b>
-                {headerColumn1}
-            </b>
+                <b className="table-header">
+                    {headerColumn1}
+                </b>
+                { colOneSort
+                    ?   <div className="sortable-icons">
+                            <div className={`
+                                arrow 
+                                ${title}-arrow
+                                ${title}-c1-arrow 
+                            `}>
+                                &#9650;
+                            </div>
+                            <div className={`
+                                arrow 
+                                ${title}-arrow
+                                ${title}-c1-arrow `
+                            }>
+                                &#9660;
+                            </div>
+                        </div>
+                    : null
+                }
             </div>
             <div
-                className={`grid-header ${colTwoSort ? "header-toggle-sort ": null }`}
-                onClick={colTwoSort ? () => gridHeaderColTwoOrderToggle() : null}
+                className={`grid-header ${colTwoSort ? "header-toggle-sort grid-header-hoverable ": null }`}
+                onClick={colTwoSort ? () => gridHeaderColTwoOrderToggle(title) : null}
             >
-            <b>
-                {headerColumn2}
-            </b>
+                <b>
+                    {headerColumn2}
+                </b>
+                { colTwoSort
+                    ?   <div className="sortable-icons">
+                            <div className={`
+                                arrow 
+                                ${title}-arrow 
+                                ${title}-c2-arrow 
+                            `}>
+                                &#9650;
+                            </div>
+                            <div className={`
+                                arrow 
+                                ${title}-arrow 
+                                ${title}-c2-arrow 
+                                hidden-arrow 
+                            `}>
+                                &#9660;
+                            </div>
+                        </div>
+                    : null
+                }
             </div>
             <div
-                className={`grid-header ${colThreeSort ? "header-toggle-sort ": null }`}
-                onClick={colThreeSort ? () => gridHeaderColThreeOrderToggle() : null}
+                className={`grid-header ${colThreeSort ? "header-toggle-sort grid-header-hoverable ": null }`}
+                onClick={colThreeSort ? () => gridHeaderColThreeOrderToggle(title) : null}
             >
-            <b>
-                {headerColumn3}
-            </b>
+                <b>
+                    {headerColumn3}
+                </b>
+                { colThreeSort
+                    ?   <div className="sortable-icons">
+                            <div className={
+                                `arrow 
+                                ${title}-arrow 
+                                ${title}-c3-arrow 
+                            `}>
+                                &#9650;
+                            </div>
+                            <div className={
+                                `arrow 
+                                ${title}-arrow 
+                                ${title}-c3-arrow 
+                            `}>
+                                &#9660;
+                            </div>
+                        </div>
+                    : null
+                }
             </div>
             {dataArray.map((info) => (
                 <>
