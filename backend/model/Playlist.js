@@ -13,9 +13,12 @@ const playlistSchema = new mongoose.Schema({
     playlistName: String,
     playlistOwner: String,
     playlistImage: String,
-    playlistPosition: Number,
-    trackTable: {
+    playlistDuplicates: {
         type: Map,
+        of: mongoose.Schema.Types.Mixed
+    },
+    trackTable: {
+        type: Array,
         of: mongoose.Schema.Types.Mixed
     }
 })

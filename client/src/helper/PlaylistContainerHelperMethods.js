@@ -1,5 +1,4 @@
-
-const convertMStoFormat = (durationInMs, keepSeconds=false) => {
+const convertMStoFormat = (durationInMs, keepSeconds=false, simplifyAbbreviation=false) => {
     var durationInMs = Number(durationInMs)
     const seconds = Math.floor((durationInMs / 1000) % 60);
     const minutes = Math.floor((durationInMs / 1000 / 60) % 60);
@@ -9,6 +8,22 @@ const convertMStoFormat = (durationInMs, keepSeconds=false) => {
     if(hours) res += `${hours} ${hours > 1 ? "hrs": "hr"} `
     if(minutes) res += `${minutes} ${minutes > 1 ? "mins": "min"} `
     if(keepSeconds && seconds) res += `${seconds} ${seconds > 1 ? "secs": "sec"} `
+
+    if(simplifyAbbreviation) {
+        const simplifications = {
+            "hrs": "h",
+            "hr": "h",
+            "mins": "m",
+            "min": "m",
+            "secs": "s",
+            "sec": "s"
+        }
+
+        for(const [key, val] of Object.entries(simplifications)) {
+            res = res.replace(key, val)
+        }
+    }
+
     return res
 }
 
@@ -33,6 +48,7 @@ const getArtistSongsInfo = (trackTable) => {
     }
     return artistSongsInfo
 }
+
 
 const getGenreSongs = (trackTable) => {
     var genreSongs = {}
@@ -74,7 +90,7 @@ const getYearSongs = (trackTable) => {
         }
     }
     return yearSongs
-    }
+}
 
 
 const groupTopItemsByTrackcount = (itemSongs, returnType=null) => {
@@ -99,6 +115,37 @@ const groupTopItemsByTrackcount = (itemSongs, returnType=null) => {
     return topItems
 }
 
+
+const getShortestTrack = (trackTable) => {
+    var trackObject = {}
+    for(const [track, trackInfo] of Object.entries(trackTable)) {
+        if (trackObject?.trackDuration){
+            if(trackInfo.trackDuration < trackObject.trackDuration) {
+                trackObject = trackInfo
+            }
+        } else {
+            trackObject["trackDuration"] = trackInfo.trackDuration
+        }
+    }
+    return trackObject
+}
+
+
+const getLongestTrack = (trackTable) => {
+    var trackObject = {}
+    for(const [track, trackInfo] of Object.entries(trackTable)) {
+        if (trackObject?.trackDuration){
+            if(trackInfo.trackDuration > trackObject.trackDuration) {
+                trackObject = trackInfo
+            }
+        } else {
+            trackObject["trackDuration"] = trackInfo.trackDuration
+        }
+    }
+    return trackObject
+}
+
+
 const getShortestDuration = (trackTable) => {
     var duration
     var name
@@ -106,8 +153,8 @@ const getShortestDuration = (trackTable) => {
     for(const [track, trackInfo] of Object.entries(trackTable)) {
     if (duration){
         if(trackInfo.trackDuration < duration) {
-        duration = trackInfo.trackDuration
-        name = trackInfo.trackName
+            duration = trackInfo.trackDuration
+            name = trackInfo.trackName
         }
     } else {
         duration = trackInfo.trackDuration
@@ -123,28 +170,105 @@ const getLongestDuration = (trackTable) => {
     var name
 
     for(const [track, trackInfo] of Object.entries(trackTable)) {
-    if (duration){
-        if(trackInfo.trackDuration > duration) {
-        duration = trackInfo.trackDuration
-        name = trackInfo.trackName
+        if (duration){
+            if(trackInfo.trackDuration > duration) {
+            duration = trackInfo.trackDuration
+            name = trackInfo.trackName
+            }
+        } else {
+            duration = trackInfo.trackDuration
+            name = trackInfo.trackName
         }
-    } else {
-        duration = trackInfo.trackDuration
-        name = trackInfo.trackName
-    }
     }
     return [duration, name]
 }
 
+// only energy, dancibility.. for now
+const getAverageField = (fieldName, trackTable) => {
+    var average = 0
+    for(const [track, trackInfo] of Object.entries(trackTable)) {
+        average += trackInfo[fieldName]
+    }
+    return (average/Object.keys(trackTable).length).toFixed(2)
+}
+
+// only energy, dancibility.. for now
+const getHighestLowestField = (fieldName, trackTable) => {
+    var highestLowest = {
+        "highestScore": null,
+        "highestName": "",
+        "highestArtist": "",
+        "lowestScore": null,
+        "lowestName": "",
+        "lowestArtist": "",
+    }
+
+    const setHighestScoreNameArtist = (score, name, artist) => {
+        highestLowest["highestScore"] = score
+        highestLowest["highestName"] = name
+        highestLowest["highestArtist"] = Object.values(artist)
+                                            .map((artistInfo) => artistInfo.name)
+                                            .join(' & ')
+    }
+    const setLowestScoreNameArtist = (score, name, artist) => {
+        highestLowest["lowestScore"] = score
+        highestLowest["lowestName"] = name
+        highestLowest["lowestArtist"] = Object.values(artist)
+                                            .map((artistInfo) => artistInfo.name)
+                                            .join(' & ')
+    }
+
+    for(const [track, trackInfo] of Object.entries(trackTable)) {
+        if(highestLowest["highestScore"] == null) {
+            setHighestScoreNameArtist(trackInfo[fieldName], trackInfo.trackName, trackInfo.trackArtists )
+        } else {
+            if(trackInfo[fieldName] > highestLowest["highestScore"]) {
+                setHighestScoreNameArtist(trackInfo[fieldName], trackInfo.trackName, trackInfo.trackArtists )
+            }
+        }
+
+        if(highestLowest["lowestScore"] == null) {
+            setLowestScoreNameArtist(trackInfo[fieldName], trackInfo.trackName, trackInfo.trackArtists )
+        } else {
+            if(trackInfo[fieldName] < highestLowest["lowestScore"]) {
+                setLowestScoreNameArtist(trackInfo[fieldName], trackInfo.trackName, trackInfo.trackArtists )
+            }
+        }
+    }
+    return highestLowest
+}
 
 
+ const isInViewport = (element) => {
+    var bounding = element.getBoundingClientRect();
 
-  export {
+    // Checking if *fully* visible
+    if (
+        bounding.top >= 0 &&
+        bounding.left >= 0 &&
+        bounding.right <= (window.innerWidth || document.documentElement.clientWidth) &&
+        bounding.bottom <= (window.innerHeight || document.documentElement.clientHeight)
+    ) {
+        console.log('In the viewport! :)');
+        return true;
+    } else {
+        console.log('Not in the viewport. :(');
+        return false;
+    }
+}
+
+
+export {
     convertMStoFormat,
     getArtistSongsInfo,
     getGenreSongs,
     getYearSongs,
     groupTopItemsByTrackcount,
     getShortestDuration,
-    getLongestDuration
+    getLongestDuration,
+    getShortestTrack,
+    getLongestTrack,
+    getAverageField,
+    getHighestLowestField,
+    isInViewport
 }

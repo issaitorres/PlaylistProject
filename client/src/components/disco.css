@@ -1,0 +1,11 @@
+
+.disco-container {
+    /* width: 100px;
+    height: 100px;
+    margin: 20px; */
+}
+
+
+.disco-image {
+    transform: scale(3,3);
+}

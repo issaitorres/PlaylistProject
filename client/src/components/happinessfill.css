@@ -1,0 +1,88 @@
+.happiness-wrapper{
+    align-content: center;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+}
+
+.testcontentboxcontainer{
+    margin: 50px;
+}
+
+.testcontentbox {
+    width: 200px;
+    height: 200px;
+    border: 0px solid #ccc;
+    border-radius: 110px;
+
+    /* justify-content: center; */
+    /* align-items: center; */
+    /* text-align: center; */
+    position: relative;
+    /* right: 50px; */
+    overflow: hidden;
+    margin: 5px;
+
+}
+
+
+
+.textcontentboximagecontainer {
+    z-index: 0;
+    position: relative;
+}
+
+.textcontentboximage {
+    z-index: 1;
+    border: 0px solid red;
+    border-radius: 100px;
+    transform: scale(1.05,1.05);
+    /* transform: scale(1,1); */
+}
+
+.liquid-animate:before {
+    content: "";
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background: #ffcc00;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 40%;
+    animation: fill 7s ease-in-out forwards;
+    z-index: 0;
+}
+
+.liquid-animate:after {
+    border-radius: 0%;
+}
+
+/* upper limit 12px - lower limit 187 - diff 175 */ 
+@keyframes fill {
+    from {
+        top: 250px;
+        transform: translateX(-50%) rotate(0deg)
+    }
+    to {
+        top: var(--colorEndPoint, 0px);
+        transform: translateX(-50%) rotate(360deg)
+
+    }
+    75% {border-radius: 40%;}
+    100% {border-radius: 0%;}
+}
+
+
+
+.testcontentbox:before {
+    /* content: "";
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background: #00acee;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 40%;
+    animation: fill 7s ease-in-out forwards; */
+    /* animation: fill 7s ease-in-out infinite; */
+}

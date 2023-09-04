@@ -1,0 +1,71 @@
+
+
+.shortest-longest-container-two {
+    display: flex;
+    position: relative;
+    /* height: 100%; */
+}
+
+.rightTrack div h2 {
+    margin: 30px 0px 15px 0px;
+}
+
+.leftTrack div h2 {
+    margin: 30px 0px 15px 0px;
+}
+
+.title-artist {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /* position: relative;
+    height: 100%;
+    overflow: auto;
+    margin: auto 0px */
+    /* position: absolute; */
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
+    /* height: 100%; */
+    /* height: 200px; */
+    /* border: 3px solid green; */
+}
+
+.leftTrack {
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid black;
+    /* height: 500px;
+    text-align: center; */
+
+    text-align: center;
+    width: 175px;
+    /* max-height: 325px; */
+    min-height: 275px;
+    /* background-color: var(--default-gray); */
+    /* border-radius: 10px; */
+    margin: 5px 0px 5px 5px;
+    padding: 5px;
+    position: relative;
+}
+
+
+.rightTrack {
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid black;
+    /* height: 500px;
+    text-align: center; */
+
+    text-align: center;
+    width: 175px;
+    /* max-height: 325px; */
+    min-height: 275px;
+    /* background-color: var(--default-gray); */
+    /* border-radius: 10px; */
+    margin: 5px 5px 5px 0px;
+    padding: 5px;
+    position: relative;
+}

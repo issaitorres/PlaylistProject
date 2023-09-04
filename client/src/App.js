@@ -4,7 +4,9 @@ import Home from './pages/home.js';
 import Register from './pages/register';
 import Auth from './pages/auth';
 import Logout from './pages/logout';
-import Navbar from './components/navbar';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+
 import Playlist from './pages/playlist';
 
 
@@ -20,6 +22,7 @@ function App() {
           <Route path="/logout" element={<Logout />} />
           <Route path="/playlist/:id" element={<Playlist/>} />
         </Routes>
+        <Footer/>
       </Router>
     </div>
   );

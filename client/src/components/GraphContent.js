@@ -1,60 +1,47 @@
-import React from 'react'
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  SubTitle,
-  Tooltip,
-  Legend,
-} from 'chart.js';
+import { useRef } from 'react'
 import { Bar } from 'react-chartjs-2';
-import zoomPlugin from 'chartjs-plugin-zoom';
+import { nthIndex, getRangeColors, setLabelsAndDataset } from "../helper/GraphContentHelperMethods"
+import "../ChartJS"
+import { truncateString } from "../helper/StringHelperMethods"
 
 
+const GraphContent = ({ graph }) => {
+    const chartRef = useRef(null)
+    const data = graph.data
+    const graphTitle = graph.graphTitle
+    const xAxisTitle = graph.xAxisTitle
+    const yAxisTitle = graph.yAxisTitle
+    const customTicks = graph.customTicks
+    const customTooltip = graph.customTooltip
+    const groupData = graph.groupData
+    const xData = graph.xData
+    const yData = graph.yData
+    const useKeyForxData = graph.useKeyForxData
+    const useValueForLabels = graph.useValueForLabels
+    var [labels, dataset] = setLabelsAndDataset(data, xData, yData, useKeyForxData, useValueForLabels, groupData)
+    const rangeColors = getRangeColors(dataset)
 
-const GraphContent = ({ 
-        data, 
-        graphTitle, 
-        xTitleText, 
-        YTitleText, 
-        customTicks, 
-        customTooltip, 
-        groupData, 
-        xData, 
-        yData,
-        useKeyForxData,
-        useValueForLabels
-    }) => {
-    const lowColor = 'rgba(255, 99, 132, 0.5)'
-    const midlLowColor = 'rgba(135, 141, 193, 1)'
-    const midlHighColor = 'rgba(184, 64, 193, 1)'
-    const highColor = 'rgba(85, 155, 234, 1)'
-    var labels
-    var dataset
+    const barData = {
+        labels: labels,
+        datasets: [
+            {
+                data: dataset,
+                backgroundColor: rangeColors,
+                font: {
+                    size: 20
+                }
+            },
+        ]
+    };
 
-    ChartJS.register(
-        CategoryScale,
-        LinearScale,
-        BarElement,
-        Title,
-        SubTitle,
-        Tooltip,
-        Legend,
-        zoomPlugin
-    );
-
+    const handleResetZoom = () => {
+        if(chartRef && chartRef.current) {
+            chartRef.current.resetZoom()
+        }
+    }
 
     const yearsTooltipCallback =  {
         title: (context) => {
-            const truncateString = (str, truncateLength) => {
-                if( str.length <= truncateLength) {
-                    return str
-                }
-                return `${str.slice(0,truncateLength)}...`
-            }
-
             var songs = `${context[0].label}\n`
             for( const [index, track] of data[Number(context[0].label)].trackNames.entries()) {
                 if(index > 25) {
@@ -70,15 +57,6 @@ const GraphContent = ({
         label: (context) => {
             return `${context.formattedValue} ${context.formattedValue > 1 ? 'songs' : 'song'}`
         },
-    }
-
-    const nthIndex = (str, pat, n) => {
-        var L= str.length, i= -1;
-        while(n-- && i++<L){
-            i= str.indexOf(pat, i);
-            if (i < 0) break;
-        }
-        return i;
     }
 
     const artistGenreTooltipCallback = {
@@ -120,11 +98,14 @@ const GraphContent = ({
     }
 
     const options = {
-
         responsive: true,
         plugins: {
+            customButton: {
+                display: true,
+                text: "hello"
+            },
             legend: {
-                display: false,
+                display: false
             },
             title: {
                 display: true,
@@ -155,20 +136,23 @@ const GraphContent = ({
                 },
                 zoom: {
                     pinch: {
-                        enabled: true       // Enable pinch zooming
+                        enabled: true
                     },
                     wheel: {
-                        enabled: true       // Enable wheel zooming
+                        enabled: true
                     },
                     mode: 'x',
                 }
+            },
+            datalabels: {
+                display: false
             }
         },
         scales: {
             x: {
                 title: {
                     display: true,
-                    text: xTitleText,
+                    text: xAxisTitle,
                     font: {
                         size: 20
                     },
@@ -179,7 +163,7 @@ const GraphContent = ({
             y: {
                 title: {
                     display: true,
-                    text: YTitleText,
+                    text: yAxisTitle,
                     font: {
                         size: 20
                     },
@@ -192,80 +176,12 @@ const GraphContent = ({
         },
     };
 
-
-
-    if (groupData) {
-        var grouped = {}
-        for (let [key, info] of Object.entries(data)) {
-            if(useKeyForxData) {
-                grouped[key] = info[yData]
-            } else {
-                grouped[info[xData]] = info[yData]
-            }
-        }
-
-        //group the data for graph
-        const groupObjectValuesByFrequency = (object) => {
-            const result = {}
-            for (let [key, value] of Object.entries(object)) {
-                if(result[value] != undefined) {
-                    result[value].push(key)
-                } else {
-                    result[value] = [key]
-                }
-            }
-            return result
-        }
-
-        var groupedData = groupObjectValuesByFrequency(grouped)
-        labels = Object.values(groupedData)
-        dataset = Object.keys(groupedData)
-    } else {
-
-        dataset = Object.values(data).map((info) => {
-            return info[yData]
-        })
-        if(useValueForLabels) {
-            labels = Object.values(data).map((obj) => {
-                return obj[useValueForLabels]
-            })
-        } else {
-            labels = Object.keys(data)
-        }
-    }
-
-
-    var max = Math.max(...dataset)
-    const rangeColors = dataset.map((amount) =>{
-        var color
-        if(amount < Math.ceil(max * .2)) {
-            color = lowColor
-        } else if ( amount > Math.ceil(max * .2) && amount < Math.ceil(max * .4)) {
-            color = midlLowColor
-        } else if ( amount > Math.ceil(max * .4) && amount < Math.ceil(max * .6)) { 
-            color = midlHighColor
-        } else {
-            color = highColor
-        }
-        return color
-    })
-
-
-    const barData = {
-        labels: labels,
-        datasets: [
-            {
-                data: dataset,
-                backgroundColor: rangeColors,
-                font: {
-                    size: 20
-                }
-            },
-        ],
-    };
-
   return (
-        <Bar options={options} data={barData}/>
+        <>
+            <Bar id="myChart" ref={chartRef} options={options} data={barData}/>
+            <button onClick={handleResetZoom}>Reset Zoom</button>
+            {/* <button onClick={draw}>draw</button> */}
+        </>
   )
 }
 

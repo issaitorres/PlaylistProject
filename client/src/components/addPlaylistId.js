@@ -25,7 +25,7 @@ const AddPlaylistId = ({ accessToken, fetchPlaylists }) => {
         })
   
         alert("submit successful")
-        fetchPlaylists()
+        fetchPlaylists(true)
   
       } catch (err) {
         console.log(err)

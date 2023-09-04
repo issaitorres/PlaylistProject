@@ -34,8 +34,6 @@
     font-size: 30px;
     border: none;
     cursor: pointer;
-
-
 }
 
 .carousel-button-active {
@@ -47,16 +45,70 @@
 .vl {
     border-left: 3px solid var(--default-gray);
     height: 100px;
-  }
+}
 
-
-  .carousel-button:hover {
+.carousel-button:hover {
     background-color: var(--default-gray);
     color: var(--default-white);
 }
 
-  /* .carousel-button:focus {
-    background-color: var(--default-black);
-    color: var(--default-white);
+.more-container {
+    /* width: 100%; */
+    margin: 0px auto;
+}
 
-} */
+
+.more-top-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    /* margin: 0px auto; */
+}
+
+.more-top-container > div {
+    /* border: 1px solid blue; */
+    margin: 10px;
+    background-color: var(--default-lighter-gray);
+    /* background-color: #878787; */
+    border-radius: 10px;
+}
+
+.more-bottom-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+.more-bottom-container > div{
+    /* min-width: 200px; */
+    background-color: var(--default-lighter-gray);
+    border-radius: 10px;
+    margin: 10px;
+    min-width: 300px;
+}
+
+.explicit-container {
+    /* width: 250px;
+    height: 350px; */
+    padding: 25px 30px;
+    margin: 25px;
+    display: flex;
+    flex-direction: row;
+}
+
+.piechart-container {
+    padding: 0px 5px;
+    width: 250px;
+    height: 350px;
+}
+
+.shortest-longest-container {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 2px 15px;
+    justify-content: center;
+    align-items: center;
+}
+
+.shortest-longest-container .singleTrackContainer {
+    /* margin: auto 5px; */
+}

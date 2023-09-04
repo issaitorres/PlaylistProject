@@ -1,17 +1,26 @@
-import React, {useState, useEffect} from 'react'
-import GridContent from './gridContent';
+import React, { useState, useEffect } from 'react'
+import GridContent from './GridContent';
 import GraphContent from './GraphContent';
+import QualityContainer from './QualityContainer';
 import "./carousel.css"
 
-const Carousel = ({ graphGridData }) => {
+const Carousel = ({ 
+    graphGridData, 
+    explicitPieChart,
+    decadesPieChart,
+    shortestTrack, 
+    longestTrack, 
+    qualityData,
+    test
+}) => {
     const [currentIndex, setCurrentIndex] = useState(0)
 
     const goToSlide = (slideIndex) => {
         setCurrentIndex(slideIndex);
-        setActive(slideIndex)
+        activeSlide(slideIndex)
     };
 
-    const setActive = (slideIndex) => {
+    const activeSlide = (slideIndex) => {
         var current = document.getElementsByClassName("carousel-button-active");
         current[0].className = current[0].className.replaceAll("carousel-button-active", "");
         document.querySelector(`.cb${slideIndex}`).className += "carousel-button-active"
@@ -24,71 +33,107 @@ const Carousel = ({ graphGridData }) => {
 
 
   return (
-    <>
         <div className="flex-container">
             <div className="carousel-button-container">
-                {graphGridData.map((data, slideIndex) => (
-                    <>
-                        <button 
-                            key={slideIndex}  
-                            onClick={() => goToSlide(slideIndex)}
-                            className={`carousel-button cb${slideIndex} `}
-                        >
-                            {data.title}
-                        </button>
-                        {slideIndex !== Object.keys(graphGridData).length-1 &&  <div class="vl"></div> }
-                    </>
-                ))}
+                {graphGridData.map((data, slideIndex) => {
+                    return (
+                        <React.Fragment key={slideIndex}>
+                            <button 
+                                onClick={() => goToSlide(slideIndex)}
+                                className={`carousel-button cb${slideIndex} `}
+                            >
+                                {data.title}
+                            </button>
+                            {/* {slideIndex !== Object.keys(graphGridData).length-1 &&  <div class="vl"></div> } */}
+                            <div className="vl" ></div>
+                        </React.Fragment>
+                    )
+                })}
+                <button 
+                    key={4}  
+                    onClick={() => goToSlide(4)}
+                    className={`carousel-button cb${4} `}
+                >
+                    More
+                </button>
             </div>
             <div className="carousel-container">
                 {graphGridData.map((graphGrid, index) => {
                     return (
                     <div className='carousel-item' key={index} style={{transform: `translate(-${currentIndex * 100}%)`}}>
                         <div className="graph-container">
-                            {/* <h2>
-                            {graphGrid.title}
-                            </h2> */}
                             {graphGrid.graph.data
-                                ? <GraphContent
-                                    data={graphGrid.graph.data}
-                                    graphTitle={graphGrid.graph.graphTitle}
-                                    xAxisTitle={graphGrid.graph.xAxisTitle}
-                                    yAxisTitle={graphGrid.graph.yAxisTitle}
-                                    customTicks={graphGrid.graph.customTicks}
-                                    customTooltip={graphGrid.graph.customTooltip}
-                                    groupData={graphGrid.graph.groupData}
-                                    xData={graphGrid.graph.xData}
-                                    yData={graphGrid.graph.yData}
-                                    useKeyForxData={graphGrid.graph.useKeyForxData}
-                                    useValueForLabels={graphGrid.graph.useValueForLabels}
+                                ? 
+                                    <GraphContent
+                                        graph={graphGrid.graph}
                                     />
                                 : "spinner"
                             }
                             {
                             graphGrid.grid.data
-                                ? <GridContent
-                                    title={graphGrid.grid.title}
-                                    data={graphGrid.grid.data}
-                                    headers={graphGrid.grid.headers}
-                                    columnTypes={graphGrid.grid.columnTypes}
-                                    columnSortable={graphGrid.grid.columnSortable}
-                                    columnValues={graphGrid.grid.columnValues}
-                                    initialSort={graphGrid.grid.initialSort}
+                                ? 
+                                    <GridContent
+                                        grid={graphGrid.grid}
                                     />
                                 : "spinner"
                             }
-
                         </div>
                     </div>
                     )})
                 }
+                <div className='carousel-item' key={4} style={{transform: `translate(-${currentIndex * 100}%)`}}>
+                    <div className="more-container">
+                        <div className="more-top-container">
+                            <div className="explicit-container">
+                                {/* <div style={{width: "400px", height: "300px"}}> */}
+                                <div className="piechart-container">
+                                    {explicitPieChart}
+                                </div>
+                                <div className="piechart-container">
+                                    {decadesPieChart}
+                                </div>
+
+                                {/* </div>  */}
+                            </div>
+                            {/* <div className="explicit-container">
+                                    {piechartTwo}
+                            </div> */}
+                            {/* <div className="shortest-longest-container">
+                                {shortestTrack}
+                                {longestTrack}
+                            </div> */}
+                            {test}
+                        </div>
+                        <div className="more-bottom-container">
+                            {qualityData.map((data, index) => {
+                                return (
+                                    <QualityContainer {...data} key={index} />
+                                )
+                            })}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </>
-  )
+    )
 }
 
 export default Carousel
+
+
+
+
+
+{/* <div className="happiness-container">
+    {happinessFill}
+</div> */}
+
+{/* <div className="energy-container">
+    {lightningFill}
+</div> */}
+{/* <div className="dance-container">
+    {discoFill}
+</div> */}
 
 
 

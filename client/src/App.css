@@ -2,6 +2,8 @@
 
 .App {
   /* background-color: #01401d; */
+  position: relative;
+  min-height: 100vh;
 }
 
 body,
@@ -15,6 +17,9 @@ html {
   --default-white: #f2f2f2;
   --default-black: #1C1C1E;
   --default-gray: #696969;
+  --default-light-gray: #787878;
+  --default-lighter-gray: #a1a1a1;
+
   --default-green: #04AA6D;
   --default-dark-green: #03774c;
 
@@ -60,6 +65,36 @@ button {
 }
 
 
+
+
+/* Footer css */
+
+.Footer {
+  background-color: #333;
+  color: white;
+  position: absolute;
+  bottom: -150px;
+  width: 100%;
+  min-height: 150px;
+  margin: 20px 0px 0px 0px;
+}
+
+.Footer a {
+  color: white;
+}
+
+.Footer-links {
+  width: 90%;
+  margin: 10px auto;
+  padding: 10px;
+
+}
+
+.Footer-end {
+  text-align: center;
+}
+
+
 /* Forms */
 .form {
   /* margin: 10px;
@@ -95,6 +130,10 @@ input {
 
 
 /* page */
+/* .page-container {
+  position: relative;
+  min-height: 100vh;
+} */
 .page  {
   display: flex;
   align-items: center;
@@ -103,6 +142,8 @@ input {
   background: linear-gradient(145deg, var(--default-green) -10%, var(--default-black));
   background-size: cover;
   background-position: center;
+  /* position: relative;
+  min-height: 90vh; */
 }
 
 .submit-button {

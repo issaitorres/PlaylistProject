@@ -5,7 +5,7 @@ const { GenerateAccessTokenOrGetFromEnvVar } = require('./GetAccessToken')
 const getPlaylistInfo = async (playlistId) => {
     const accessToken = await GenerateAccessTokenOrGetFromEnvVar()
     var spotify_playlists_endpoint = `https://api.spotify.com/v1/playlists/${playlistId}`
-    var trackTable = {}
+    var trackTable = []
     const playlistArtistIds = new Set()
     const playlistAlbumIds = new Set()
     var playlistInfo = {}
@@ -67,7 +67,7 @@ const getPlaylistInfo = async (playlistId) => {
             playlistAlbumIds.add(track.album.id)
 
             playlistPosition += 1
-            trackTable[track.id] = trackInfo
+            trackTable.push(trackInfo)
         }
 
         if(next == null) {
@@ -79,30 +79,67 @@ const getPlaylistInfo = async (playlistId) => {
 
     // get BPMs and merge into trackTable
     //  - could get other attributes like energy, danceability, time_signature
-    const trackIds = Object.keys(trackTable)
+    const trackIds = trackTable.map((track) => track.trackId)
     var audioFeatures = await getAudioFeatures(accessToken, trackIds)
-    for (let [trackId, trackInfo] of Object.entries(trackTable)) {
-        trackInfo["trackTempo"] = audioFeatures[trackId].tempo
+    for (let track of trackTable) {
+        track["trackTempo"] = audioFeatures[track.trackId].tempo
+        track["danceability"] = audioFeatures[track.trackId].danceability
+        track["energy"] = audioFeatures[track.trackId].energy
+        track["instrumentalness"] = audioFeatures[track.trackId].instrumentalness
+        track["key"] = audioFeatures[track.trackId].key
+        track["liveness"] = audioFeatures[track.trackId].liveness
+        track["loudness"] = audioFeatures[track.trackId].loudness
+        track["mode"] = audioFeatures[track.trackId].mode
+        track["speechiness"] = audioFeatures[track.trackId].speechiness
+        track["time_signature"] = audioFeatures[track.trackId].time_signature
+        track["valence"] = audioFeatures[track.trackId].valence
+        track["acousticness"] = audioFeatures[track.trackId].acousticness
     }
 
     // get artist data and merge into trackTable
     var artistInfo = await getArtistInfo(accessToken, playlistArtistIds)
-    for (let [trackId, trackInfo] of Object.entries(trackTable)) {
-        for(let artistId of Object.keys(trackInfo.trackArtists)) {
-            trackInfo.trackArtists[artistId]["artistPopularity"] = artistInfo[artistId].artistPopularity
-            trackInfo.trackArtists[artistId]["artistGenres"] = artistInfo[artistId].artistGenres
+    for (let track of trackTable) {
+        for(let artistId of Object.keys(track.trackArtists)) {
+            track.trackArtists[artistId]["artistPopularity"] = artistInfo[artistId].artistPopularity
+            track.trackArtists[artistId]["artistGenres"] = artistInfo[artistId].artistGenres
+            track.trackArtists[artistId]["artistImage"] = artistInfo[artistId].artistImage
         }
     }
 
     // get album data and merge data into trackTable
     var albumInfo = await getAlbumPopularity(accessToken, playlistAlbumIds)
-    for (let [trackId, trackInfo] of Object.entries(trackTable)) {
-        trackInfo.album["albumPopularity"] = albumInfo[trackInfo.album.albumId].albumPopularity
+    for (let track of trackTable) {
+        track.album["albumPopularity"] = albumInfo[track.album.albumId].albumPopularity
     }
+
+    // duplicates
+    var seenTrackIds = []
+    var duplicates = {
+            duplicateCount: 0,
+            duplicateTracks: {}
+        }
+
+
+    trackTable.forEach((track, index) => {
+        if(seenTrackIds.includes(track.trackId)) {
+            if (!duplicates.duplicateTracks[track.trackId]) {
+                duplicates.duplicateTracks[track.trackId] = {
+                    title: track.trackName,
+                    positions: [seenTrackIds.indexOf(track.trackId) + 1, index + 1]
+                }
+            } else {
+                duplicates.duplicateTracks[track.trackId].positions.push(index + 1)
+            }
+            duplicates.duplicateCount += 1
+        } else {
+            seenTrackIds.push(track.trackId)
+        }
+    })
 
     playlistInfo["playlistName"] = playlistName
     playlistInfo["playlistOwner"] = playlistOwner
     playlistInfo["playlistImage"] = playlistImage
+    playlistInfo["duplicates"] = duplicates
     playlistInfo["trackTable"] = trackTable
 
     return playlistInfo
@@ -156,7 +193,8 @@ const getArtistInfo = async (accessToken, playlistArtistIds) => {
                 "artistId": artistObject.id,
                 "artistName": artistObject.name,
                 "artistPopularity": artistObject.popularity,
-                "artistGenres": artistObject.genres
+                "artistGenres": artistObject.genres,
+                "artistImage": artistObject?.images[0]?.url
             }
         }
     }
@@ -180,7 +218,19 @@ const getAudioFeatures = async (accessToken, trackIds) => {
         for (let audioFeatures of audioFeaturesResponse.data.audio_features) {
             tracksIdsAndBPM[audioFeatures.id] = {
                 "trackId": audioFeatures.id,
-                "tempo": audioFeatures.tempo
+                "tempo": audioFeatures.tempo,
+                "danceability": audioFeatures.danceability,
+                "energy": audioFeatures.energy,
+                "instrumentalness": audioFeatures.instrumentalness,
+                "key": audioFeatures.key,
+                "liveness": audioFeatures.liveness,
+                "loudness": audioFeatures.loudness,
+                "mode": audioFeatures.mode,
+                "speechiness": audioFeatures.speechiness,
+                "time_signature": audioFeatures.time_signature,
+                "valence": audioFeatures.valence,
+                "acousticness": audioFeatures.acousticness
+
             }
         }
     }

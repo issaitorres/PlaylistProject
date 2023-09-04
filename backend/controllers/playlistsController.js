@@ -34,7 +34,7 @@ const addPlaylist = async (req, res) => {
             playlistName: playlistInfo.playlistName,
             playlistOwner: playlistInfo.playlistOwner,
             playlistImage: playlistInfo.playlistImage,
-            playlistPosition: playlistInfo.playlistPosition,
+            playlistDuplicates: playlistInfo.duplicates,
             trackTable: playlistInfo.trackTable
         })
 

@@ -11,6 +11,7 @@ const Logout = () => {
     useEffect(() => {
         setCookies("access_token", "")
         window.localStorage.removeItem("userID")
+        window.localStorage.removeItem("playlistInfo")
         navigate("/")
     })
 

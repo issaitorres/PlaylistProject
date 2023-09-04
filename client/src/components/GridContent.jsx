@@ -1,24 +1,24 @@
-
-
 import React, { useState, useEffect} from 'react'
+import { sortNumerically, sortAlphabetically } from "../helper/TableColumnHelperMethods"
 
-const GridContent = ({ data, title, headers, columnTypes, columnSortable, columnValues, initialSort}) => {
+const GridContent = ({ grid }) => {
     const [dataArray, setDataArray] = useState([])
     const [columnOneToggle, setColumnOneToggle] = useState(true)
     const [columnTwoToggle, setColumnTwoToggle] = useState(true)
     const [columnThreeToggle, setColumnThreeToggle] = useState(true)
-    const [headerColumn1, headerColumn2, headerColumn3] = headers
-    const [colOneType, colTwoType, colThreeType] = columnTypes
-    const [colOneSort, colTwoSort, colThreeSort] = columnSortable
-    const [colOneVal, colTwoVal, colThreeVal] = columnValues
-    const [initialColValSort, initialType] = initialSort
+    const [headerColumn1, headerColumn2, headerColumn3] = grid.headers
+    const [colOneType, colTwoType, colThreeType] = grid.columnTypes
+    const [colOneSort, colTwoSort, colThreeSort] = grid.columnSortable
+    const [colOneVal, colTwoVal, colThreeVal] = grid.columnValues
+    const [initialColValSort, initialType] = grid.initialSort
+    const data = grid.data
+    const title = grid.title
 
 
     const gridHeaderColOneOrderToggle = (title) => {
         const sorted = determineColTypeAndSort(colOneType, dataArray, columnOneToggle, "colOneValue")
         setDataArray(sorted)
         setSortArrows(1, columnOneToggle, title)
-
         setColumnOneToggle(!columnOneToggle)
     }
 
@@ -27,7 +27,6 @@ const GridContent = ({ data, title, headers, columnTypes, columnSortable, column
         setDataArray(sorted)
         setSortArrows(2, columnTwoToggle, title)
         setColumnTwoToggle(!columnTwoToggle)
-
     }
 
     const gridHeaderColThreeOrderToggle = (title) => {
@@ -38,7 +37,6 @@ const GridContent = ({ data, title, headers, columnTypes, columnSortable, column
     }
 
     const setSortArrows = (num, toggle, title) => {
-
         var current = document.getElementsByClassName(`${title}-arrow`);
         for(const cur of current) {
             cur.className = cur.className.replaceAll("hidden-arrow", "");
@@ -46,7 +44,6 @@ const GridContent = ({ data, title, headers, columnTypes, columnSortable, column
 
         var triggerArrow = document.getElementsByClassName(`${title}-c${num}-arrow`);
         var pos = toggle ? 0 : 1
-
 
         triggerArrow[pos].className += "hidden-arrow"
 
@@ -64,31 +61,21 @@ const GridContent = ({ data, title, headers, columnTypes, columnSortable, column
         }
     }
 
-    const sortAlphabetically = (dataArray, toggle, colVal) => {
-        const val = toggle ? -1 : 1
-        return ([...dataArray].sort((a,b) => a[colVal] < b[colVal] ? val * -1 : val * 1))
-    }
-
-    const sortNumerically = (dataArray, toggle, colVal) => {
-        const val = toggle ? -1 : 1
-        return ([...dataArray].sort((a, b) => val * b[colVal] - val * a[colVal]))
-    }
-
     useEffect(() => {
         var initialDataArray = []
         for (let [key, value] of Object.entries(data)) {
             initialDataArray.push({
-                colOneValue: colOneVal =="useKey"
+                colOneValue: colOneVal == "useKey"
                     ? key
                     : typeof(value[colOneVal]) == Number
                         ?  Number(value[colOneVal])
                         : value[colOneVal],
-                colTwoValue: colTwoVal =="useKey"
+                colTwoValue: colTwoVal == "useKey"
                     ? key
                     : typeof(value[colTwoVal]) == Number
                         ?  Number(value[colTwoVal])
                         : value[colTwoVal],
-                colThreeValue: colThreeVal =="useKey"
+                colThreeValue: colThreeVal == "useKey"
                     ? key
                     : typeof(value[colThreeVal]) == Number
                         ?  Number(value[colThreeVal])
@@ -139,7 +126,7 @@ const GridContent = ({ data, title, headers, columnTypes, columnSortable, column
                 className={`grid-header ${colTwoSort ? "header-toggle-sort grid-header-hoverable ": null }`}
                 onClick={colTwoSort ? () => gridHeaderColTwoOrderToggle(title) : null}
             >
-                <b>
+                <b className="table-header">
                     {headerColumn2}
                 </b>
                 { colTwoSort
@@ -167,7 +154,7 @@ const GridContent = ({ data, title, headers, columnTypes, columnSortable, column
                 className={`grid-header ${colThreeSort ? "header-toggle-sort grid-header-hoverable ": null }`}
                 onClick={colThreeSort ? () => gridHeaderColThreeOrderToggle(title) : null}
             >
-                <b>
+                <b className="table-header">
                     {headerColumn3}
                 </b>
                 { colThreeSort
@@ -190,19 +177,24 @@ const GridContent = ({ data, title, headers, columnTypes, columnSortable, column
                     : null
                 }
             </div>
-            {dataArray.map((info) => (
-                <>
+            {dataArray.map((info, index) => (
+                <React.Fragment key={index}>
                     <div className="grid-item">
                         {info.colOneValue}
                     </div>
                     <div className="grid-item">
                         {info.colTwoValue}
+
                     </div>
-                    <div className="grid-item">
+                    <div className={`
+                        grid-item 
+                        ${Array.isArray(colThreeType) ? "grid-item-song-titles" : ""}
+                        ${info.colThreeValue.length > 5 ? "grid-item-song-titles-min-height" : "" }
+                    `}>
                         <ul>
                             {Array.isArray(info.colThreeValue)
-                                ? info.colThreeValue.map((val) => (
-                                    <li>
+                                ? info.colThreeValue.map((val, index) => (
+                                    <li key={index}>
                                         {val}
                                     </li>
                                 ))
@@ -210,7 +202,7 @@ const GridContent = ({ data, title, headers, columnTypes, columnSortable, column
                             }
                         </ul>
                     </div>
-                </>
+                </React.Fragment>
             ))}
         </div>
     </>

@@ -1,0 +1,18 @@
+.sparkle-svg{
+    viewBox: "0 0 160 160";
+    fill: "none";
+    position: absolute;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.sparkle-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.sparkle-childwrapper {
+    position: relative;
+    z-index: 1;
+    font-weight: bold;
+}
