@@ -20,6 +20,8 @@ const TrackGridContent = ({ trackTable, playlistDuplicates }) => {
             return sortNumerically(dataArray, columnToggle, colVal)
         } else if (colType == "boolean") {
             return sortAlphabetically(dataArray, columnToggle, colVal, true)
+        } else if (colType == "object") {
+            return sortAlphabetically(dataArray, columnToggle, colVal, false, "artistName")
         }
         else { //array
             return null
@@ -38,7 +40,7 @@ const TrackGridContent = ({ trackTable, playlistDuplicates }) => {
     }
 
     const updateSortArrows = (index, toggle) => {
-        var current = document.getElementsByClassName(`arrow`);
+        var current = document.getElementsByClassName(`tt-arrow`);
         for(const cur of current) {
             cur.className = cur.className.replaceAll("hidden-arrow", "");
         }
@@ -58,8 +60,12 @@ const TrackGridContent = ({ trackTable, playlistDuplicates }) => {
                 "trackPreview": trackInfo.trackPreview,
                 "songPop": trackInfo.trackPopularity,
                 "artist": Object.values(trackInfo.trackArtists)
-                            .map((artistInfo) => artistInfo.name)
-                            .join(', '),
+                            .map((artistInfo) => (
+                                {"artistName": artistInfo.name, "artistId": artistInfo.id}
+                            )),
+                // "artist": Object.values(trackInfo.trackArtists)
+                //             .map((artistInfo) => artistInfo.name)
+                //             .join(', '),
                 "genres": Array.from(new Set(Object.values(trackInfo.trackArtists)
                             .map((artistInfo) => {
                                 var genres = artistInfo.artistGenres
@@ -137,13 +143,13 @@ const TrackGridContent = ({ trackTable, playlistDuplicates }) => {
                         </b>
                         <div className="sortable-icons">
                             <div className={`
-                                arrow
+                                tt-arrow
                                 h${index}-arrow
                             `}>
                                 &#9650;
                             </div>
                             <div className={`
-                                arrow
+                                tt-arrow
                                 h${index}-arrow
                             `}>
                                 &#9660;
@@ -159,9 +165,34 @@ const TrackGridContent = ({ trackTable, playlistDuplicates }) => {
                             return (
                                 <div className="grid-item" key={index}>
                                     <div>
-                                        <div>
-                                            {value}
-                                        </div>
+                                        { index != 3 
+                                            ? 
+                                                <div>
+                                                    {value}
+                                                </div>
+                                            :
+                                                <div>
+                                                    {/* {"artistName": artistInfo.name, "artistId": artistInfo.id} */}
+
+                                                    {value.map((info, index) => {
+                                                        return (
+                                                            <>
+                                                                <a href={`https://open.spotify.com/artist/${info.artistId}`} target="_blank" rel="noreferrer">
+                                                                    {info.artistName}
+                                                                </a>
+                                                                {index+1 < value.length ? `, `: ""}
+                                                            </>
+                                                        )
+
+                        })}
+                                                    {/* {value.map((info) => (
+                                                        <a href={info.id}>
+                                                            {info.artistName}
+                                                        </a>
+                                                        )).join(', ')} */}
+                                                </div>
+                                        }
+
                                         { index == 0 &&
                                             <img src={info.albumArt} width="65px" height="65px"/>
                                         }

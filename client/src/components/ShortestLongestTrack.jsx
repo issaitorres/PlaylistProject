@@ -4,10 +4,6 @@ import "./shortestlongesttrack.css"
 
 
 const ShortestLongestTrack = ({ shortestTrack, longestTrack}) => {
-
-  console.log("\n here is shortestTrack")
-  console.log(shortestTrack.trackName)
-
   return (
     <div className="shortest-longest-container-two">
       <div className="leftTrack">
@@ -20,13 +16,11 @@ const ShortestLongestTrack = ({ shortestTrack, longestTrack}) => {
         </div>
         <div className="title-artist">
           <div>
-            {shortestTrack.trackName}&nbsp;
-            by&nbsp;
-              {
-                Object.values(shortestTrack.trackArtists)
-                  .map((artistInfo) => artistInfo.name)
-                  .join(' & ')
-              }
+            {shortestTrack.trackName} by {
+              Object.values(shortestTrack.trackArtists)
+                .map((artistInfo) => artistInfo.name)
+                .join(' & ')
+            }
           </div>
         </div>
       </div>
@@ -40,18 +34,17 @@ const ShortestLongestTrack = ({ shortestTrack, longestTrack}) => {
         </div>
         <div className="title-artist">
           <div>
-            {longestTrack.trackName}&nbsp;
-            by&nbsp;
-              {
-                Object.values(longestTrack.trackArtists)
-                  .map((artistInfo) => artistInfo.name)
-                  .join(' & ')
-              }
+            {longestTrack.trackName} by {
+              Object.values(longestTrack.trackArtists)
+                .map((artistInfo) => artistInfo.name)
+                .join(' & ')
+            }
           </div>
         </div>
       </div>
     </div>
   )
 }
+
 
 export default ShortestLongestTrack

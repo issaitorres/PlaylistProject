@@ -114,9 +114,15 @@ const PieChart = ({trackTable, title, type}) => {
                 }
             },
             datalabels: {
-                display: true,
+                // display datalabel if percentage is greater than 10%
+                display: function(context) {
+                    const total = context.chart.data.datasets[0].data.reduce((acc, val) => acc + val)
+                    const curr = context.chart.data.datasets[0].data[context.dataIndex]
+                    return curr > (Math.ceil(total/10)) ? true : false
+                  },
                 color: 'black',
                 align: "end",
+                offset: 10,
                 font: {
                     weight: "bold",
                     size: 14,

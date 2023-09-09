@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useCookies } from 'react-cookie'
 import axios from 'axios'
-import AddPlaylistId from '../components/addPlaylistId'
-import PlaylistLinkContainer from '../components/playlistLinkContainer'
+import AddPlaylistId from '../../components/addPlaylistId'
+import PlaylistLinkContainer from '../../components/playlistLinkContainer'
+import LoggedOut from './LoggedOut'
 
 
 const Home = () => {
@@ -50,9 +51,13 @@ const Home = () => {
             }
           })
           setPlaylists(res.data)
-
         }
+        // else if(error?.response?.status === 500) {
+        //   // console.log(error)
+
+        // }
         console.log(error)
+
       }
     }
   }, [])
@@ -69,7 +74,7 @@ const Home = () => {
       <AddPlaylistId accessToken={cookies.access_token} fetchPlaylists={fetchPlaylists} />
       {
         !cookies.access_token && !userID 
-          ? "Login to see playlist info" 
+          ? <LoggedOut/>
           : (!playlists.length 
             ? <div>
                 Add a playlist to see info here!

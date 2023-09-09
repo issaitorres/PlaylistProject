@@ -14,6 +14,14 @@ const AddPlaylistId = ({ accessToken, fetchPlaylists }) => {
     if(playlistIdRegex1.test(playlistId) || playlistIdRegex2.test(playlistId)) {
 
       var extractedPlaylistId = playlistIdRegex2.test(playlistId) ? playlistId.split('/').pop() : playlistId
+
+      // compare with localstorage
+      const localStoragePlaylistInfo = window.localStorage.playlistInfo
+      if(localStoragePlaylistInfo) {
+        const currentPlaylistIds = JSON.parse(localStoragePlaylistInfo).map((info) => info.playlistId)
+        if(currentPlaylistIds.includes(extractedPlaylistId)) return alert("This playlist ID has already been submitted!")
+      }
+
       try {
         const res = await axios.post("http://localhost:3500/playlists", {
           playlistId: extractedPlaylistId
@@ -30,7 +38,6 @@ const AddPlaylistId = ({ accessToken, fetchPlaylists }) => {
       } catch (err) {
         console.log(err)
       }
-
     } else {
       alert("Invalid playlist ID")
     }

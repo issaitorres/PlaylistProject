@@ -3,17 +3,24 @@ import axios from 'axios'
 import { useCookies } from 'react-cookie'
 import { useNavigate } from 'react-router-dom'
 import FormInput from '../components/FormInput'
+import {useLocation} from 'react-router-dom';
+
 
 
 
 const Auth = () => {
+  const location = useLocation();
+
   const [loginData, setLoginData] = useState({
-    email: "",
+    email: location?.state?.email || "",
     password: ""
   })
 
   const [cookies, setCookies] = useCookies(["access_token"])
+  const [displayWarning, setDisplayWarning] = useState(false)
+
   const navigate = useNavigate()
+
 
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -32,11 +39,15 @@ const Auth = () => {
       navigate('/')
 
     } catch (err) {
+      if(err.response.status === 401){
+        setDisplayWarning(true)
+      }
       console.log(err)
     }
   }
 
   const onChange = (e) => {
+    setDisplayWarning(false)
     setLoginData({...loginData, [e.target.name]: e.target.value})
   }
 
@@ -66,6 +77,10 @@ const Auth = () => {
     <div className="page">
       <form onSubmit={handleSubmit} className="form">
         <h1> Login</h1>
+        {displayWarning &&
+          <div className="warning">
+            Username or password is incorrect
+          </div>}
         {inputs.map((input) => (
           <FormInput
             key={input.id}

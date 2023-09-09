@@ -17,12 +17,8 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    // userPlaylistObjectIds: [{
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'playlists'
-    // }],
     userPlaylistObjectIds: [{
-        type: Map,
+        type: Array,
         of: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'playlists'

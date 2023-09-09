@@ -8,7 +8,7 @@ const getGraphGridData = (artistSongsInfo, genreSongs, yearSongs ) => {
                     graphTitle: 'Most common artists',
                     xAxisTitle: 'Artist',
                     yAxisTitle: '# of songs',
-                    customTicks: "artistGenreTicks",
+                    minimizeTicks: true,
                     customTooltip: "artistGenreTooltip",
                     groupData: true,
                     xData: "artistName",
@@ -20,10 +20,10 @@ const getGraphGridData = (artistSongsInfo, genreSongs, yearSongs ) => {
                     title: "artist-information",
                     data: artistSongsInfo,
                     headers: ["Artist", "# of songs", "Songs"],
-                    columnTypes: ["string", "number", ["string"]],
                     columnSortable: [true, true, false],
                     columnValues: ["artistName", "trackCount", "trackNames"],
-                    initialSort: ["colTwoValue", "Number"]
+                    initialSort: ["colTwoValue", "Number"],
+                    initiallySortByColumn: 1 // 0 indexed columns
                 }
             },
             {
@@ -33,7 +33,7 @@ const getGraphGridData = (artistSongsInfo, genreSongs, yearSongs ) => {
                     graphTitle: 'Most common genres',
                     xAxisTitle: 'Genre',
                     yAxisTitle: '# of songs',
-                    customTicks: "artistGenreTicks",
+                    minimizeTicks: true,
                     customTooltip: "artistGenreTooltip",
                     groupData: true,
                     xData: "genre",
@@ -44,11 +44,12 @@ const getGraphGridData = (artistSongsInfo, genreSongs, yearSongs ) => {
                 grid: {
                     title: "genre-information",
                     data: genreSongs,
-                    headers: ["Genre", "# of songs", "Songs"],
-                    columnTypes: ["string", "number", ["string"]],
-                    columnSortable: [true, true, false],
-                    columnValues: ["useKey", "trackCount", "trackNames"],
-                    initialSort: ["colTwoValue", "Number"]
+                    headers: ["Genre", "# of songs", "Songs", "Artists"],
+                    columnSortable: [true, true, false, false],
+                    columnValues: ["useKey", "trackCount", "trackNames", "trackArtists"],
+                    initialSort: ["colTwoValue", "Number"],
+                    initiallySortByColumn: 1 // 0 indexed columns
+
                 }
             },
             {
@@ -58,7 +59,7 @@ const getGraphGridData = (artistSongsInfo, genreSongs, yearSongs ) => {
                     graphTitle: 'Most common years',
                     xAxisTitle: 'Year',
                     yAxisTitle: '# of songs',
-                    customTicks: false,
+                    minimizeTicks: false,
                     customTooltip: "yearsTooltip",
                     groupData: false,
                     xData: "genre",
@@ -70,10 +71,11 @@ const getGraphGridData = (artistSongsInfo, genreSongs, yearSongs ) => {
                     title: "year-information",
                     data: yearSongs,
                     headers: ["Year", "# of songs", "Songs"],
-                    columnTypes: ["number", "number", ["string"]],
                     columnSortable: [true, true, false],
                     columnValues: ["useKey", "trackCount", "trackNames"],
-                    initialSort: ["colTwoValue", "Number"]
+                    initialSort: ["colTwoValue", "Number"],
+                    initiallySortByColumn: 1 // 0 indexed columns
+
                 }
             },
             {
@@ -83,7 +85,7 @@ const getGraphGridData = (artistSongsInfo, genreSongs, yearSongs ) => {
                     graphTitle: 'Artist Popularity',
                     xAxisTitle: 'Artist',
                     yAxisTitle: 'Popularity',
-                    customTicks: false,
+                    minimizeTicks: false,
                     customTooltip: false,
                     groupData: false,
                     xData: "artistName",
@@ -95,10 +97,11 @@ const getGraphGridData = (artistSongsInfo, genreSongs, yearSongs ) => {
                     title: "artist-popularity-information",
                     data: artistSongsInfo,
                     headers: ["Artist", "Popularity", "# of songs"],
-                    columnTypes: ["string", "number", "number"],
                     columnSortable: [true, true, true],
                     columnValues: ["artistName", "artistPopularity", "trackCount"],
-                    initialSort: ["colTwoValue", "Number"]
+                    initialSort: ["colTwoValue", "Number"],
+                    initiallySortByColumn: 1 // 0 indexed columns
+
                 }
             }
         ]

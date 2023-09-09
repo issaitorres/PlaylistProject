@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { useState } from 'react'
 import { useCookies } from 'react-cookie'
+import { useNavigate } from 'react-router-dom'
 import {
   getArtistSongsInfo,
   getGenreSongs,
@@ -15,13 +16,13 @@ import SingleTrack from './singleTrack';
 import getGraphGridData from "../data/getGraphGridData"
 import getMoreQualityData from "../data/qualityData"
 import PlaylistQuickFacts from './PlaylistQuickFacts';
+import ShortestLongestTrack from './ShortestLongestTrack';
 import About from './About';
 import "./playlistContainer.css"
 
-import ShortestLongestTrack from './ShortestLongestTrack'; 
 
-
-const PlaylistContainer = ({ playlist, fetchPlaylists=null }) => {
+const PlaylistContainer = ({ playlist }) => {
+  const navigate = useNavigate()
   const [cookies, setCookies] = useCookies(["access_token"])
   const [activate, setActivate] = useState(false)
   const { 
@@ -49,9 +50,15 @@ const PlaylistContainer = ({ playlist, fetchPlaylists=null }) => {
       }
     })
 
-    // alert("remove successful")
-    // we want to update if we remove the playlist!
-    fetchPlaylists(true)
+    // remove playlist from localstorage
+    if(window.localStorage.playlistInfo) {
+      var newLocalStorage = JSON.parse(window.localStorage.playlistInfo).filter((info) => info._id != playlistObjectId)
+      window.localStorage.setItem("playlistInfo", JSON.stringify(newLocalStorage))
+    }
+
+    // redirect to home
+    alert("deleted")
+    navigate('/')
   }
 
 
@@ -74,9 +81,7 @@ const PlaylistContainer = ({ playlist, fetchPlaylists=null }) => {
           graphGridData={getGraphGridData(artistSongsInfo, genreSongs, yearSongs)}
           explicitPieChart={<PieChart trackTable={trackTable} title="Explicit" type="explicit" />}
           decadesPieChart={<PieChart trackTable={trackTable} title="Decades" type="decades" />}
-
-          shortestTrack={<SingleTrack track={getShortestTrack(trackTable)} title="Shortest song" />}
-          test={
+          shortestLongestTrack={
             <ShortestLongestTrack 
               shortestTrack={getShortestTrack(trackTable)} 
               longestTrack={getLongestTrack(trackTable)} 
@@ -87,18 +92,18 @@ const PlaylistContainer = ({ playlist, fetchPlaylists=null }) => {
           qualityData={getMoreQualityData(trackTable, activate, setActivate)}
         />
       </div>
-      <div>
-        <button onClick={() => removePlaylist(playlistObjectId)}>
-          Remove
-        </button>
-      </div>
       <TrackGridContent 
         trackTable={trackTable} 
         playlistDuplicates={playlistDuplicates}
       />
       <div>
-        <About/>
+        <About removePlaylist={() => removePlaylist(playlistObjectId)}/>
       </div>
+      {/* <div>
+        <button onClick={() => removePlaylist(playlistObjectId)}>
+          Remove this playlist
+        </button>
+      </div> */}
     </div>
   )
 }

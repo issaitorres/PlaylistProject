@@ -1,8 +1,14 @@
 import { useRef } from 'react'
 import { Bar } from 'react-chartjs-2';
-import { nthIndex, getRangeColors, setLabelsAndDataset } from "../helper/GraphContentHelperMethods"
+import {
+    getRangeColors,
+    setLabelsAndDataset,
+    yearsTooltipCallbackTitle,
+    artistGenreTooltipCallbackTitle,
+    minimizeTicksCallback,
+    labelTooltipCallback
+} from "../helper/GraphContentHelperMethods"
 import "../ChartJS"
-import { truncateString } from "../helper/StringHelperMethods"
 
 
 const GraphContent = ({ graph }) => {
@@ -11,7 +17,7 @@ const GraphContent = ({ graph }) => {
     const graphTitle = graph.graphTitle
     const xAxisTitle = graph.xAxisTitle
     const yAxisTitle = graph.yAxisTitle
-    const customTicks = graph.customTicks
+    const minimizeTicks = graph.minimizeTicks
     const customTooltip = graph.customTooltip
     const groupData = graph.groupData
     const xData = graph.xData
@@ -41,59 +47,18 @@ const GraphContent = ({ graph }) => {
     }
 
     const yearsTooltipCallback =  {
-        title: (context) => {
-            var songs = `${context[0].label}\n`
-            for( const [index, track] of data[Number(context[0].label)].trackNames.entries()) {
-                if(index > 25) {
-                    songs += "\n..."
-                    break
-                } else {
-                    songs += `\n${truncateString(track, 40)}`
-                }
-
-            }
-            return songs
-        },
-        label: (context) => {
-            return `${context.formattedValue} ${context.formattedValue > 1 ? 'songs' : 'song'}`
-        },
+        title: (context) => yearsTooltipCallbackTitle(context, data),
+        label: (context) => labelTooltipCallback(context)
     }
 
     const artistGenreTooltipCallback = {
-        title: (context) => {
-            if(context[0].label.includes(",")) {
-                var limit = nthIndex(context[0].label,',',25)
-                if (limit !== -1) {
-                    var sub = context[0].label.substring(0, limit)
-                    sub += ",..."
-                    return sub.replaceAll(",", "\n")
-                }
-                return context[0].label.replaceAll(",", "\n")
-            }
-            return context.dataset
-        },
-        label: (context) => {
-            return `${context.formattedValue} ${context.formattedValue > 1 ? 'songs' : 'song'}`
-        },
+        title: (context) => artistGenreTooltipCallbackTitle(context),
+        label: (context) => labelTooltipCallback(context)
     }
 
-    const artistGenreTicksCallback = {
-        callback: function(label) {
-            var shortenXLabel = this.getLabelForValue(label).slice(0,4)
-            if(shortenXLabel.length == 4) {
-                shortenXLabel.push("...")
-            }
-            return shortenXLabel
-        },
-        color: "black",
-        font: {
-            size: 12.5
-        }
-    }
 
     const customCallbacks = {
         "yearsTooltip": yearsTooltipCallback,
-        "artistGenreTicks" : artistGenreTicksCallback,
         "artistGenreTooltip": artistGenreTooltipCallback
     }
 
@@ -158,7 +123,22 @@ const GraphContent = ({ graph }) => {
                     },
                     color: "black"
                 },
-                ticks: customTicks ? customCallbacks[customTicks] : {color: "black"},
+                // this keyword is specific to where it is called
+                // so this can only work here and function(label) is different from arrow function
+                // this specific case needs function(label)
+                ticks: {
+                    callback: function(label) {
+                        var newLabel = minimizeTicks
+                            ? minimizeTicksCallback(this, label)
+                            : this.getLabelForValue(label)
+                        return newLabel
+                    },
+                    color: "black",
+                    font: {
+                        size: 12.5
+                    }
+                }
+
             },
             y: {
                 title: {
@@ -179,7 +159,7 @@ const GraphContent = ({ graph }) => {
   return (
         <>
             <Bar id="myChart" ref={chartRef} options={options} data={barData}/>
-            <button onClick={handleResetZoom}>Reset Zoom</button>
+            {/* <button onClick={handleResetZoom}>Reset Zoom</button> */}
             {/* <button onClick={draw}>draw</button> */}
         </>
   )

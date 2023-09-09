@@ -49,23 +49,21 @@ const getMyPlaylists = async (req, res) => {
     const mongoUserId = req.mongoUserId
     const userObject = await User.findOne({ _id: mongoUserId }).exec()
 
-    // const newUserPlaylistObjectIds = userObject.userPlaylistObjectIds.map((p) => p.toString())
-    // newUserPlaylistObjectIds.map((p) => p.toString())
-    // const properForm = []
-    // newUserPlaylistObjectIds.map((p) => properForm.push({"_id": p}))
-    // const playlistObjects = await Playlist.find({
-    //     "$or":  properForm
-    // })
-
     try {
+        const multipleIds = []
+        userObject.userPlaylistObjectIds.forEach((playlistObjectId) => {
+            multipleIds.push({ _id: playlistObjectId})
+        })
+
+        if (!multipleIds.length) return res.status(204)
+
         const playlistObjects = await Playlist.find({
-            "$or":  userObject.userPlaylistObjectIds
+            "$or":  multipleIds
         })
 
         res.status(200).json(playlistObjects)
     } catch (err) {
-        res.status(200).json({ 'message' : `some error` })
-
+        res.status(500).json({ 'message' : 'Invalid playlist object id(s)' })
     }
 }
 
@@ -91,19 +89,44 @@ const disassociateUserFromPlaylistById = async (req, res) => {
     }
 }
 
+const deletePlaylistAndDissociateUserWithPlayListId = async (req, res) => {
+    const mongoUserId = req.mongoUserId
+    const playlistObjectId = req.body.playlistObjectId
+
+    if (!mongoUserId || !playlistObjectId) return res.status(400).json({ 'message': 'missing playlistObjectId or mongoUserId' })
+
+    const userObject = await User.findOne({ _id: mongoUserId }).exec()
+
+    if(userObject.userPlaylistObjectIds.includes(playlistObjectId)) {
+        const newUserPlaylistObjectIds = userObject.userPlaylistObjectIds.filter((userPlaylistObjectId) => userPlaylistObjectId !=  playlistObjectId)
+        userObject.userPlaylistObjectIds = newUserPlaylistObjectIds
+
+        const result = await userObject.save()
+        const deletedResult = await Playlist.deleteOne({ _id: playlistObjectId })
+
+        res.status(200).json({ 'message': 'delete successful'})
+    } else {
+        res.status(200).json({ 'message' : 'couldn\'t find that playlistId'})
+    }
+
+}
+
 const addPlaylistObjectIdToUserPlaylistObjectIds = async (mongoUserId, playlistObjectId) => {
     const user = await User.findOne({ _id: mongoUserId})
 
     if(!user.userPlaylistObjectIds.includes(playlistObjectId)) {
-        const obj = { _id: playlistObjectId}
-        user.userPlaylistObjectIds.push(obj)
-
-        // user.userPlaylistObjectIds.push(playlistObjectId)
+        user.userPlaylistObjectIds.push(playlistObjectId._id)
         const result = await user.save()
     } 
 }
 
-module.exports = { getAllPlaylists, addPlaylist, getMyPlaylists, disassociateUserFromPlaylistById }
+module.exports = {
+    getAllPlaylists,
+    addPlaylist,
+    getMyPlaylists,
+    disassociateUserFromPlaylistById,
+    deletePlaylistAndDissociateUserWithPlayListId
+}
 
 
 

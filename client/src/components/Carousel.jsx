@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import GridContent from './GridContent';
 import GraphContent from './GraphContent';
 import QualityContainer from './QualityContainer';
+import CarouselGrid from './CarouselGrid';
 import "./carousel.css"
 
 const Carousel = ({ 
     graphGridData, 
     explicitPieChart,
     decadesPieChart,
-    shortestTrack, 
-    longestTrack, 
     qualityData,
-    test
+    shortestLongestTrack
 }) => {
     const [currentIndex, setCurrentIndex] = useState(0)
 
@@ -72,9 +70,7 @@ const Carousel = ({
                             {
                             graphGrid.grid.data
                                 ? 
-                                    <GridContent
-                                        grid={graphGrid.grid}
-                                    />
+                                    <CarouselGrid grid={graphGrid.grid}/>
                                 : "spinner"
                             }
                         </div>
@@ -102,7 +98,7 @@ const Carousel = ({
                                 {shortestTrack}
                                 {longestTrack}
                             </div> */}
-                            {test}
+                            {shortestLongestTrack}
                         </div>
                         <div className="more-bottom-container">
                             {qualityData.map((data, index) => {

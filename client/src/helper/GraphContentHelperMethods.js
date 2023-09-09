@@ -1,3 +1,6 @@
+import { truncateString } from "../helper/StringHelperMethods"
+
+
 // get the index of the nth time pat appears in a string
 const nthIndex = (str, pat, n) => {
     var L= str.length, i= -1;
@@ -82,9 +85,53 @@ const setLabelsAndDataset = (data, xData, yData,  useKeyForxData, useValueForLab
     return [labels, dataset]
 }
 
+const yearsTooltipCallbackTitle = (context, data) => {
+        var songs = `${context[0].label}\n`
+        for( const [index, track] of data[Number(context[0].label)].trackNames.entries()) {
+            if(index > 25) {
+                songs += "\n..."
+                break
+            } else {
+                songs += `\n${truncateString(track, 40)}`
+            }
+        }
+        return songs
+}
+
+const artistGenreTooltipCallbackTitle = (context) => {
+    if(context[0].label.includes(",")) {
+        var limit = nthIndex(context[0].label,',',25)
+        if (limit !== -1) {
+            var sub = context[0].label.substring(0, limit)
+            sub += ",..."
+            return sub.replaceAll(",", "\n")
+        }
+        return context[0].label.replaceAll(",", "\n")
+    }
+    return context.dataset
+}
+
+
+const minimizeTicksCallback = (data, label) => {
+    var shortenXLabel = data.getLabelForValue(label).slice(0,4)
+    if(shortenXLabel.length == 4) {
+        shortenXLabel.push("...")
+    }
+    return shortenXLabel
+}
+
+
+const labelTooltipCallback = (context) => {
+    return `${context.formattedValue} ${context.formattedValue > 1 ? 'songs' : 'song'}`
+}
+
 
 export {
     nthIndex,
     getRangeColors,
-    setLabelsAndDataset
+    setLabelsAndDataset,
+    yearsTooltipCallbackTitle,
+    artistGenreTooltipCallbackTitle,
+    minimizeTicksCallback,
+    labelTooltipCallback
 }
