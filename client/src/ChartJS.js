@@ -13,7 +13,7 @@ import {
   import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 
-// Global register for both bar and pie chart we will be using
+// Global register for both bar and pie chart
 // zoomPlugin specific to bar chart
 // ArcElement and ChartDataLabels specific to pie chart
   ChartJS.register(

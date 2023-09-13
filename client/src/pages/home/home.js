@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useCookies } from 'react-cookie'
 import axios from 'axios'
-import AddPlaylistId from '../../components/addPlaylistId'
-import PlaylistLinkContainer from '../../components/playlistLinkContainer'
+import AddPlaylist from '../../components/AddPlaylist/AddPlaylist'
+import PlaylistLinkContainer from '../../components/PlaylistTile/PlaylistTile'
 import LoggedOut from './LoggedOut'
 
 
@@ -71,7 +71,7 @@ const Home = () => {
 
   return (
     <div className="page-container">
-      <AddPlaylistId accessToken={cookies.access_token} fetchPlaylists={fetchPlaylists} />
+      <AddPlaylist accessToken={cookies.access_token} fetchPlaylists={fetchPlaylists} />
       {
         !cookies.access_token && !userID 
           ? <LoggedOut/>

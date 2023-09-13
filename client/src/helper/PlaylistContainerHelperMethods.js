@@ -214,35 +214,39 @@ const getHighestLowestField = (fieldName, trackTable) => {
         "lowestArtist": "",
     }
 
-    const setHighestScoreNameArtist = (score, name, artist) => {
+    const setHighestScoreNameArtist = (score, name, artist, albumImage) => {
         highestLowest["highestScore"] = score
         highestLowest["highestName"] = name
         highestLowest["highestArtist"] = Object.values(artist)
                                             .map((artistInfo) => artistInfo.name)
                                             .join(' & ')
+        highestLowest["highestAlbumImage"] = albumImage
+
     }
-    const setLowestScoreNameArtist = (score, name, artist) => {
+    const setLowestScoreNameArtist = (score, name, artist, albumImage) => {
         highestLowest["lowestScore"] = score
         highestLowest["lowestName"] = name
         highestLowest["lowestArtist"] = Object.values(artist)
                                             .map((artistInfo) => artistInfo.name)
                                             .join(' & ')
+        highestLowest["lowestAlbumImage"] = albumImage
+
     }
 
     for(const [track, trackInfo] of Object.entries(trackTable)) {
         if(highestLowest["highestScore"] == null) {
-            setHighestScoreNameArtist(trackInfo[fieldName], trackInfo.trackName, trackInfo.trackArtists )
+            setHighestScoreNameArtist(trackInfo[fieldName], trackInfo.trackName, trackInfo.trackArtists, trackInfo.album.albumImage )
         } else {
             if(trackInfo[fieldName] > highestLowest["highestScore"]) {
-                setHighestScoreNameArtist(trackInfo[fieldName], trackInfo.trackName, trackInfo.trackArtists )
+                setHighestScoreNameArtist(trackInfo[fieldName], trackInfo.trackName, trackInfo.trackArtists, trackInfo.album.albumImage )
             }
         }
 
         if(highestLowest["lowestScore"] == null) {
-            setLowestScoreNameArtist(trackInfo[fieldName], trackInfo.trackName, trackInfo.trackArtists )
+            setLowestScoreNameArtist(trackInfo[fieldName], trackInfo.trackName, trackInfo.trackArtists, trackInfo.album.albumImage )
         } else {
             if(trackInfo[fieldName] < highestLowest["lowestScore"]) {
-                setLowestScoreNameArtist(trackInfo[fieldName], trackInfo.trackName, trackInfo.trackArtists )
+                setLowestScoreNameArtist(trackInfo[fieldName], trackInfo.trackName, trackInfo.trackArtists, trackInfo.album.albumImage )
             }
         }
     }

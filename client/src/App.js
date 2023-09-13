@@ -1,13 +1,12 @@
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Home from './pages/home/home.js';
-import Register from './pages/register';
-import Auth from './pages/auth';
-import Logout from './pages/logout';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-
-import Playlist from './pages/playlist';
+import Register from './pages/auth/register';
+import Login from './pages/auth/auth';
+import Logout from './pages/auth/logout';
+import Navbar from './components/NavBar/Navbar';
+import Footer from './components/Footer/Footer';
+import Playlist from './pages/playlist/playlist';
 
 
 function App() {
@@ -18,7 +17,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/auth" element={<Auth />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="/playlist/:id" element={<Playlist/>} />
         </Routes>

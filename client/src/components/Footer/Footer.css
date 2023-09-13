@@ -1,0 +1,36 @@
+.footer {
+    background-color: #333;
+    color: white;
+    position: absolute;
+    bottom: -150px;
+    width: 100%;
+    min-height: 150px;
+    margin: 20px 0px 0px 0px;
+  }
+  
+  .footer a {
+    color: white;
+  }
+  
+  .footer-links {
+    padding: 10px;
+  }
+  
+  .footer-end {
+    text-align: center;
+  }
+
+  .footer-flex {
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    margin: 10px auto;
+    /* padding: 10px; */
+  }
+
+  .footer-icon{
+    width: 30px;
+    height: 30px;
+    margin: 2px;
+    padding: 5px;
+  }

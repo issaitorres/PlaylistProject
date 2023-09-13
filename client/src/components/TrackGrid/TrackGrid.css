@@ -1,0 +1,146 @@
+.track-table-container {
+    margin: 30px 0px;
+    padding: 0px;
+    display: grid;
+    grid-template-columns: repeat(22, 1fr);
+    height: 1500px;
+    max-height: 800px;
+    overflow: scroll;
+}
+
+.track-table-heading {
+    display: block;
+    margin: 0px auto 0px 5px;
+}
+  
+.track-table-heading h2 {
+    margin: 10px 0px 10px 0px
+}
+
+.track-table-header {
+    margin: 0px 0px;
+    padding: 10px;
+    font-size: 18px;
+    position: sticky;
+    top: 0;
+    display: flex;
+    align-items: center;
+    background-color: #878787;
+    border: 1px solid #646464;
+}
+
+.table-header {
+    font-size: 18px;
+    padding: 5px 10px;
+}
+
+.header-toggle-sort {
+    cursor: pointer;
+}
+
+.sortable-icons {
+    display: flex;
+    flex-direction: column;
+    margin: auto 5px;
+}
+
+
+.grid-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border: 1px solid #c7c7c7;
+  padding: 5px 0px;
+}
+
+.grid-item > div > img{
+    padding: 5px;
+}
+
+.grid-item>ul {
+    margin: 15px 0px;
+}
+
+.tt-arrow {
+  font-size: 10px;
+}
+
+.hidden-arrow {
+    visibility: hidden; /* visibility keeps space*/
+}
+
+.audio-container {
+    padding: 5px;
+    /* margin: 5px; */
+}
+
+.audio-button {
+    height: 30px;
+    width: 30px;
+    font-size: 15px;
+    border-radius: 50%;
+    border: 2px solid var(--default-gray);
+    text-align: center;
+    cursor: pointer;
+}
+  
+.audio-button>svg{
+    padding: 2px 1px 1px 1px;
+}
+
+.hidden-button {
+    display: none;
+}
+
+/* prevent icon from interfering with clicks on button 
+    - specifically for Font Awesome Play and Pause icons */
+[data-prefix='fas'] {
+    pointer-events: none;
+  }
+
+
+audio::-webkit-media-controls-mute-button {
+  display: none !important;
+}
+
+audio::-webkit-media-controls-volume-slider {
+  display: none !important;
+}
+
+audio:not([controls]) {
+  display: none !important;
+}
+
+
+/* Every other row has different background color to tell rows apart */
+/* will depend on how many columns we have */
+/* works when sorting items by any column type too  */
+/* an + b where a = 2 x N and N is number of headers and b is offset
+N will also determine how high our offset needs to reach starting at 1*/
+/* 22 headers */
+.track-table-container > .grid-item:nth-child(44n + 1),
+.track-table-container > .grid-item:nth-child(44n + 2),
+.track-table-container > .grid-item:nth-child(44n + 3),
+.track-table-container > .grid-item:nth-child(44n + 4),
+.track-table-container > .grid-item:nth-child(44n + 5),
+.track-table-container > .grid-item:nth-child(44n + 6),
+.track-table-container > .grid-item:nth-child(44n + 7),
+.track-table-container > .grid-item:nth-child(44n + 8),
+.track-table-container > .grid-item:nth-child(44n + 9),
+.track-table-container > .grid-item:nth-child(44n + 10),
+.track-table-container > .grid-item:nth-child(44n + 11),
+.track-table-container > .grid-item:nth-child(44n + 12),
+.track-table-container > .grid-item:nth-child(44n + 13),
+.track-table-container > .grid-item:nth-child(44n + 14),
+.track-table-container > .grid-item:nth-child(44n + 15),
+.track-table-container > .grid-item:nth-child(44n + 16),
+.track-table-container > .grid-item:nth-child(44n + 17),
+.track-table-container > .grid-item:nth-child(44n + 18),
+.track-table-container > .grid-item:nth-child(44n + 19),
+.track-table-container > .grid-item:nth-child(44n + 20),
+.track-table-container > .grid-item:nth-child(44n + 21),
+.track-table-container > .grid-item:nth-child(44n + 22)
+{
+    background: #e6e6e6;
+}

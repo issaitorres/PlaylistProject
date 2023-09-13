@@ -1,0 +1,23 @@
+.add-playlist-form {
+    background-color: var(--default-gray);
+    padding: 2px 60px;
+    border-radius: 10px;
+    text-align: center;
+    align-items: center;
+    max-width: 800px;
+    margin: 10px auto;
+}
+
+.add-playlist-formInput-overrides {
+    margin: 0px auto;
+    max-width: 400px ;
+}
+
+.add-playlist-formInput-overrides span {
+    max-width: 400px;
+    margin: 0px auto;
+}
+
+.add-playlist-button-override {
+    max-width: 400px
+  }

@@ -1,0 +1,40 @@
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(var(--headerLength, 0), 1fr);
+    height: 1000px;
+    max-height: 400px;
+    overflow: scroll;
+    overflow-x: hidden;
+    width: 850px;
+    margin: 0px auto;
+}
+  
+.grid-item-even-column {
+    background: #e6e6e6;
+}
+
+.grid-header {
+    font-size: 20px;
+    position: sticky;
+    top: 0;
+    display: flex;
+    background-color: #878787;
+    border: 1px solid #646464;
+    padding: 5px 0px;
+}
+  
+.grid-item-song-titles {
+    text-align: left !important;
+    justify-content: left !important;
+    flex-wrap: wrap;
+    padding: 0px 0px;
+}
+  
+.grid-item-song-titles-min-height {
+    overflow: auto;
+    min-height: 200px;
+}
+
+.arrow {
+    font-size: 10px;
+}

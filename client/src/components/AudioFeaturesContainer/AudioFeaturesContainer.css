@@ -1,0 +1,105 @@
+.quality-wrapper {
+    width: 100%;
+    min-width: 200px;
+    max-width: 300px;
+    height: 100%;
+    margin: 1px;
+    align-content: center;
+    text-align: center;
+}
+
+.highestLowestTracks > div > h3 {
+    margin-bottom: 5px;
+}
+
+.image-wrapper {
+    z-index: 0;
+    position: relative;
+}
+
+.image-container {
+    width: 200px;
+    height: 200px;
+    border-radius: 110px;
+    position: relative;
+    overflow: hidden;
+    margin: 5px auto;
+}
+
+.image-icon {
+    z-index: 1;
+    border-radius: 100px;
+    transform: scale(1.05,1.05);
+}
+
+.liquid-animate:before {
+    content: "";
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background: #ffcc00;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 40%;
+    animation: fill 7s ease-in-out forwards;
+    z-index: 0;
+}
+
+.liquid-animate:after {
+    border-radius: 0%;
+}
+
+/* upper limit 12px - lower limit 187 - diff 175 */ 
+@keyframes fill {
+    from {
+        top: 215px;
+        transform: translateX(-50%) rotate(0deg)
+    }
+    to {
+        top: var(--colorEndPoint, 0px);
+        transform: translateX(-50%) rotate(360deg)
+
+    }
+    75% {border-radius: 40%;}
+    100% {border-radius: 0%;}
+}
+
+
+
+.lightning-animation {
+    animation: flash 3s ease-out forwards;
+}
+
+@keyframes flash {
+    9% {
+        stroke: black;
+    }
+    10% {
+        stroke: yellow;
+    }
+    12% {
+        fill: yellow;
+    }
+    14% {
+        fill: white;
+        stroke: black;
+    }
+    16% {
+        fill: yellow;
+        stroke: yellow;
+    }
+    75% {
+        fill: yellow;
+        stroke: black;
+    }
+    100% {
+        fill: yellow;
+        stroke: black;
+    }
+}
+
+.disco-image {
+    position: relative;
+    transform: scale(3,3);
+    z-index: 1;
+}
