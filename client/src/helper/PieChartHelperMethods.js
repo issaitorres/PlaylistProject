@@ -1,4 +1,5 @@
 import { truncateString } from "../helper/StringHelperMethods"
+import colorSelection from "../data/colorSelection"
 
 
 const separateExplicitCleanTrackTitles = (trackTable) => {
@@ -80,16 +81,11 @@ const decadesPieChartProperties = (trackTable) => {
     var dataTrack= []
     var decades = {}
     var backgroundColor = []
+    var selectedColors = []
     var borderWidth = 0
     var hoverBorderWidth = 0
     const blueColor = 'rgba(43, 130, 204, transparency)'
 
-    // color must now be the same as the background! ever!
-    function random_rgba() {
-        var o = Math.round, r = Math.random, s = 255;
-        return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + 'transparency' + ')';
-    }
-    
     for(const track of trackTable) {
         var decade = Math.floor(track.album.albumReleaseYear / 10) * 10
 
@@ -110,7 +106,7 @@ const decadesPieChartProperties = (trackTable) => {
 
     if(Object.keys(decades).length > 1) {
         Object.keys(decades).forEach((decade) => {
-            backgroundColor.push(random_rgba())
+            backgroundColor.push(random_rgba(selectedColors))
         })
         borderWidth = 1
         hoverBorderWidth = 2
@@ -144,6 +140,39 @@ const decadesToolTipCallbacks = (context, decades, trackTitleDisplaylimit, total
 
 const decadesDataLabelsFormatter = (value, context) => {
     return context.chart.data.labels[context.dataIndex].slice(-2) + "s"
+}
+
+
+// get distinct color from preselected list
+const random_rgba = (selectedColors) => {
+    var colors = Object.values(colorSelection)
+    var randomColor = colors[colors.length * Math.random() | 0]
+    if(selectedColors.includes(randomColor)) {
+        var loopColor = randomColor
+        while (selectedColors.includes(loopColor)) {
+            loopColor = colors[colors.length * Math.random() | 0]
+        }
+        selectedColors.push(loopColor)
+        randomColor = loopColor
+    } else {
+        selectedColors.push(randomColor)
+    }
+
+    var hexColor = hexToRgbA(randomColor)
+    return hexColor
+}
+
+const hexToRgbA = (hex) =>{
+    var c;
+    if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
+        c= hex.substring(1).split('');
+        if(c.length== 3){
+            c= [c[0], c[0], c[1], c[1], c[2], c[2]];
+        }
+        c= '0x'+c.join('');
+        return 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+',transparency)';
+    }
+    throw new Error('Bad Hex');
 }
 
 
