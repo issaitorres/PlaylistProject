@@ -2,17 +2,19 @@ import React, { useState, useEffect } from 'react'
 import { useCookies } from 'react-cookie'
 import axios from 'axios'
 import AddPlaylist from '../../components/AddPlaylist/AddPlaylist'
-import PlaylistLinkContainer from '../../components/PlaylistTile/PlaylistTile'
+import PlaylistTile from '../../components/PlaylistTile/PlaylistTile'
 import LoggedOut from './LoggedOut'
+import { useNavigate } from 'react-router-dom'
 
 
 const Home = () => {
   const [cookies, setCookies] = useCookies(["access_token"])
   const [playlists, setPlaylists] = useState([])
   const userID = window.localStorage.userID
+  const navigate = useNavigate()
 
 
-  const fetchPlaylists = React.useCallback(async (update=false) => {
+  const fetchPlaylists = React.useCallback(async (update=false, playlistId=false) => {
     // all playlists
     // const res = await axios.get("http://localhost:3500/playlists" , {
     //   headers: {
@@ -31,8 +33,11 @@ const Home = () => {
           }
         })
         setPlaylists(res.data)
+        if(playlistId) {
+          console.log("\n navigate")
+          navigate(`/playlist/${playlistId}`, {state: {playlist: res.data.find((playlist) => { return playlist.playlistId === playlistId })}})
+        }
         window.localStorage.setItem("playlistInfo", JSON.stringify(res.data))
-
       } catch (error) {
 
         // get new access token if expired
@@ -66,7 +71,7 @@ const Home = () => {
     if(cookies.access_token && userID) {
       fetchPlaylists()
     }
-  }, [fetchPlaylists])
+  }, [])
 
 
   return (
@@ -83,7 +88,7 @@ const Home = () => {
                 <h1> Your Playlists</h1>
                 <div className="playlistLinksContainer">
                   {playlists.map((playlist, index) => (
-                    <PlaylistLinkContainer
+                    <PlaylistTile
                       key={index}
                       playlist={playlist}
                     />

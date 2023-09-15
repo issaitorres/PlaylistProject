@@ -3,5 +3,15 @@
     display: block;
     /* text-align: left; */
     margin: 0px auto 0px 5px;
-  }
+}
+
+.about-table {
+  /* border: 1px solid black; */
+}
+
+.about-table td {
+  padding: 15px 5px;
+  border: 0px solid black;
+
+}
   

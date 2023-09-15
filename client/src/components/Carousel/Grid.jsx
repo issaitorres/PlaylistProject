@@ -93,6 +93,7 @@ const Grid = ({ grid }) => {
                     <div
                         className={`grid-header ${columnSortable[index] ? "header-toggle-sort grid-header-hoverable ": null }`}
                         onClick={() => sortColumn(index)}
+                        key={index}
                     >
                         <b className="table-header">
                             {header}
@@ -126,7 +127,7 @@ const Grid = ({ grid }) => {
                 <React.Fragment key={index}>
                     {Object.values(info).map((infoTwo, infoIndex) => {
                         return (
-                            <>
+                            <React.Fragment key={infoIndex}>
                                 {Array.isArray(infoTwo)
                                     ? 
                                         <div className={`
@@ -153,7 +154,7 @@ const Grid = ({ grid }) => {
                                             {infoTwo}
                                         </div>
                                 }
-                            </>
+                            </React.Fragment>
                         )
                     })}
                 </React.Fragment>

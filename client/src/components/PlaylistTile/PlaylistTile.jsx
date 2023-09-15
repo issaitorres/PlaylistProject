@@ -2,11 +2,10 @@ import { Link } from "react-router-dom"
 import "./PlaylistTile.css"
 
 
-
-const PlaylistLinkContainer = ({playlist}) => {
+const PlaylistTile = ({playlist}) => {
   return (
     <div className="playlistLinkContainer">
-        <Link to={`/playlist/${playlist._id}`} state={{playlist: playlist}}>
+        <Link to={`/playlist/${playlist.playlistId}`} state={{playlist: playlist}}>
             <img src={playlist.playlistImage} width="200px" height="200px"/>
             <div>
                 {playlist.playlistName}
@@ -16,4 +15,4 @@ const PlaylistLinkContainer = ({playlist}) => {
   )
 }
 
-export default PlaylistLinkContainer
+export default PlaylistTile

@@ -3,7 +3,7 @@ import axios from 'axios'
 import { useCookies } from 'react-cookie'
 import { useNavigate } from 'react-router-dom'
 import FormInput from '../../components/FormInput/FormInput'
-import {useLocation} from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 
 const Login = () => {
@@ -33,11 +33,10 @@ const Login = () => {
         maxAge: 900
       })
       window.localStorage.setItem("userID", res.data.userID)
-      alert("successful login")
       navigate('/')
 
     } catch (err) {
-      if(err.response.status === 401){
+      if(err?.response?.status === 401){
         setDisplayWarning(true)
       }
       console.log(err)

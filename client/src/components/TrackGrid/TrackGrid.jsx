@@ -1,4 +1,4 @@
-import { useState, useEffect} from 'react'
+import React, { useState, useEffect} from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPause, faPlay } from '@fortawesome/free-solid-svg-icons'
 import getTrackDataColumnHeaders from '../../data/getTrackDataColumnHeaders'
@@ -169,12 +169,12 @@ const TrackGrid = ({ trackTable, playlistDuplicates }) => {
                                                     <div>
                                                         {value.map((info, index) => {
                                                             return (
-                                                                <>
+                                                                <React.Fragment key={index}>
                                                                     <a href={`https://open.spotify.com/artist/${info.artistId}`} target="_blank" rel="noreferrer">
                                                                         {info.artistName}
                                                                     </a>
                                                                     {index+1 < value.length ? `, `: ""}
-                                                                </>
+                                                                </React.Fragment>
                                                             )
                                                         })}
                                                     </div>

@@ -6,16 +6,11 @@ import {
   getArtistSongsInfo,
   getGenreSongs,
   getYearSongs,
-  getShortestTrack,
-  getLongestTrack,
 } from "../../helper/PlaylistContainerHelperMethods"
 import TrackGrid from '../TrackGrid/TrackGrid';
 import Carousel from '../Carousel/Carousel';
-import PieChart from '../Charts/PieChart';
 import getGraphGridData from "../../data/getGraphGridData"
-import getAudioFeaturesData from "../../data/audioFeaturesData"
 import PlaylistQuickFacts from '../PlaylistQuickFacts/PlaylistQuickFacts';
-import ShortestLongestTrack from '../ShortestLongestTrack/ShortestLongestTrack';
 import About from '../About/About';
 import "./PlaylistContainer.css"
 
@@ -23,7 +18,6 @@ import "./PlaylistContainer.css"
 const PlaylistContainer = ({ playlist }) => {
   const navigate = useNavigate()
   const [cookies, setCookies] = useCookies(["access_token"])
-  const [activate, setActivate] = useState(false)
   const { 
     _id: playlistObjectId,
     playlistId, 
@@ -55,7 +49,6 @@ const PlaylistContainer = ({ playlist }) => {
       window.localStorage.setItem("playlistInfo", JSON.stringify(newLocalStorage))
     }
 
-    alert("deleted")
     navigate('/')
   }
 
@@ -64,33 +57,25 @@ const PlaylistContainer = ({ playlist }) => {
     <div className="container">
       <div className="flex-container">
         <PlaylistQuickFacts 
+          artistSongsInfo={artistSongsInfo}
+          genreSongs={genreSongs}
+          playlistDuplicates={playlistDuplicates}
           playlistImage={playlistImage}
           playlistName={playlistName}
           playlistOwner={playlistOwner}
-          playlistDuplicates={playlistDuplicates}
-          artistSongsInfo={artistSongsInfo}
-          genreSongs={genreSongs}
-          yearSongs={yearSongs}
           trackTable={trackTable}
+          yearSongs={yearSongs}
         />
       </div>
       <div>
         <Carousel 
           graphGridData={getGraphGridData(artistSongsInfo, genreSongs, yearSongs)}
-          explicitPieChart={<PieChart trackTable={trackTable} title="Explicit" type="explicit" />}
-          decadesPieChart={<PieChart trackTable={trackTable} title="Decades" type="decades" />}
-          shortestLongestTrack={
-            <ShortestLongestTrack 
-              shortestTrack={getShortestTrack(trackTable)} 
-              longestTrack={getLongestTrack(trackTable)} 
-            />
-          }
-          audioFeaturesData={getAudioFeaturesData(trackTable, activate, setActivate)}
+          trackTable={trackTable}
         />
       </div>
       <TrackGrid
-        trackTable={trackTable} 
         playlistDuplicates={playlistDuplicates}
+        trackTable={trackTable}
       />
       <div>
         <About removePlaylist={() => removePlaylist(playlistObjectId)}/>

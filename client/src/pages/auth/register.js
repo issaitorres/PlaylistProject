@@ -19,8 +19,7 @@ const Register = () => {
 
     try {
       const result = await axios.post("http://localhost:3500/register", registerUserData)
-      alert("Registration completed now login!")
-      navigate('/auth', {state: {email: registerUserData.email}})
+      navigate('/login', {state: {email: registerUserData.email}})
 
     } catch (err) {
       alert(err.response.data.message)

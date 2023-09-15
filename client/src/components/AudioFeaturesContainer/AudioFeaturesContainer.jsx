@@ -45,13 +45,14 @@ const AudioFeaturesContainer = ({
 
   return (
     <div className="quality-wrapper" >
-        <h2> {`${title}: ${Math.round(averageQuality * 100)}%`}</h2>
+        <h2> {`${title}`}</h2>
+        <h3> {`Average Song: ${Math.round(averageQuality * 100)}%`}</h3>
         <div id="iconContent">
             {icon}
         </div>
         <div className="highestLowestTracks">
             <div>
-                <h3>Highest {quality} song: {`${Math.round(highestLowestField.highestScore*100)}%`} </h3>
+                <h3>Highest: {`${Math.round(highestLowestField.highestScore*100)}%`} </h3>
                 <SingleTrack 
                     albumImage={highestLowestField.highestAlbumImage}
                     score={highestLowestField.highestScore}
@@ -60,7 +61,7 @@ const AudioFeaturesContainer = ({
                 />
             </div>
             <div>
-                <h3>Lowest {quality} song: {`${Math.round(highestLowestField.lowestScore*100)}%`} </h3>
+                <h3>Lowest: {`${Math.round(highestLowestField.lowestScore*100)}%`} </h3>
                 <SingleTrack 
                     albumImage={highestLowestField.lowestAlbumImage}
                     score={highestLowestField.lowestScore}

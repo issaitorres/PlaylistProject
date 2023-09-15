@@ -6,6 +6,7 @@ import "./AddPlaylist.css"
 
 const AddPlaylist = ({ accessToken, fetchPlaylists }) => {
   const [playlistId, setPlaylistId] = useState("")
+  const [loader, setLoader] = useState(false)
 
 
   const submitPlaylistId = async (event) => {
@@ -24,6 +25,7 @@ const AddPlaylist = ({ accessToken, fetchPlaylists }) => {
         if(currentPlaylistIds.includes(extractedPlaylistId)) return alert("This playlist ID has already been submitted!")
       }
 
+      setLoader(!loader)
       try {
         const res = await axios.post("http://localhost:3500/playlists", {
           playlistId: extractedPlaylistId
@@ -34,9 +36,7 @@ const AddPlaylist = ({ accessToken, fetchPlaylists }) => {
           }
         })
   
-        alert("submit successful")
-        fetchPlaylists(true)
-  
+        fetchPlaylists(true, extractedPlaylistId)
       } catch (err) {
         console.log(err)
       }
@@ -61,12 +61,12 @@ const AddPlaylist = ({ accessToken, fetchPlaylists }) => {
                 pattern=".*playlist\/.{22}|.{22}"
                 placeholder="Playlist URL or playlist ID"
                 className="formInput add-playlist-formInput-overrides"
-                errorMessage="Please submit playlist URL or playlist ID ex: https://open.spotify.com/playlist/3cT4tGoRr5eC3jGUZT5MTD or  3cT4tGoRr5eC3jGUZT5MTD"
+                errorMessage="Please submit validplaylist URL or playlist ID. Ex: https://open.spotify.com/playlist/3cT4tGoRr5eC3jGUZT5MTD or  3cT4tGoRr5eC3jGUZT5MTD"
               />
               <button
                 type="submit"
                 className="submit-button add-playlist-button-override">
-                Submit
+                <div className={`${loader && 'loader'}`}>{!loader && "Submit"}</div>
               </button>
             </form>
           </div>

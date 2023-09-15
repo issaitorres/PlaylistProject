@@ -5,12 +5,12 @@ import happyface from "../Assets/happy-icon.png"
 import disco from "../Assets/disco.png"
 
 
-const getAudioFeaturesData = (trackTable, activate, setActivate) => {
+const getAudioFeaturesData = (trackTable, activateAnimation, setActivateAnimation) => {
     return (
       [
         {
           quality: "Energy",
-          title: "Avg. Song Energy",
+          title: "Energy",
           averageQuality: getAverageField("energy", trackTable),
           highestLowestField: getHighestLowestField("energy", trackTable),
           icon:         
@@ -40,7 +40,7 @@ const getAudioFeaturesData = (trackTable, activate, setActivate) => {
         },
         {
           quality: "Happiness",
-          title: "Avg. Song Happiness",
+          title: "Happiness",
           averageQuality: getAverageField("valence", trackTable),
           highestLowestField: getHighestLowestField("valence", trackTable),
           icon:
@@ -65,18 +65,18 @@ const getAudioFeaturesData = (trackTable, activate, setActivate) => {
         },
         {
           quality: "Danceability",
-          title: "Avg. Song Danceability",
+          title: "Danceability",
           averageQuality: getAverageField("danceability", trackTable),
           highestLowestField: getHighestLowestField("danceability", trackTable),
           icon:    
-            <Sparkles activate={activate}>
+            <Sparkles activate={activateAnimation}>
               <div className="disco-container">
                 <img src={disco} width="200px" height="200px" className="disco-image" />
               </div>
             </Sparkles>,
           animationId: "target",
           animationKeyword: "lightning-animation",
-          callback: () => {setActivate(!activate)}
+          callback: () => { setActivateAnimation(!activateAnimation) }
         },
       ]
     )

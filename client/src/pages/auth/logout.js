@@ -1,15 +1,15 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useCookies} from 'react-cookie'
-
+import { useCookies } from 'react-cookie'
 
 
 const Logout = () => {
     const navigate = useNavigate()
-    const [cookies, setCookies] = useCookies(["access_token"])
+    const [cookies, setCookies, removeCookie] = useCookies(["access_token"])
 
     useEffect(() => {
-        setCookies("access_token", "")
+        removeCookie('access_token');
+        //jwt http only cookie - can only be changed from server, not frontend
         window.localStorage.removeItem("userID")
         window.localStorage.removeItem("playlistInfo")
         navigate("/")

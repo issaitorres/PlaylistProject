@@ -118,7 +118,7 @@ const PieChart = ({trackTable, title, type}) => {
                 display: function(context) {
                     const total = context.chart.data.datasets[0].data.reduce((acc, val) => acc + val)
                     const curr = context.chart.data.datasets[0].data[context.dataIndex]
-                    return curr > (Math.ceil(total/10)) ? true : false
+                    return curr > (Math.floor(total/10)) ? true : false
                   },
                 color: 'black',
                 align: "end",

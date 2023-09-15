@@ -25,7 +25,7 @@ const addPlaylist = async (req, res) => {
     const playlistObject = await Playlist.findOne({ playlistId: playlistId }).exec()
     if(playlistObject) {
         addPlaylistObjectIdToUserPlaylistObjectIds(mongoUserId, playlistObject._id)
-        res.status(200).json({ 'message' : 'added playlist object id added to userPlaylistObjectIds if not there' })
+        res.status(200).json(playlistObject)
     } else {
         const playlistInfo = await getPlaylistInfo(playlistId)
         const playlistObject = await Playlist.create({
@@ -39,7 +39,7 @@ const addPlaylist = async (req, res) => {
         })
 
         addPlaylistObjectIdToUserPlaylistObjectIds(mongoUserId, playlistObject._id)
-        res.status(200).json({ 'message' : 'New playlist object created and id added to userPlaylistObjectIds' })
+        res.status(200).json(playlistObject)
     }
 }
 

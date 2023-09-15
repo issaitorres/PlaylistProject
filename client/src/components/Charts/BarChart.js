@@ -64,6 +64,10 @@ const BarChart = ({ graph }) => {
     }
 
     const options = {
+        // keeps animation on tooltip instead of animation: false
+        animation: {
+            duration: 0
+        },
         responsive: true,
         plugins: {
             customButton: {
@@ -124,7 +128,7 @@ const BarChart = ({ graph }) => {
                     },
                     color: "black"
                 },
-                // this keyword is specific to where it is called
+                // "this" keyword is specific to where it is called
                 // so this can only work here and function(label) is different from arrow function
                 // this specific case needs function(label)
                 ticks: {

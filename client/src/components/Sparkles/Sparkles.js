@@ -96,13 +96,6 @@ const Sparkles = ({ children, activate, ...delegated }) => {
     return range(3).map(() => generateSparkle());
   });
   const prefersReducedMotion = usePrefersReducedMotion();
-  // const [activate, setActivate] = useState(false)
-  // const user = useContext(UserContext);
-
-
-  // const activateSparkles = () => {
-  //   setActivate(!activate)
-  // }
   useRandomInterval(
     () => {
       if (activate) {
@@ -133,12 +126,7 @@ const Sparkles = ({ children, activate, ...delegated }) => {
         ))}
         <ChildWrapper>{children}</ChildWrapper>
       </Wrapper>
-
-      {/* <button onClick={() => activateSparkles()}>
-        add sparkles
-      </button> */}
     </>
-
   );
 };
 
