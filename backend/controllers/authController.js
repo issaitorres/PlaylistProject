@@ -49,7 +49,7 @@ const handleLogin = async (req, res) => {
 
         })
 
-        res.json({ accessToken, userID: foundUser.id });
+        res.json({ accessToken, userID: foundUser.id, userEmail: foundUser.email });
     } else {
         res.status(401).json({ 'message': 'email or password is incorrect'});
 

@@ -37,9 +37,18 @@ app.use('/login', require('./routes/auth'));
 app.use('/refresh', require('./routes/refresh'));
 app.use('/logout', require('./routes/logout'))
 
+// special route only for mongo db queries
+    // - add middleware only for this route to verify this command comes from server
+
+// app.use('/db', require('./routes/db'));
+// router.delete('/deletepastweek', playlistsController.deletePlaylistObjectsNotUpdatedInPastWeek) - current in routes/auth
+
+
+
 // routes where login is required
 app.use(verifyJWT)
 app.use('/playlists', require('./routes/playlists'));
+// app.use('/user', require('./routes/user'));
 
 
 

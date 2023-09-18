@@ -105,7 +105,7 @@ const TrackGrid = ({ trackTable, playlistDuplicates }) => {
                     Track Table
                 </h2>
                 <div>
-                    {playlistDuplicates.duplicateCount == 0
+                    {playlistDuplicates?.duplicateCount == 0 || playlistDuplicates != {}
                         ? "This playlist contains no duplicate tracks."
                         : <div>
                                 <div>

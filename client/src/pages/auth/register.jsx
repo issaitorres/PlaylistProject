@@ -13,15 +13,18 @@ const Register = () => {
       passwordConfirmation: ""
   })
   const navigate = useNavigate()
+  const [loader, setLoader] = useState(false)
+
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-
+    setLoader(!loader)
     try {
       const result = await axios.post("http://localhost:3500/register", registerUserData)
       navigate('/login', {state: {email: registerUserData.email}})
 
     } catch (err) {
+      setLoader(false)
       alert(err.response.data.message)
     }
   }
@@ -97,7 +100,8 @@ const Register = () => {
           />
         ))}
         <button className="submit-button">
-          Submit
+          {/* Submit */}
+          <div className={`${loader && 'loader'}`}>{!loader && "Submit"}</div>
         </button>
       </form>
     </div>

@@ -10,7 +10,8 @@ import { useNavigate } from 'react-router-dom'
 const Home = () => {
   const [cookies, setCookies] = useCookies(["access_token"])
   const [playlists, setPlaylists] = useState([])
-  const userID = window.localStorage.userID
+  const userInfo = window?.localStorage?.userInfo
+  const userID = userInfo ? JSON.parse(userInfo).id : null
   const navigate = useNavigate()
 
 
@@ -34,7 +35,6 @@ const Home = () => {
         })
         setPlaylists(res.data)
         if(playlistId) {
-          console.log("\n navigate")
           navigate(`/playlist/${playlistId}`, {state: {playlist: res.data.find((playlist) => { return playlist.playlistId === playlistId })}})
         }
         window.localStorage.setItem("playlistInfo", JSON.stringify(res.data))

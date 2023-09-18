@@ -22,10 +22,11 @@ const addPlaylist = async (req, res) => {
     if (!playlistId || !mongoUserId) return res.status(400).json({ 'message': 'missing playlistID or mongoUserId' })
     
     // check if playlistObject already exists
-    const playlistObject = await Playlist.findOne({ playlistId: playlistId }).exec()
+    const playlistObject = await Playlist.findOne({ playlistId: playlistId }, excludedProperties).exec()
     if(playlistObject) {
-        addPlaylistObjectIdToUserPlaylistObjectIds(mongoUserId, playlistObject._id)
         res.status(200).json(playlistObject)
+        addPlaylistObjectIdToUserPlaylistObjectIds(mongoUserId, playlistObject._id)
+        addUserIdToPlaylistObjectOwnerUser(mongoUserId, playlistObject._id)
     } else {
         const playlistInfo = await getPlaylistInfo(playlistId)
         const playlistObject = await Playlist.create({
@@ -38,8 +39,18 @@ const addPlaylist = async (req, res) => {
             trackTable: playlistInfo.trackTable
         })
 
+        // filter out the excludedProperties by only including properties we need
+        const filteredPlaylistObject = {
+            playlistId: playlistObject.playlistId,
+            playlistName: playlistObject.playlistName,
+            playlistOwner: playlistObject.playlistOwner,
+            playlistImage: playlistObject.playlistImage,
+            playlistDuplicates: playlistObject.playlistDuplicates,
+            trackTable: playlistObject.trackTable
+        }
+
+        res.status(200).json(filteredPlaylistObject)
         addPlaylistObjectIdToUserPlaylistObjectIds(mongoUserId, playlistObject._id)
-        res.status(200).json(playlistObject)
     }
 }
 
@@ -57,9 +68,7 @@ const getMyPlaylists = async (req, res) => {
 
         if (!multipleIds.length) return res.status(204)
 
-        const playlistObjects = await Playlist.find({
-            "$or":  multipleIds
-        })
+        const playlistObjects = await Playlist.find({ "$or":  multipleIds }, excludedProperties)
 
         res.status(200).json(playlistObjects)
     } catch (err) {
@@ -89,6 +98,7 @@ const disassociateUserFromPlaylistById = async (req, res) => {
     }
 }
 
+
 const deletePlaylistAndDissociateUserWithPlayListId = async (req, res) => {
     const mongoUserId = req.mongoUserId
     const playlistObjectId = req.body.playlistObjectId
@@ -102,14 +112,24 @@ const deletePlaylistAndDissociateUserWithPlayListId = async (req, res) => {
         userObject.userPlaylistObjectIds = newUserPlaylistObjectIds
 
         const result = await userObject.save()
-        const deletedResult = await Playlist.deleteOne({ _id: playlistObjectId })
+
+        const playlistObject = await Playlist.findOne({ _id: playlistObjectId }).exec()
+
+        if(playlistObject.userOwner.includes(mongoUserId) && playlistObject.userOwner.length == 1) {
+            const deletedResult = await Playlist.deleteOne({ _id: playlistObjectId })
+        } else {
+            // PlaylistObject has multiple owners so only remove an owner
+            const newUserOwner = playlistObject.userOwner.filter((userOwnerId) => userOwnerId != mongoUserId)
+            playlistObject.userOwner = newUserOwner
+            const result = await playlistObject.save()
+        }
 
         res.status(200).json({ 'message': 'delete successful'})
     } else {
         res.status(200).json({ 'message' : 'couldn\'t find that playlistId'})
     }
-
 }
+
 
 const addPlaylistObjectIdToUserPlaylistObjectIds = async (mongoUserId, playlistObjectId) => {
     const user = await User.findOne({ _id: mongoUserId})
@@ -120,12 +140,45 @@ const addPlaylistObjectIdToUserPlaylistObjectIds = async (mongoUserId, playlistO
     } 
 }
 
+
+const addUserIdToPlaylistObjectOwnerUser = async (mongoUserId, playlistObjectId) => {
+    const playlistObject = await Playlist.findOne({ _id: playlistObjectId})
+
+    if(!playlistObject.userOwner.includes(mongoUserId)) {
+        playlistObject.userOwner.push(mongoUserId)
+        const result = await playlistObject.save()
+    }
+}
+
+
+const deletePlaylistObjectsNotUpdatedInPastWeek = async (req, res) => {
+    var weekAgoDate = new Date();
+    weekAgoDate.setDate(weekAgoDate.getDate() - 7) // for last week
+    // weekAgoDate.setHours(weekAgoDate.getHours() - 1) // for last hour
+
+    // $gt - would be anything from past x days until now
+    // $lt - would be anything in the past x+ days
+    const deletedPlaylists = await Playlist.deleteMany({"updatedAt": {$lt: weekAgoDate}})
+
+    res.status(200).json({ 'message': 'deleted all playslists one week old and older if any'})
+}
+
+
+const excludedProperties = {
+    userOwner: 0,
+    createdAt: 0,
+    updatedAt: 0,
+    __v: 0
+}
+
+
 module.exports = {
     getAllPlaylists,
     addPlaylist,
     getMyPlaylists,
     disassociateUserFromPlaylistById,
-    deletePlaylistAndDissociateUserWithPlayListId
+    deletePlaylistAndDissociateUserWithPlayListId,
+    deletePlaylistObjectsNotUpdatedInPastWeek
 }
 
 

@@ -8,9 +8,10 @@ const Logout = () => {
     const [cookies, setCookies, removeCookie] = useCookies(["access_token"])
 
     useEffect(() => {
-        removeCookie('access_token');
+        removeCookie("access_token", { path: '/' })
+        // removeCookie("access_token")
         //jwt http only cookie - can only be changed from server, not frontend
-        window.localStorage.removeItem("userID")
+        window.localStorage.removeItem("userInfo")
         window.localStorage.removeItem("playlistInfo")
         navigate("/")
     })

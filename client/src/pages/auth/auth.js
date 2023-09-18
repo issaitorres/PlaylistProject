@@ -8,7 +8,7 @@ import { useLocation } from 'react-router-dom';
 
 const Login = () => {
   const location = useLocation();
-
+  const [loader, setLoader] = useState(false)
   const [loginData, setLoginData] = useState({
     email: location?.state?.email || "",
     password: ""
@@ -23,6 +23,7 @@ const Login = () => {
   const handleSubmit = async (event) => {
     event.preventDefault()
 
+    setLoader(!loader)
     try {
       const res = await axios.post("http://localhost:3500/login", loginData,
       {
@@ -32,13 +33,19 @@ const Login = () => {
       setCookies("access_token", res.data.accessToken, {
         maxAge: 900
       })
-      window.localStorage.setItem("userID", res.data.userID)
+      window.localStorage.setItem("userInfo", JSON.stringify({
+        id: res.data.userID,
+        email: res.data.userEmail
+        //firstName:
+        //lastName
+      }))
       navigate('/')
 
     } catch (err) {
       if(err?.response?.status === 401){
         setDisplayWarning(true)
       }
+      setLoader(false)
       console.log(err)
     }
   }
@@ -88,7 +95,7 @@ const Login = () => {
           />
         ))}
         <button className="submit-button">
-          Submit
+          <div className={`${loader && 'loader'}`}>{!loader && "Submit"}</div>
         </button>
       </form>
     </div>

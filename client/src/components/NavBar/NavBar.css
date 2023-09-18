@@ -6,7 +6,7 @@
 }
   
 .navbar a {
-    float: left;
+    /* float: left; */
     color: var(--default-white);
     text-align: center;
     padding: 14px 16px;
@@ -21,6 +21,30 @@
 
 .navbar a.active {
     background-color: var(--default-green);
+    color: white;
+}
+
+.navbar-left {
+    float: left;
+}
+
+.navbar-left > div {
+    padding: 10px 0px;
+    margin: 0px 5px 0px 0px;
+}
+
+.navbar-right {
+    display: flex;
+    flex-direction: row;
+    float: right;
+}
+
+.navbar-right > div {
+    padding: 10px 0px;
+    margin: 0px 0px 0px 5px;
+}
+
+.user-links{
     color: white;
 }
   
