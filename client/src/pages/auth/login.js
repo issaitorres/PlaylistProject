@@ -35,9 +35,8 @@ const Login = () => {
       })
       window.localStorage.setItem("userInfo", JSON.stringify({
         id: res.data.userID,
-        email: res.data.userEmail
-        //firstName:
-        //lastName
+        email: res.data.userEmail,
+        username: res.data.username
       }))
       navigate('/')
 

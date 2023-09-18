@@ -7,8 +7,7 @@ import FormInput from '../../components/FormInput/FormInput'
 const Register = () => {
   const [registerUserData, setRegisterUserData] = useState({
       email: "",
-      firstname: "",
-      lastname: "",
+      username: "",
       password: "",
       passwordConfirmation: ""
   })
@@ -41,26 +40,16 @@ const Register = () => {
     },
     {
       id: 2,
-      name: "firstname",
+      name: "username",
       type: "text",
-      placeholder: "First Name",
-      label: "First Name",
+      placeholder: "Username",
+      label: "Username",
       required: true,
       pattern: "[A-Za-z0-9]{3,16}", // can use regex
-      errorMessage: "First name must be 2-16 characters and cannot include any special characters"
+      errorMessage: "Username must be 2-16 characters and cannot include any special characters"
     },
     {
       id: 3,
-      name: "lastname",
-      type: "text",
-      placeholder: "Last Name",
-      label: "Last Name",
-      required: true,
-      pattern: "[A-Za-z0-9]{3,16}", // can use regex
-      errorMessage: "Last name must be 2-16 characters and cannot include any special characters"
-    },
-    {
-      id: 4,
       name: "password",
       type: "password",
       placeholder: "Password",
@@ -71,7 +60,7 @@ const Register = () => {
 
     },
     {
-      id: 5,
+      id: 4,
       name: "passwordConfirmation",
       type: "password",
       placeholder: "Confirm Password",

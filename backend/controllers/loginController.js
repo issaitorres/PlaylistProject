@@ -2,10 +2,6 @@ const { User } = require('../model/User')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-// http://localhost:3500/auth
-// http://localhost:3500/playlists/user
-// user1 {"email": "test1@gmail.com", "password": "Pass!@#4"}
-// user2 {"email": "test2@gmail.com", "password": "password"}
 
 const handleLogin = async (req, res) => {
     const { email, password } = req.body
@@ -49,7 +45,12 @@ const handleLogin = async (req, res) => {
 
         })
 
-        res.json({ accessToken, userID: foundUser.id, userEmail: foundUser.email });
+        res.json({ 
+            accessToken, 
+            userID: foundUser.id, 
+            userEmail: foundUser.email,
+            username: foundUser.userName
+         });
     } else {
         res.status(401).json({ 'message': 'email or password is incorrect'});
 

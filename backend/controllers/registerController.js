@@ -2,16 +2,11 @@
 const { User } = require('../model/User')
 const bcrypt = require('bcrypt');
 
-// user1
-// {"email": "test1@gmail.com", "firstname": "first1" ,"lastname": "last1", "password": "password"}
-
-// user2
-// {"email": "test2@gmail.com", "firstname": "first2" ,"lastname": "last2", "password": "password"}
 
 const handleNewUser = async (req, res) => {
-    const { email, firstname, lastname, password } = req.body;
-    if (!email || !firstname || !lastname || !password) {
-        return res.status(400).json({ 'message': 'Email, firstname, lastname and password are required.' });
+    const { email, username, password } = req.body;
+    if (!email || !username || !password) {
+        return res.status(400).json({ 'message': 'Email, username and password are required.' });
     }
     
     const duplicate = await User.findOne({ email: email }).exec()
@@ -21,8 +16,7 @@ const handleNewUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10)
         const result = await User.create({
             email: email,
-            firstname: firstname,
-            lastname: lastname,
+            userName: username,
             password: hashedPassword
         })
         res.status(201).json({ 'success': `New user ${email} created!` });

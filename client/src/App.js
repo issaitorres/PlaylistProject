@@ -2,7 +2,7 @@ import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Home from './pages/home/home.js';
 import Register from './pages/auth/register';
-import Login from './pages/auth/auth';
+import Login from './pages/auth/login';
 import Logout from './pages/auth/logout';
 import Navbar from './components/NavBar/Navbar';
 import Footer from './components/Footer/Footer';
