@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { useState } from 'react'
 import { useCookies } from 'react-cookie'
 import { useNavigate } from 'react-router-dom'
 import {
@@ -15,7 +14,7 @@ import About from '../About/About';
 import "./PlaylistContainer.css"
 
 
-const PlaylistContainer = ({ playlist }) => {
+const PlaylistContainer = ({ playlist, refreshPlaylist }) => {
   const navigate = useNavigate()
   const [cookies, setCookies] = useCookies(["access_token"])
   const { 
@@ -65,6 +64,7 @@ const PlaylistContainer = ({ playlist }) => {
           playlistOwner={playlistOwner}
           trackTable={trackTable}
           yearSongs={yearSongs}
+          refreshPlaylist={refreshPlaylist}
         />
       </div>
       <div>

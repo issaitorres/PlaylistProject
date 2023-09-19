@@ -135,7 +135,7 @@ const getShortestTrack = (trackTable) => {
                 trackObject = trackInfo
             }
         } else {
-            trackObject["trackDuration"] = trackInfo.trackDuration
+            trackObject = trackInfo
         }
     }
     return trackObject
@@ -150,7 +150,7 @@ const getLongestTrack = (trackTable) => {
                 trackObject = trackInfo
             }
         } else {
-            trackObject["trackDuration"] = trackInfo.trackDuration
+            trackObject = trackInfo
         }
     }
     return trackObject

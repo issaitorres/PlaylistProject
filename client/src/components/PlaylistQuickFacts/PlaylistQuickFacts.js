@@ -12,7 +12,9 @@ const PlaylistQuickFacts = ({
     artistSongsInfo, 
     genreSongs,
     yearSongs,
-    trackTable}) => {
+    trackTable,
+    refreshPlaylist
+}) => {
 
     const trackCount = Object.keys(trackTable).length
     const artistCount = Object.keys(artistSongsInfo).length
@@ -64,6 +66,9 @@ const PlaylistQuickFacts = ({
                 </div>
                 <div>
                     <label> Duplicate Tracks: </label> <span><b>{playlistDuplicates.duplicateCount}</b></span>
+                </div>
+                <div>
+                    <button onClick={() =>refreshPlaylist()}>Refresh Playlist</button>
                 </div>
             </div>
         </div>

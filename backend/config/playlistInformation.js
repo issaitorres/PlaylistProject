@@ -2,7 +2,7 @@ const axios = require('axios');
 const { GenerateAccessTokenOrGetFromEnvVar } = require('./GetAccessToken')
 
 
-const getPlaylistInfo = async (playlistId) => {
+const getPlaylistInfo = async (playlistId, refreshPlaylistId=false) => {
     const accessToken = await GenerateAccessTokenOrGetFromEnvVar()
     var spotify_playlists_endpoint = `https://api.spotify.com/v1/playlists/${playlistId}`
     var trackTable = []
@@ -14,6 +14,8 @@ const getPlaylistInfo = async (playlistId) => {
     var playlistName
     var playlistOwner
     var playlistImage
+    var totalTracks
+    var snapshotId
 
     var playlistPosition = 1
     var loop = true
@@ -24,6 +26,13 @@ const getPlaylistInfo = async (playlistId) => {
             }
         })
 
+        if(refreshPlaylistId) {
+            if(refreshPlaylistId == res.data.snapshot_id) {
+                // playlist hasn't changed so don't need to fetch data
+                return false
+            }
+        }
+
         if(spotify_playlists_endpoint.includes('/tracks')){
             items = res.data.items
             next = res.data.next
@@ -33,6 +42,8 @@ const getPlaylistInfo = async (playlistId) => {
             playlistName =  res.data.name
             playlistOwner = res.data.owner.display_name
             playlistImage = res.data.images[0]?.url || null
+            totalTracks = res.data.tracks.total
+            snapshotId = res.data.snapshot_id
         }
 
         for(const [position, itemObject] of Object.entries(items)) {
@@ -139,6 +150,8 @@ const getPlaylistInfo = async (playlistId) => {
     playlistInfo["playlistName"] = playlistName
     playlistInfo["playlistOwner"] = playlistOwner
     playlistInfo["playlistImage"] = playlistImage
+    playlistInfo["totalTracks"] = totalTracks
+    playlistInfo["snapshotId"] = snapshotId
     playlistInfo["duplicates"] = duplicates
     playlistInfo["trackTable"] = trackTable
 

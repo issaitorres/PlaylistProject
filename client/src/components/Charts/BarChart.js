@@ -163,7 +163,7 @@ const BarChart = ({ graph }) => {
 
   return (
         <>
-            <Bar id="myChart" ref={chartRef} options={options} data={barData}/>
+            <Bar redraw={true} id="myChart" ref={chartRef} options={options} data={barData}/>
             {/* <button onClick={handleResetZoom}>Reset Zoom</button> */}
         </>
   )

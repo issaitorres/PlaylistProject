@@ -7,6 +7,8 @@ router
     .get('/user', playlistsController.getMyPlaylists)
     .post('/', playlistsController.addPlaylist)
     .delete('/', playlistsController.deletePlaylistAndDissociateUserWithPlayListId)
+    .post('/refresh', playlistsController.refreshPlaylist)
+
     // .patch('/', playlistsController.updatePlaylistById)
 
 

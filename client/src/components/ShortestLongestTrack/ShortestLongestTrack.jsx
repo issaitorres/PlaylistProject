@@ -30,7 +30,7 @@ const ShortestLongestTrack = ({ shortestTrack, longestTrack}) => {
           <h3 className="duration-heading">
             {convertMStoFormat(longestTrack.trackDuration, true)}
           </h3>
-          <img src={longestTrack.album.albumImage} width="160" height="160"/>
+          <img src={longestTrack?.album?.albumImage ? longestTrack?.album?.albumImage : "nothing"} width="160" height="160"/>
         </div>
         <div className="title-artist">
           <div>

@@ -35,12 +35,15 @@ const addPlaylist = async (req, res) => {
             playlistName: playlistInfo.playlistName,
             playlistOwner: playlistInfo.playlistOwner,
             playlistImage: playlistInfo.playlistImage,
+            totalTracks: playlistInfo.totalTracks,
+            snapshotId: playlistInfo.snapshotId,
             playlistDuplicates: playlistInfo.duplicates,
             trackTable: playlistInfo.trackTable
         })
 
-        // filter out the excludedProperties by only including properties we need
+        // filter out the excludedProperties by only returning properties we need
         const filteredPlaylistObject = {
+            _id: playlistObject._id,
             playlistId: playlistObject.playlistId,
             playlistName: playlistObject.playlistName,
             playlistOwner: playlistObject.playlistOwner,
@@ -74,6 +77,50 @@ const getMyPlaylists = async (req, res) => {
     } catch (err) {
         res.status(500).json({ 'message' : 'Invalid playlist object id(s)' })
     }
+}
+
+const refreshPlaylist = async (req, res) => {
+    const { playlistId } = req.body
+    const mongoUserId = req.mongoUserId
+
+    if (!playlistId || !mongoUserId) return res.status(400).json({ 'message': 'missing playlistID or mongoUserId' })
+
+    const playlistObject = await Playlist.findOne({ playlistId: playlistId }, excludedProperties).exec()
+    if(playlistObject) {
+        var playlistInfo = await getPlaylistInfo(playlistId, playlistObject.snapshotId)
+
+        if(playlistInfo) {
+            const result = await playlistObject.updateOne({
+                playlistName: playlistInfo.playlistName,
+                playlistOwner: playlistInfo.playlistOwner,
+                playlistImage: playlistInfo.playlistImage,
+                totalTracks: playlistInfo.totalTracks,
+                snapshotId: playlistInfo.snapshotId,
+                playlistDuplicates: playlistInfo.duplicates,
+                trackTable: playlistInfo.trackTable
+            })
+
+            // filter out the excludedProperties by only returning properties we need
+            const filteredPlaylistObject = {
+                _id: playlistObject._id,
+                playlistId: playlistId,
+                playlistName: playlistInfo.playlistName,
+                playlistOwner: playlistInfo.playlistOwner,
+                playlistImage: playlistInfo.playlistImage,
+                playlistDuplicates: playlistInfo.duplicates,
+                trackTable: playlistInfo.trackTable
+            }
+
+            res.status(200).json(filteredPlaylistObject)
+        } else {
+            res.status(204).json({ 'message' : 'no refresh needed'})
+        }
+
+    } else {
+        res.status(404).json({ 'message' : 'Could not find the the playlistobject we wanted to update'})
+    }
+
+
 }
 
 
@@ -168,7 +215,9 @@ const excludedProperties = {
     userOwner: 0,
     createdAt: 0,
     updatedAt: 0,
-    __v: 0
+    __v: 0,
+    totalTracks: 0,
+    snapshotId: 0
 }
 
 
@@ -178,7 +227,8 @@ module.exports = {
     getMyPlaylists,
     disassociateUserFromPlaylistById,
     deletePlaylistAndDissociateUserWithPlayListId,
-    deletePlaylistObjectsNotUpdatedInPastWeek
+    deletePlaylistObjectsNotUpdatedInPastWeek,
+    refreshPlaylist
 }
 
 

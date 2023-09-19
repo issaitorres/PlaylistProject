@@ -14,6 +14,8 @@ const playlistSchema = new mongoose.Schema(
         playlistName: String,
         playlistOwner: String,
         playlistImage: String,
+        totalTracks: Number,
+        snapshotId: String,
         playlistDuplicates: {
             type: Map,
             of: mongoose.Schema.Types.Mixed
