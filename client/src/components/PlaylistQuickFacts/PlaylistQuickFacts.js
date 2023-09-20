@@ -2,6 +2,10 @@ import {
     convertMStoFormat,
     groupTopItemsByTrackcount,
 } from "../../helper/PlaylistContainerHelperMethods"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faRefresh } from '@fortawesome/free-solid-svg-icons'
+import { useState } from "react"
+
 
 
 const PlaylistQuickFacts = ({
@@ -25,6 +29,13 @@ const PlaylistQuickFacts = ({
     const avgTrackDuration = totalPlaylistDuration / trackCount
     const totalBPM = Object.values(trackTable).map((track) => track.trackTempo).reduce((acc, val) => acc + val)
     const avgBPM = Math.ceil(totalBPM / trackCount)
+
+    const [refresh, setRefresh] = useState(false)
+    const getRefreshData = async () => {
+        setRefresh(true)
+        const res = await refreshPlaylist()
+        setRefresh(false)
+    }
 
   return (
     <>
@@ -67,10 +78,19 @@ const PlaylistQuickFacts = ({
                 <div>
                     <label> Duplicate Tracks: </label> <span><b>{playlistDuplicates.duplicateCount}</b></span>
                 </div>
-                <div>
-                    <button onClick={() =>refreshPlaylist()}>Refresh Playlist</button>
-                </div>
             </div>
+        </div>
+        <div className="refresh-corner" onClick={() => getRefreshData()}>
+            <span className="refresh-tooltip">
+                <span className="refresh-text">Outdated Playlist?</span>
+                &nbsp;
+                <span className="tooltiptext">
+                    Playlists are updated all the time.
+                    If this information looks outdated, click here to get the latest playlist!
+                </span>
+                &nbsp;
+                <FontAwesomeIcon icon={faRefresh} className={`refresh-icon ${refresh ? `rotate`: ""}`}/>
+            </span>
         </div>
     </>
   )

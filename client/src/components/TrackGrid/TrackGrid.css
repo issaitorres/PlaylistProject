@@ -95,7 +95,7 @@
 
 /* prevent icon from interfering with clicks on button 
     - specifically for Font Awesome Play and Pause icons */
-[data-prefix='fas'] {
+.audio-button [data-prefix='fas'] {
     pointer-events: none;
   }
 

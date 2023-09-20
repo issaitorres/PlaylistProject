@@ -14,7 +14,7 @@ const nthIndex = (str, pat, n) => {
 
 const getRangeColors = (dataset) => {
     // top 10% - top 25% - top 50% - bottom 50% - bottom 10% relative to the max
-    const bottomTenPercentColor = '#ff6384'
+    const bottomTenPercentColor = '#ffbb33'
     const bottomFiftyPercentColor = '#878dc1'
     const topFiftyPercentColor = '#b840dc'
     const topTwentyFivePrecentColor = '#559bea'
@@ -23,13 +23,13 @@ const getRangeColors = (dataset) => {
     var max = Math.max(...dataset)
     const rangeColors = dataset.map((amount) =>{
         var color
-        if(amount <= Math.ceil(max * .1)) {
+        if(amount < Math.ceil(max * .1)) {
             color = bottomTenPercentColor
-        } else if ( amount > Math.ceil(max * .1) && amount < Math.ceil(max * .5)) {
+        } else if ( amount >= Math.ceil(max * .1) && amount < Math.ceil(max * .5)) {
             color = bottomFiftyPercentColor
-        } else if ( amount > Math.ceil(max * .5) && amount < Math.ceil(max * .75)) { 
+        } else if ( amount >= Math.ceil(max * .5) && amount < Math.ceil(max * .75)) {
             color = topFiftyPercentColor
-        } else if ( amount > Math.ceil(max * .75) && amount < Math.ceil(max * .9)) { 
+        } else if ( amount >= Math.ceil(max * .75) && amount < Math.ceil(max * .9)) {
             color = topTwentyFivePrecentColor
         } else {
             color = topTenPrecentColor

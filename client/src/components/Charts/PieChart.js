@@ -140,7 +140,6 @@ const PieChart = ({trackTable, title, type}) => {
 
     return (
         <Pie
-            redraw={true}
             data={data} 
             options={options}
         />

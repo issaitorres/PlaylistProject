@@ -46,7 +46,7 @@ const getArtistSongsInfo = (trackTable) => {
             }
         }
     }
-    return artistSongsInfo
+    return Object.values(artistSongsInfo).sort((a,b) =>a.artistPopularity < b.artistPopularity ? -1 : 1)
 }
 
 

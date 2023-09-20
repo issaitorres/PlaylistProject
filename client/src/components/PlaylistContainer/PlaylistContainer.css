@@ -13,6 +13,7 @@
   border-radius: 10px;
   min-width: 300px;
   max-width: 1200px;
+  position: relative;
 }
 
 .sidebar {
@@ -57,3 +58,81 @@
   overflow: auto;
 }
 
+.refresh-corner {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  pointer-events: auto !important;
+  cursor: pointer;
+}
+
+.rotate {
+  animation: spin 2s linear infinite;
+}
+
+.refresh-corner .refresh-text {
+  text-decoration: underline;
+}
+
+.refresh-corner:hover {
+  color: green;
+}
+
+.refresh-tooltip {
+  position: relative;
+  display: inline-block;
+  transition: all 0.3s ease-in-out;
+
+}
+
+.refresh-tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: #333;
+  box-shadow: 0 0 3px rgba(56, 54, 54, 0.86);
+  opacity: .40;
+  color: #fff;
+  text-align: center;
+  padding: 5px;
+  border-radius: 6px;
+
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 1;
+  font-size: 16px;
+  transition: all 0.3s ease-in-out;
+
+
+  width: 140px;
+  bottom: 120%;
+  left: 50%;
+  margin-left: -80px; /* Use half of the width (120/2 = 60), to center the tooltip */
+}
+
+.refresh-tooltip .tooltiptext::after {
+  content: " ";
+  position: absolute;
+  top: 100%; /* At the bottom of the tooltip */
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
+  opacity: 1;
+}
+
+.refresh-icon:hover {
+  cursor: pointer;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.refresh-tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

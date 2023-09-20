@@ -71,7 +71,7 @@ const Login = () => {
       placeholder: "Password",
       label: "Password",
       required: true,
-      errorMessage: ""
+      errorMessage: "Password cannot be empty"
     }
   ]
 

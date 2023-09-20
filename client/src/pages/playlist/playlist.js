@@ -88,11 +88,10 @@ const Playlist = () => {
             parsedLocalStoragePlaylistInfo[oldPlaylistIndex] = newPlaylistInfo
             window.localStorage.setItem("playlistInfo", JSON.stringify(parsedLocalStoragePlaylistInfo))
             setPlaylist(newPlaylistInfo)
-            navigate(`/playlist/${playlistIdFromURL}`, { replace: true }); // <-- redirect to current path w/o state
-
+            navigate(0, { replace: true }) // <-- redirect to current path w/o state
         }
-
     }
+    return true
 }
 
 

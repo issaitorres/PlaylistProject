@@ -62,6 +62,7 @@ const AddPlaylist = ({ accessToken, fetchPlaylists }) => {
                 placeholder="Playlist URL or playlist ID"
                 className="formInput add-playlist-formInput-overrides"
                 errorMessage="Please submit validplaylist URL or playlist ID. Ex: https://open.spotify.com/playlist/3cT4tGoRr5eC3jGUZT5MTD or  3cT4tGoRr5eC3jGUZT5MTD"
+                errMsgPos="topErrMsg"
               />
               <button
                 type="submit"
