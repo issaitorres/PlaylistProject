@@ -90,12 +90,17 @@ const Login = () => {
             value={loginData[input.name]}
             onChange={onChange}
             className="formInput formInput-register-login-width"
+            password={`${input.type == "password" ? true : false}`}
+
             {...input} // pass all other key: values
           />
         ))}
         <button className="submit-button">
           <div className={`${loader && 'loader'}`}>{!loader && "Submit"}</div>
         </button>
+        <a href="http://localhost:3000/register" className="link">
+          Don't have an account?
+        </a>
       </form>
     </div>
   )

@@ -155,7 +155,9 @@ const BarChart = ({ graph }) => {
                     color: "black"
                 },
                 ticks: {
-                    color: "black"
+                    color: "black",
+                    beginAtZero: true,
+                    callback: function(value) {if (value % 1 === 0) {return value;}}
                 }
             },
         },

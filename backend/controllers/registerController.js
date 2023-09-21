@@ -10,7 +10,7 @@ const handleNewUser = async (req, res) => {
     }
     
     const duplicate = await User.findOne({ email: email }).exec()
-    if(duplicate) return res.status(409).json({ 'message': 'duplicate email'}) // conflict
+    if(duplicate) return res.status(409).json({ 'message': 'Duplicate email'}) // conflict
 
     try {
         const hashedPassword = await bcrypt.hash(password, 10)
@@ -22,7 +22,6 @@ const handleNewUser = async (req, res) => {
         res.status(201).json({ 'success': `New user ${email} created!` });
 
     } catch (err) {
-        
         res.status(500).json({ 'message': err.message})
     }
 }

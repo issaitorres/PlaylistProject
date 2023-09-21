@@ -13,6 +13,7 @@ const Register = () => {
   })
   const navigate = useNavigate()
   const [loader, setLoader] = useState(false)
+  const [warning, setWarning] = useState(false)
 
 
   const handleSubmit = async (event) => {
@@ -24,7 +25,7 @@ const Register = () => {
 
     } catch (err) {
       setLoader(false)
-      alert(err.response.data.message)
+      setWarning(err.response.data.message)
     }
   }
 
@@ -59,19 +60,10 @@ const Register = () => {
       errorMessage: "password should be 8-20 characters and include at least 1 letter, 1 number, and 1 special character",
 
     },
-    {
-      id: 4,
-      name: "passwordConfirmation",
-      type: "password",
-      placeholder: "Confirm Password",
-      label: "Password",
-      required: true,
-      pattern: registerUserData.password,
-      errorMessage: "passwords must match"
-    }
   ]
 
   const onChange = (e) => {
+    setWarning(false)
     setRegisterUserData({...registerUserData, [e.target.name]: e.target.value})
   }
 
@@ -79,17 +71,18 @@ const Register = () => {
     <div className="page">
       <form onSubmit={handleSubmit} className="form">
         <h1> Register</h1>
+        {warning ? <div className="warning">{warning}</div> : null}
         {inputs.map((input) => (
           <FormInput
             key={input.id}
             value={registerUserData[input.name]}
             onChange={onChange}
             className="formInput formInput-register-login-width"
+            password={`${input.type == "password" ? true : false}`}
             {...input} // pass all other key: values
           />
         ))}
         <button className="submit-button">
-          {/* Submit */}
           <div className={`${loader && 'loader'}`}>{!loader && "Submit"}</div>
         </button>
       </form>

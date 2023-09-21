@@ -34,3 +34,25 @@
 .formInput input:invalid[focused="true"] ~ span {
     display:block;
 }
+
+.input {
+    position: relative;
+}
+
+.form-container span {
+    font-size: 14px;
+    padding: 3px;
+    color: var(--default-red);
+    display: none;
+}
+
+.formInput .field-icon {
+    width: 20px;
+    height: 20px;
+    margin: -45px 5px 15px auto
+}
+
+.password-icon {
+    width: 20px;
+    height: 20px;
+}

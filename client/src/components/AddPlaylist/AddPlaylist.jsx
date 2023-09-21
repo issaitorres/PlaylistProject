@@ -2,11 +2,13 @@ import { useState } from 'react'
 import axios from 'axios'
 import FormInput from '../FormInput/FormInput'
 import "./AddPlaylist.css"
+import { useNavigate } from 'react-router-dom'
 
 
 const AddPlaylist = ({ accessToken, fetchPlaylists }) => {
   const [playlistId, setPlaylistId] = useState("")
   const [loader, setLoader] = useState(false)
+  const navigate = useNavigate()
 
 
   const submitPlaylistId = async (event) => {
@@ -19,10 +21,14 @@ const AddPlaylist = ({ accessToken, fetchPlaylists }) => {
       var extractedPlaylistId = playlistIdRegex2.test(playlistId) ? playlistId.split('/').pop() : playlistId
 
       // compare with localstorage
-      const localStoragePlaylistInfo = window.localStorage.playlistInfo
+      const localStoragePlaylistInfo = window?.localStorage?.playlistInfo
       if(localStoragePlaylistInfo) {
         const currentPlaylistIds = JSON.parse(localStoragePlaylistInfo).map((info) => info.playlistId)
-        if(currentPlaylistIds.includes(extractedPlaylistId)) return alert("This playlist ID has already been submitted!")
+        if(currentPlaylistIds.includes(extractedPlaylistId)) {
+          navigate(`/playlist/${extractedPlaylistId}`)
+        }
+        // navigate to playlist and exit - this would submit another playlist without this return
+        return
       }
 
       setLoader(!loader)
@@ -35,8 +41,13 @@ const AddPlaylist = ({ accessToken, fetchPlaylists }) => {
             authorization: `Bearer ${accessToken}`
           }
         })
-  
-        fetchPlaylists(true, extractedPlaylistId)
+
+        const newPlaylistInfo = res.data
+        const localStoragePlaylistInfo = window?.localStorage?.playlistInfo
+        var parsedLocalStoragePlaylistInfo = localStoragePlaylistInfo ? JSON.parse(localStoragePlaylistInfo) : []
+        parsedLocalStoragePlaylistInfo.push(newPlaylistInfo)
+        window.localStorage.setItem("playlistInfo", JSON.stringify(parsedLocalStoragePlaylistInfo))
+        navigate(`/playlist/${playlistId}`, {state: { playlist: newPlaylistInfo }})
       } catch (err) {
         console.log(err)
       }
