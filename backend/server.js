@@ -48,7 +48,7 @@ app.use('/logout', require('./routes/logout'))
 // routes where login is required
 app.use(verifyJWT)
 app.use('/playlists', require('./routes/playlists'));
-// app.use('/user', require('./routes/user'));
+app.use('/user', require('./routes/user'));
 
 
 

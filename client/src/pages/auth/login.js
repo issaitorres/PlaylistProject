@@ -4,6 +4,7 @@ import { useCookies } from 'react-cookie'
 import { useNavigate } from 'react-router-dom'
 import FormInput from '../../components/FormInput/FormInput'
 import { useLocation } from 'react-router-dom';
+import { Link } from "react-router-dom"
 
 
 const Login = () => {
@@ -98,9 +99,9 @@ const Login = () => {
         <button className="submit-button">
           <div className={`${loader && 'loader'}`}>{!loader && "Submit"}</div>
         </button>
-        <a href="http://localhost:3000/register" className="link">
+        <Link to="/register" className="link">
           Don't have an account?
-        </a>
+        </Link>
       </form>
     </div>
   )

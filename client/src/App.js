@@ -7,6 +7,8 @@ import Logout from './pages/auth/logout';
 import Navbar from './components/NavBar/Navbar';
 import Footer from './components/Footer/Footer';
 import Playlist from './pages/playlist/playlist';
+import Error from './pages/404/error'
+import User from './pages/user/user'
 
 
 function App() {
@@ -20,6 +22,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="/playlist/:id" element={<Playlist/>} />
+          <Route path="/user" element={<User/>} />
+          <Route path="*" element={<Error/>} />
         </Routes>
         <Footer/>
       </Router>

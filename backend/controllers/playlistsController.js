@@ -14,13 +14,11 @@ const getAllPlaylists = async (req, res) => {
 }
 
 
-//user 1 { "playlistId": "3cT4tGoRr5eC3jGUZT5MTD" } { "playlistId": "5WRysPh2irCupBRNBWq48l" }
-//user 2 { "playlistId": "37i9dQZF1F0sijgNaJdgit" } { "playlistId": "1EPm5HSeYnoKwXVUyXKFxe" }
 const addPlaylist = async (req, res) => {
     const { playlistId } = req.body
     const mongoUserId = req.mongoUserId
     if (!playlistId || !mongoUserId) return res.status(400).json({ 'message': 'missing playlistID or mongoUserId' })
-    
+
     // check if playlistObject already exists
     const playlistObject = await Playlist.findOne({ playlistId: playlistId }, excludedProperties).exec()
     if(playlistObject) {
@@ -62,17 +60,9 @@ const addPlaylist = async (req, res) => {
 const getMyPlaylists = async (req, res) => {
     const mongoUserId = req.mongoUserId
     const userObject = await User.findOne({ _id: mongoUserId }).exec()
-
     try {
-        const multipleIds = []
-        userObject.userPlaylistObjectIds.forEach((playlistObjectId) => {
-            multipleIds.push({ _id: playlistObjectId})
-        })
-
-        if (!multipleIds.length) return res.status(204)
-
+        var multipleIds = userObject.userPlaylistObjectIds.map((playlistObjectId) => { return { _id: playlistObjectId } })
         const playlistObjects = await Playlist.find({ "$or":  multipleIds }, excludedProperties)
-
         res.status(200).json(playlistObjects)
     } catch (err) {
         res.status(500).json({ 'message' : 'Invalid playlist object id(s)' })
@@ -230,44 +220,3 @@ module.exports = {
     deletePlaylistObjectsNotUpdatedInPastWeek,
     refreshPlaylist
 }
-
-
-
-
-// don't think I'll really have an option to update a playlistId with a new one
-// we can still do updates on a user page where we can update email, first, last name, and password  
-
-// { "oldPlaylistId": "3cT4tGoRr5eC3jGUZT5MTD", "newPlaylistId": "5WRysPh2irCupBRNBWq48l" }
-// const updatePlaylistById = async (req, res) => {
-//     const mongoUserId = req.mongoUserId
-//     const oldPlaylistId = req.body.oldPlaylistId
-//     const newPlaylistId = req.body.newPlaylistId
-
-
-//     if (!mongoUserId || !oldPlaylistId || !newPlaylistId) return res.status(400).json({ 'message': 'missing oldPlaylistID or newPlaylistId or mongoUserId' })
-//     const playlistObject = await Playlist.findOne({ mongoUserId: mongoUserId }).exec()
-
-//     if(playlistObject.playlistIds.includes(oldPlaylistId)) {
-
-//         const indexOldPlaylist = playlistObject.playlistIds.indexOf(oldPlaylistId)
-
-//         playlistObject.playlistIds[indexOldPlaylist] = newPlaylistId
-//         const result = await playlistObject.save()
-
-//         res.status(200).json({ 'message': 'update succesful'})
-//     } else {
-//         res.status(200).json({ 'message' : `couldn't find that oldPlaylistId to update` })
-//     }
-// }
-
-    // const result = async () => {
-    //     const result2 = Promise.all(
-    //         userObject.userPlaylistObjectIds.map(async (id) => {
-
-    //             const playlist = await Playlist.findById(id).exec()
-    //             playlistObjects.push(playlist)
-    //         })
-    //     )
-    //     return result2
-
-    // }

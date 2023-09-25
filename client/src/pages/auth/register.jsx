@@ -8,8 +8,7 @@ const Register = () => {
   const [registerUserData, setRegisterUserData] = useState({
       email: "",
       username: "",
-      password: "",
-      passwordConfirmation: ""
+      password: ""
   })
   const navigate = useNavigate()
   const [loader, setLoader] = useState(false)

@@ -4,9 +4,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 
 const FormInput = (props) => {
-  const { label, errorMessage, onChange, className, id, errMsgPos="", password=false, ...inputProps } = props
+  const { label, errorMessage, onChange, className, id, errMsgPos="", password=false, inputName, ...inputProps } = props
   const [focused, setFocused] = useState(false)
-  const [passwordVisible, setPasswordVisible] = useState(false)
+  const [passwordVisible, setPasswordVisible] = useState([])
 
   const handleFocus = (e) => {
     setFocused(true)
@@ -24,9 +24,11 @@ const FormInput = (props) => {
   }
 
   const revealPassword = () => {
-    var passwordInput = document.getElementById("password-input")
-    passwordInput.type = passwordVisible ? "password" : "text"
-    setPasswordVisible(!passwordVisible)
+    var passwordInput = document.getElementById(`password-input-${inputName}`)
+    passwordInput.type = passwordVisible[id] ? "password" : "text"
+    var update = [...passwordVisible]
+    update[id] = !update[id]
+    setPasswordVisible(update)
   }
 
   return (
@@ -34,11 +36,11 @@ const FormInput = (props) => {
         {errMsgPos && <span id="top-err-msg">{errorMessage}</span>}
         <label>{label}</label>
           <input
-            id={password == "true" ? "password-input" : null}
+            id={password == "true" ? `password-input-${inputName}` : null}
             className={errMsgPos}
             onChange={onChange}
             onBlur={handleFocus}
-            onFocus={() => inputProps.name === "passwordConfirmation" && setFocused(true)}
+            onFocus={() => inputName === "passwordConfirmation" && setFocused(true)}
             focused={focused.toString()}
             {...inputProps}
           />
@@ -50,7 +52,7 @@ const FormInput = (props) => {
                   onClick={() => revealPassword()}
                 >
                   {
-                    passwordVisible
+                    passwordVisible[id]
                       ? <FontAwesomeIcon icon={faEye} className="password-icon"/>
                       : <FontAwesomeIcon icon={faEyeSlash} className="password-icon"/>
                   }

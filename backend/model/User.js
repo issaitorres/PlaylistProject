@@ -14,11 +14,8 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     userPlaylistObjectIds: [{
-        type: Array,
-        of: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'playlists'
-        }
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'playlists'
     }],
     refreshToken: {
         type: String

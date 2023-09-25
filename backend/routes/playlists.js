@@ -9,7 +9,5 @@ router
     .delete('/', playlistsController.deletePlaylistAndDissociateUserWithPlayListId)
     .post('/refresh', playlistsController.refreshPlaylist)
 
-    // .patch('/', playlistsController.updatePlaylistById)
-
 
 module.exports = router;

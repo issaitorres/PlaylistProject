@@ -6,7 +6,7 @@ import './NavBar.css'
 const Navbar = () => {
   const [cookies, setCookies] = useCookies(["access_token"])
   const userInfo = window?.localStorage?.userInfo
-  const email = userInfo ? JSON.parse(userInfo).email : "user"
+  const username = userInfo ? JSON.parse(userInfo).username : "user"
 
   return (
     <div className="navbar">
@@ -28,8 +28,8 @@ const Navbar = () => {
             </div>
           :
             <div className="navbar-right">
-              <div className="user-links">
-                Welcome {email}
+              <div>
+                <NavLink to="/user" activeclassname="active"> {username} </NavLink>
               </div>
               <div>
                 <NavLink to="/logout" activeclassname="active">Logout </NavLink>

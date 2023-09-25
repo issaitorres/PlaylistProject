@@ -150,6 +150,11 @@ input {
   margin: 15px auto !important;
 }
 
+.error-container{
+  margin: 10px;
+  text-align: center;
+}
+
 
 @keyframes spin {
   0% { transform: rotate(0deg); }
