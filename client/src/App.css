@@ -123,6 +123,26 @@ input {
   color: var(--default-black);
 }
 
+.danger-button {
+  width: 100%;
+  height: 50px;
+  padding: 10px;
+  border: none;
+  background-color: var(--default-red);
+  color: white;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 18px;
+  cursor: pointer;
+  margin: 15px 0px 15px 0px;
+  border:2px solid var(--default-red);
+}
+
+.danger-button:hover {
+  background-color: var(--default-white);; /* Green */
+  color: var(--default-black);
+}
+
 
 /* add-playlist-form */
 
@@ -159,4 +179,49 @@ input {
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+.playlist-list-container {
+  margin: 20px;
+}
+
+.playlist-list {
+  margin: 0px;
+  list-style: none;
+}
+
+.playlist-list li:nth-child(n+6) {
+  display: none;
+}
+
+.playlist-list-viewtoggle {
+  cursor: pointer;
+  display: list-item;
+  list-style-type: none;
+  text-decoration: underline;
+}
+
+.user-section {
+  max-width: 500px;
+  margin: 10px auto;
+}
+
+.notice-banner {
+  margin: 10px auto;
+  background-color: var(--default-green);
+  max-width: 600px;
+  text-align: center;
+  border: 2px solid #03774c;
+  border-radius: 6px;
+}
+
+
+.playlist-list li img {
+  vertical-align: middle;
+  margin: 5px 10px 5px 0px;
+}
+
+.playlist-list li span {
+  /* font-weight: bold; */
+
 }

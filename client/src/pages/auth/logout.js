@@ -10,11 +10,12 @@ const Logout = () => {
     useEffect(() => {
         removeCookie("access_token", { path: '/' }) // idk if we need this
         removeCookie("access_token") // we need this
-        //jwt http only cookie - can only be changed from server, not frontend
+        //jwt cookie -  http only cookie - can only be changed from server, not frontend
         window.localStorage.removeItem("userInfo")
         window.localStorage.removeItem("playlistInfo")
         navigate("/")
-    })
+        navigate(0) // refresh needed to clear access_token
+    },[])
 
   return (
     <div>Logout</div>

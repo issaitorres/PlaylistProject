@@ -12,6 +12,9 @@
 .about-table td {
   padding: 15px 5px;
   border: 0px solid black;
+}
 
+.about-button {
+  max-width: 400px;
 }
   

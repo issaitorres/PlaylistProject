@@ -86,7 +86,7 @@ const PlaylistQuickFacts = ({
                 &nbsp;
                 <span className="tooltiptext">
                     Playlists are updated all the time.
-                    If this information looks outdated, click here to get the latest playlist!
+                    If this information looks outdated, click here to get the latest version!
                 </span>
                 &nbsp;
                 <FontAwesomeIcon icon={faRefresh} className={`refresh-icon ${refresh ? `rotate`: ""}`}/>

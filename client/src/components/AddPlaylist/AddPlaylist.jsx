@@ -25,10 +25,10 @@ const AddPlaylist = ({ accessToken, fetchPlaylists }) => {
       if(localStoragePlaylistInfo) {
         const currentPlaylistIds = JSON.parse(localStoragePlaylistInfo).map((info) => info.playlistId)
         if(currentPlaylistIds.includes(extractedPlaylistId)) {
+          // navigate to playlist and exit - this would submit another playlist without this return
           navigate(`/playlist/${extractedPlaylistId}`)
+          return
         }
-        // navigate to playlist and exit - this would submit another playlist without this return
-        return
       }
 
       setLoader(!loader)

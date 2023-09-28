@@ -1,8 +1,11 @@
 import "./About.css"
 import aboutAudioFeaturesDesc from "../../data/aboutAudioFeaturesDesc"
+import { Link } from "react-router-dom"
 
-const About = ({ removePlaylist }) => {
+
+const About = ({ removePlaylist, deleteLoader }) => {
   const descriptions = aboutAudioFeaturesDesc()
+
 
   return (
     <div className='flex-container'>
@@ -49,9 +52,14 @@ const About = ({ removePlaylist }) => {
           {/* All playlists submitted are automatically deleted after one week. - Figure how to do this when app is deployed!*/}
         </p>
         <div>
-        <button onClick={removePlaylist}>
-          Remove this playlist
+        <button className="danger-button about-button" onClick={removePlaylist}>
+          <div className={`${deleteLoader && 'loader'}`}>{!deleteLoader && "Remove this playlist"}</div>
         </button>
+        <p>To remove all playlists, visit the &thinsp;
+          <Link to="/user" className="link">
+            user page
+          </Link>
+        </p>
       </div>
       </div>
     </div>

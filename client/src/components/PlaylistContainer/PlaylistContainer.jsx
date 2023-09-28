@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { useCookies } from 'react-cookie'
 import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 import {
   getArtistSongsInfo,
   getGenreSongs,
@@ -17,6 +18,7 @@ import "./PlaylistContainer.css"
 const PlaylistContainer = ({ playlist, refreshPlaylist }) => {
   const navigate = useNavigate()
   const [cookies, setCookies] = useCookies(["access_token"])
+  const [deleteLoader, setDeleteLoader] = useState(false)
   const { 
     _id: playlistObjectId,
     playlistId, 
@@ -32,6 +34,7 @@ const PlaylistContainer = ({ playlist, refreshPlaylist }) => {
 
 
   const removePlaylist = async (playlistObjectId) => {
+    setDeleteLoader(!deleteLoader)
     const res = await axios.delete("http://localhost:3500/playlists" ,
      {
       headers: {
@@ -48,6 +51,7 @@ const PlaylistContainer = ({ playlist, refreshPlaylist }) => {
       window.localStorage.setItem("playlistInfo", JSON.stringify(newLocalStorage))
     }
 
+    setDeleteLoader(false)
     navigate('/')
   }
 
@@ -78,7 +82,7 @@ const PlaylistContainer = ({ playlist, refreshPlaylist }) => {
         trackTable={trackTable}
       />
       <div>
-        <About removePlaylist={() => removePlaylist(playlistObjectId)}/>
+        <About removePlaylist={() => removePlaylist(playlistObjectId)} deleteLoader={deleteLoader}/>
       </div>
     </div>
   )

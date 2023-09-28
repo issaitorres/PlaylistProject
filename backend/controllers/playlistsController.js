@@ -60,13 +60,18 @@ const addPlaylist = async (req, res) => {
 const getMyPlaylists = async (req, res) => {
     const mongoUserId = req.mongoUserId
     const userObject = await User.findOne({ _id: mongoUserId }).exec()
-    try {
-        var multipleIds = userObject.userPlaylistObjectIds.map((playlistObjectId) => { return { _id: playlistObjectId } })
-        const playlistObjects = await Playlist.find({ "$or":  multipleIds }, excludedProperties)
-        res.status(200).json(playlistObjects)
-    } catch (err) {
-        res.status(500).json({ 'message' : 'Invalid playlist object id(s)' })
+    var multipleIds = userObject.userPlaylistObjectIds.map((playlistObjectId) => { return { _id: playlistObjectId } })
+    if (multipleIds.length) {
+        try {
+            const playlistObjects = await Playlist.find({ "$or":  multipleIds }, excludedProperties)
+            res.status(200).json(playlistObjects)
+        } catch (err) {
+            res.status(500).json({ 'message' : 'Something went wrong' })
+        }
+    } else {
+        res.status(204).json({ 'message' : 'Found no playlist objects' })
     }
+
 }
 
 const refreshPlaylist = async (req, res) => {

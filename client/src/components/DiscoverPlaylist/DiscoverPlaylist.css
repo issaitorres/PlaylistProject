@@ -1,0 +1,65 @@
+
+.discover {
+    margin: 10px auto;
+    max-width: 400px;
+    text-align: center;
+}
+
+.discover-playlist {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black;
+    border-radius: 6px;
+    margin: 0px auto;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    position: relative;
+    /* box-shadow: 0 0 0 max(100vh, 100vw) rgba(0, 0, 0, .3); */
+    
+
+}
+
+.discover-playlist:hover {
+    background-color: var(--default-green);
+    cursor: pointer;
+
+} 
+
+
+
+
+
+
+
+
+
+
+
+
+
+.discover-main {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 5px;
+    padding: 5px;
+}
+
+.discover-main div {
+    margin: 0px 10px;
+    text-align: left;
+}
+
+.discover-loader {
+    position: relative;
+    bottom: 110px;
+}
+
+.discover-hidden {
+    visibility: visible;
+
+}
+
+.discover-loading {
+    filter: brightness(0.4);
+}
+

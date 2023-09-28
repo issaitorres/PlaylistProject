@@ -9,6 +9,8 @@ import Footer from './components/Footer/Footer';
 import Playlist from './pages/playlist/playlist';
 import Error from './pages/404/error'
 import User from './pages/user/user'
+import Restricted from './pages/auth/Restricted'
+import Protected from "./pages/auth/Protected"
 
 
 function App() {
@@ -18,11 +20,15 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/logout" element={<Logout />} />
-          <Route path="/playlist/:id" element={<Playlist/>} />
-          <Route path="/user" element={<User/>} />
+           <Route element={<Protected />}> {/* user must be logged in to access these pages */}
+            <Route path="/logout" element={<Logout />} />
+            <Route path="/playlist/:id" element={<Playlist/>} />
+            <Route path="/user" element={<User/>} />
+          </Route>
+          <Route element={<Restricted />}>{/* user cannot access these pages while logged in*/}
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+          </Route>
           <Route path="*" element={<Error/>} />
         </Routes>
         <Footer/>

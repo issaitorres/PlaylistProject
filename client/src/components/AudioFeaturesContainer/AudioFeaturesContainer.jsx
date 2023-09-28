@@ -17,29 +17,42 @@ const AudioFeaturesContainer = ({
 
     useEffect(() => {
         var qualityIcon = document.getElementById(animationId)
-        var animationSet = false // maybe reset this when out of viewport?
+        var animationSet = false
+        var scrollTimer, lastScrollFireTime = 0;
 
+        const triggerAnimation = () => {
+            var minScrollTime = 100;
+            var now = new Date().getTime();
 
-        // works but maybe we can add an event listener for the button "more" to be clicked
-        // and the trigger animation after a delay?
-        window.addEventListener('scroll', function (event) {
-        if (isInViewport(qualityIcon)) {
-                if(callback) {
-                    // if quality icon doesn't already have the animation keyword
-                    // console.log(qualityIcon)
-                    // console.log(qualityIcon.classList)
+            const processScroll = (qualityIcon, callback, animationSet, animationKeyword) => {
+                if (isInViewport(qualityIcon)) {
+                    if(callback) {
+                        if(!animationSet) {
+                            callback(qualityIcon, animationKeyword)
+                        }
+                        animationSet = true
+                        window.removeEventListener('scroll', triggerAnimation, false)
 
-                    if(!animationSet) {
-                    // if(!qualityIcon.classList.contains(animationKeyword)) {
-                        callback(qualityIcon, animationKeyword)
                     }
-                    // qualityIcon.classList.contains(class);
-                    animationSet = true
-
-
                 }
             }
-        }, false);
+
+            if (!scrollTimer) {
+                if (now - lastScrollFireTime > (3 * minScrollTime)) {
+                    processScroll(qualityIcon, callback, animationSet, animationKeyword);   // fire immediately on first scroll
+                    lastScrollFireTime = now;
+                }
+                scrollTimer = setTimeout(function() {
+                    scrollTimer = null;
+                    lastScrollFireTime = new Date().getTime();
+                    processScroll(qualityIcon, callback, animationSet, animationKeyword);
+                }, minScrollTime);
+            }
+        }
+
+        window.addEventListener('scroll', triggerAnimation, false);
+        // triggers when leaving the page
+        return () => window.removeEventListener('scroll', triggerAnimation, false);
     }, [])
 
 

@@ -1,43 +1,52 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 import FormInput from '../../components/FormInput/FormInput'
 import { useCookies } from 'react-cookie'
 
 
-
 const User = () => {
-  // const location = useLocation();
   const [cookies, setCookies] = useCookies(["access_token"])
-  const [loader, setLoader] = useState(false)
+  const [updateLoader, setUpdateLoader] = useState(false)
+  const [deleteLoader, setDeleteLoader] = useState(false)
   const [warning, setWarning] = useState(false)
   const [successfulUpdate, setSuccessfulUpdate] = useState(false)
+  const playlistInfo = window?.localStorage?.playlistInfo ? JSON.parse(window.localStorage.playlistInfo) : []
 
-
-  var localStorage
+  var userInfo
   if(window?.localStorage?.userInfo) {
-    localStorage = JSON.parse(window.localStorage.userInfo)
+    userInfo = JSON.parse(window.localStorage.userInfo)
   }
 
   const [updatedUserData, setUpdatedUserData] = useState({
-    email: localStorage?.email || "",
-    username: localStorage?.username || "",
+    email: userInfo?.email || "",
+    username: userInfo?.username || "",
     oldPassword: "",
     newPassword: ""
   })
 
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  },[])
 
-  
+
   const handleSubmit = async (event) => {
     event.preventDefault()
-    setLoader(!loader)
+
+    if((updatedUserData.oldPassword && !updatedUserData.newPassword) 
+        || (!updatedUserData.oldPassword && updatedUserData.newPassword)) {
+          setWarning("Both password fields must be filled to update to new password")
+          return
+      }
+
+      setUpdateLoader(!updateLoader)
     try {
       const result = await axios.patch("http://localhost:3500/user", updatedUserData, {
         headers: {
           authorization: `Bearer ${cookies.access_token}`
         }
       })
-      const newUsername = result.data.newusername
-      const newEmail = result.data.newemail
+      const newUsername = result.data.newUsername
+      const newEmail = result.data.newEmail
 
       var userInfo
       if(window?.localStorage?.userInfo) {
@@ -54,20 +63,19 @@ const User = () => {
         window.localStorage.setItem("userInfo", JSON.stringify(userInfo))
       }
       
-      setLoader(false)
+      setUpdateLoader(false)
       setSuccessfulUpdate(true)
       setTimeout(() => {
         setSuccessfulUpdate(false)
       }, 5000);
-
-
     } catch (err) {
-      setLoader(false)
+      setUpdateLoader(false)
       setWarning(err.response.data.message)
     }
   }
 
   const deleteAllUserPlaylists = async () => {
+    setDeleteLoader(!deleteLoader)
     try {
       const result = await axios.delete("http://localhost:3500/user/deletemyplaylists", {
         headers: {
@@ -75,27 +83,20 @@ const User = () => {
         }
       })
 
-      console.log("\n\n\n back to user")
-      console.log(result)
-
-      // if success - just clear the localstorage
       window.localStorage.removeItem("playlistInfo")
 
       setSuccessfulUpdate(true)
+      setDeleteLoader(false)
       setTimeout(() => {
         setSuccessfulUpdate(false)
       }, 5000);
-
-
-
     } catch (err) {
+      setDeleteLoader(false)
       console.log("\n\n some err")
       console.log(err)
     }
-
   }
 
-  // passswords depend on one another, so if we submit old password, new password is required
   const inputs = [
     {
       id: 1,
@@ -115,6 +116,7 @@ const User = () => {
       required: false,
       pattern: "[A-Za-z0-9]{3,16}", // can use regex
       errorMessage: "Username must be 2-16 characters and cannot include any special characters"
+      
     },
     {
       id: 3,
@@ -124,8 +126,7 @@ const User = () => {
       label: "Old Password",
       required: false,
       pattern: `^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$`,
-      errorMessage: "password should be 8-20 characters and include at least 1 letter, 1 number, and 1 special character",
-
+      errorMessage: "Password should be 8-20 characters and include at least 1 letter, 1 number, and 1 special character"
     },
     {
       id: 4,
@@ -135,8 +136,7 @@ const User = () => {
       label: "New Password",
       required: false,
       pattern: `^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$`,
-      errorMessage: "password should be 8-20 characters and include at least 1 letter, 1 number, and 1 special character",
-
+      errorMessage: "Password should be 8-20 characters and include at least 1 letter, 1 number, and 1 special character"
     },
   ]
 
@@ -145,10 +145,31 @@ const User = () => {
     setUpdatedUserData({...updatedUserData, [e.target.name]: e.target.value})
   }
 
+  const playlistDisplayedCount = 4
+  // css dependency - .playlist-list li:nth-child(n+(playlistDisplayedCount+2)) {
+  const viewToggle = (e) => {
+    var listinfo = e.target.parentNode.children
+    for (var i = 0; i < listinfo.length - 1; i++) {
+      if(i > playlistDisplayedCount) {
+        if(listinfo[i].style.display == "list-item") {
+          listinfo[i].style.display = "none"
+        } else {
+          listinfo[i].style.display = "list-item"
+        }
+      }
+    }
+
+    if(e.target.innerText == "see more...") {
+      e.target.innerText = "see less..."
+    } else {
+      e.target.innerText = "see more..."
+    }
+  }
+
   return (
     <div>
-      {successfulUpdate && <div> success </div> }
-      <div>
+      {successfulUpdate && <div className="notice-banner"> success </div> }
+      <div className="user-section">
         <form onSubmit={handleSubmit} className="form">
           <h1> Update Credentials</h1>
           {warning ? <div className="warning">{warning}</div> : null}
@@ -164,19 +185,50 @@ const User = () => {
             />
           ))}
           <button className="submit-button">
-            <div className={`${loader && 'loader'}`}>{!loader && "Update"}</div>
+            <div className={`${updateLoader && 'loader'}`}>{!updateLoader && "Update"}</div>
           </button>
         </form>
       </div>
 
-      <div>
-      <h1> Delete My Playlists</h1>
-      <button onClick={() => deleteAllUserPlaylists()}>
-            Delete My Playlists
-      </button>
-
+      <div className="user-section">
+        <div className="form">
+          <h1> Delete My Playlists</h1>
+          <div className="playlist-list-container">
+            {playlistInfo.length > 0 
+              ?
+                <>
+                  <p> Playlists count: {playlistInfo.length}</p>
+                  <ul className="playlist-list">
+                    {playlistInfo.map((playlist, index) => {
+                      return (
+                        <li key={index}>
+                          <img className="list-image" src={playlist.playlistImage} width="65px" height="65px"/>
+                          <span>
+                            <b>{playlist.playlistName}</b>
+                          </span>
+                        </li>
+                      )
+                    })}
+                  {
+                    playlistInfo.length > playlistDisplayedCount
+                    ?
+                      <div className="playlist-list-viewtoggle" onClick={(e) => viewToggle(e)}>
+                        see more...
+                      </div>
+                    :
+                      null
+                  }
+                  </ul>
+                  <button className="danger-button" onClick={() => deleteAllUserPlaylists()}>
+                    <div className={`${deleteLoader && 'loader'}`}>{!deleteLoader && "Delete My Playlists"}</div>
+                  </button>
+                </>
+              :
+                <div>No playlists to delete</div>
+            }
+          </div>
+        </div>
       </div>
-
     </div>
   )
 }

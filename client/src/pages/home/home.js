@@ -5,6 +5,7 @@ import AddPlaylist from '../../components/AddPlaylist/AddPlaylist'
 import PlaylistTile from '../../components/PlaylistTile/PlaylistTile'
 import LoggedOut from './LoggedOut'
 import { useNavigate } from 'react-router-dom'
+import DiscoverPlaylist from "../../components/DiscoverPlaylist/DiscoverPlaylist"
 
 
 const Home = () => {
@@ -16,15 +17,8 @@ const Home = () => {
 
 
   const fetchPlaylists = React.useCallback(async (update=false, playlistId=false) => {
-    // all playlists
-    // const res = await axios.get("http://localhost:3500/playlists" , {
-    //   headers: {
-    //     authorization: `Bearer ${cookies.access_token}`
-    //   }
-    // })
-
     // check if info already in localstorage
-    if(window.localStorage.playlistInfo && !update) {
+    if(window?.localStorage?.playlistInfo && !update) {
       setPlaylists(JSON.parse(window.localStorage.playlistInfo))
     } else {
       try {
@@ -37,7 +31,7 @@ const Home = () => {
         if(playlistId) {
           navigate(`/playlist/${playlistId}`, {state: {playlist: res.data.find((playlist) => { return playlist.playlistId === playlistId })}})
         }
-        window.localStorage.setItem("playlistInfo", JSON.stringify(res.data))
+        window.localStorage.setItem("playlistInfo", Array.isArray(res.data) ? JSON.stringify(res.data) : JSON.stringify([]))
       } catch (error) {
 
         // get new access token if expired
@@ -79,22 +73,25 @@ const Home = () => {
       <AddPlaylist accessToken={cookies.access_token} fetchPlaylists={fetchPlaylists} />
       {
         !cookies.access_token && !userID 
-          ? <LoggedOut/>
-          : (!playlists.length 
-            ? <div>
-                Add a playlist to see info here!
-              </div>
-            : <div className="playlistLinksWrapper">
-                <h1> Your Playlists</h1>
-                <div className="playlistLinksContainer">
-                  {playlists.map((playlist, index) => (
-                    <PlaylistTile
-                      key={index}
-                      playlist={playlist}
-                    />
-                  ))}
-                </div>
-              </div> 
+          ?
+            <LoggedOut />
+          :
+            (
+              !playlists.length
+                ?
+                  <DiscoverPlaylist />
+                :
+                  <div className="playlistLinksWrapper">
+                    <h1> Your Playlists</h1>
+                    <div className="playlistLinksContainer">
+                      {playlists.map((playlist, index) => (
+                        <PlaylistTile
+                          key={index}
+                          playlist={playlist}
+                        />
+                      ))}
+                    </div>
+                  </div>
             )
       }
     </div>

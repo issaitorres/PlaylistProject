@@ -56,7 +56,7 @@ const Register = () => {
       label: "Password",
       required: true,
       pattern: `^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$`,
-      errorMessage: "password should be 8-20 characters and include at least 1 letter, 1 number, and 1 special character",
+      errorMessage: "Password should be 8-20 characters and include at least 1 letter, 1 number, and 1 special character",
 
     },
   ]

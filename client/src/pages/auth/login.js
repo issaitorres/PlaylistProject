@@ -1,10 +1,8 @@
 import { useState } from 'react'
 import axios from 'axios'
 import { useCookies } from 'react-cookie'
-import { useNavigate } from 'react-router-dom'
 import FormInput from '../../components/FormInput/FormInput'
-import { useLocation } from 'react-router-dom';
-import { Link } from "react-router-dom"
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 
 
 const Login = () => {
@@ -14,15 +12,14 @@ const Login = () => {
     email: location?.state?.email || "",
     password: ""
   })
-
   const [cookies, setCookies] = useCookies(["access_token"])
   const [displayWarning, setDisplayWarning] = useState(false)
-
   const navigate = useNavigate()
 
 
   const handleSubmit = async (event) => {
     event.preventDefault()
+
 
     setLoader(!loader)
     try {
@@ -50,10 +47,12 @@ const Login = () => {
     }
   }
 
+
   const onChange = (e) => {
     setDisplayWarning(false)
     setLoginData({...loginData, [e.target.name]: e.target.value})
   }
+
 
   const inputs = [
     {
@@ -92,7 +91,6 @@ const Login = () => {
             onChange={onChange}
             className="formInput formInput-register-login-width"
             password={`${input.type == "password" ? true : false}`}
-
             {...input} // pass all other key: values
           />
         ))}
