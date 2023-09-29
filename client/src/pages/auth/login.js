@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useCookies } from 'react-cookie'
 import FormInput from '../../components/FormInput/FormInput'
@@ -8,6 +8,7 @@ import { useLocation, useNavigate, Link } from 'react-router-dom';
 const Login = () => {
   const location = useLocation();
   const [loader, setLoader] = useState(false)
+  const [notice, setNotice] = useState(location?.state?.notice || false)
   const [loginData, setLoginData] = useState({
     email: location?.state?.email || "",
     password: ""
@@ -15,6 +16,27 @@ const Login = () => {
   const [cookies, setCookies] = useCookies(["access_token"])
   const [displayWarning, setDisplayWarning] = useState(false)
   const navigate = useNavigate()
+
+  useEffect(()=> {
+    var homeInterval
+    if(notice) {
+      var time = 5;
+      homeInterval = setInterval(() => {
+        if (time == 0) {
+          removeInterval()
+          setNotice(false)
+          navigate("/login", { replace: true }); // remove location state
+        }
+        time--;
+      }, 1000);
+    }
+
+    const removeInterval = () => {
+      clearInterval(homeInterval);
+    }
+
+    return () => removeInterval();
+  }, [])
 
 
   const handleSubmit = async (event) => {
@@ -28,8 +50,9 @@ const Login = () => {
         withCredentials: true
       })
 
+      // must match time in seconds for accessToken in loginController - maxAge uses seconds
       setCookies("access_token", res.data.accessToken, {
-        maxAge: 900
+        maxAge: 7 * 24 * 60 * 60
       })
       window.localStorage.setItem("userInfo", JSON.stringify({
         id: res.data.userID,
@@ -77,7 +100,8 @@ const Login = () => {
 
 
   return (
-    <div className="page">
+    <div className="full-page auth-background">
+      {notice ? <div className="login-notice"> {notice}</div> : null }
       <form onSubmit={handleSubmit} className="form">
         <h1> Login</h1>
         {displayWarning &&

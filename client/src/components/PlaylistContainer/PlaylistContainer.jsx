@@ -17,7 +17,7 @@ import "./PlaylistContainer.css"
 
 const PlaylistContainer = ({ playlist, refreshPlaylist }) => {
   const navigate = useNavigate()
-  const [cookies, setCookies] = useCookies(["access_token"])
+  const [cookies, setCookies, removeCookie] = useCookies(["access_token"])
   const [deleteLoader, setDeleteLoader] = useState(false)
   const { 
     _id: playlistObjectId,
@@ -35,24 +35,34 @@ const PlaylistContainer = ({ playlist, refreshPlaylist }) => {
 
   const removePlaylist = async (playlistObjectId) => {
     setDeleteLoader(!deleteLoader)
-    const res = await axios.delete("http://localhost:3500/playlists" ,
-     {
-      headers: {
-        authorization: `Bearer ${cookies.access_token}`
-      },
-      data: {
-        "playlistObjectId": playlistObjectId
-      }
-    })
+    try {
+      const res = await axios.delete("http://localhost:3500/playlists" ,
+      {
+       headers: {
+         authorization: `Bearer ${cookies.access_token}`
+       },
+       data: {
+         "playlistObjectId": playlistObjectId
+       }
+     })
 
-    // remove playlist from localstorage
-    if(window.localStorage.playlistInfo) {
-      var newLocalStorage = JSON.parse(window.localStorage.playlistInfo).filter((info) => info._id != playlistObjectId)
-      window.localStorage.setItem("playlistInfo", JSON.stringify(newLocalStorage))
+     // remove playlist from localstorage
+     if(window.localStorage.playlistInfo) {
+       var newLocalStorage = JSON.parse(window.localStorage.playlistInfo).filter((info) => info._id != playlistObjectId)
+       window.localStorage.setItem("playlistInfo", JSON.stringify(newLocalStorage))
+     }
+
+     setDeleteLoader(false)
+     navigate('/')
+    } catch (err) {
+      if(err.response.status == 403) {
+        removeCookie("access_token")
+        navigate("/login", {state: { notice: "Access has expired. Please login to continue.", leftOffPath: "/" }})
+        return
+      }
+      console.log(err)
     }
 
-    setDeleteLoader(false)
-    navigate('/')
   }
 
 

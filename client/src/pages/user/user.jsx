@@ -2,15 +2,18 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import FormInput from '../../components/FormInput/FormInput'
 import { useCookies } from 'react-cookie'
+import { useNavigate } from 'react-router-dom'
 
 
 const User = () => {
-  const [cookies, setCookies] = useCookies(["access_token"])
+  const [cookies, setCookies, removeCookie] = useCookies(["access_token"])
   const [updateLoader, setUpdateLoader] = useState(false)
   const [deleteLoader, setDeleteLoader] = useState(false)
   const [warning, setWarning] = useState(false)
   const [successfulUpdate, setSuccessfulUpdate] = useState(false)
   const playlistInfo = window?.localStorage?.playlistInfo ? JSON.parse(window.localStorage.playlistInfo) : []
+  const navigate = useNavigate()
+
 
   var userInfo
   if(window?.localStorage?.userInfo) {
@@ -69,8 +72,14 @@ const User = () => {
         setSuccessfulUpdate(false)
       }, 5000);
     } catch (err) {
+      if(err.response.status == 403) {
+        removeCookie("access_token")
+        navigate("/login", {state: { notice: "Access has expired. Please login to continue.", leftOffPath: "/" }})
+        return
+      }
       setUpdateLoader(false)
       setWarning(err.response.data.message)
+      console.log(err)
     }
   }
 
@@ -91,6 +100,11 @@ const User = () => {
         setSuccessfulUpdate(false)
       }, 5000);
     } catch (err) {
+      if(err.response.status == 403) {
+        removeCookie("access_token")
+        navigate("/login", {state: { notice: "Access has expired. Please login to continue.", leftOffPath: "/" }})
+        return
+      }
       setDeleteLoader(false)
       console.log("\n\n some err")
       console.log(err)
@@ -167,7 +181,7 @@ const User = () => {
   }
 
   return (
-    <div>
+    <div className="page-container">
       {successfulUpdate && <div className="notice-banner"> success </div> }
       <div className="user-section">
         <form onSubmit={handleSubmit} className="form">

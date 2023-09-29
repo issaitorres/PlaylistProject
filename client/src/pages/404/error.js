@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { Link } from "react-router-dom"
+import { useEffect } from 'react'
 
 
 const Error = () => {
@@ -20,18 +21,25 @@ const Error = () => {
     clearInterval(homeInterval);
   }
 
+  // remove interval if user leaves page by clicking on any link
+  useEffect(() => {
+    return () => removeInterval();
+  }, [])
+
   return (
-    <div className="error-container">
-      <h1> 404</h1>
-      <p> Dude where's my page?</p>
-      <div className="time">
-        Redirecting back
-        &thinsp;
-        <Link to="/" className="link" onClick={removeInterval}>
-            home
-        </Link>
-        &thinsp;
-        in... <span id="time"></span>
+    <div className="full-page" style={{alignItems: "start"}}>
+      <div className="error-container">
+        <h1> 404</h1>
+        <p> Dude where's my page?</p>
+        <div className="time">
+          Redirecting back
+          &thinsp;
+          <Link to="/" className="link" onClick={removeInterval}>
+              home
+          </Link>
+          &thinsp;
+          in... <span id="time"></span>
+        </div>
       </div>
     </div>
   )

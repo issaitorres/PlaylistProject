@@ -67,7 +67,7 @@ const Register = () => {
   }
 
   return (
-    <div className="page">
+    <div className="full-page auth-background">
       <form onSubmit={handleSubmit} className="form">
         <h1> Register</h1>
         {warning ? <div className="warning">{warning}</div> : null}

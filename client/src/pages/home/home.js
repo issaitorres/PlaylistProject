@@ -72,7 +72,7 @@ const Home = () => {
     <div className="page-container">
       <AddPlaylist accessToken={cookies.access_token} fetchPlaylists={fetchPlaylists} />
       {
-        !cookies.access_token && !userID 
+        !cookies.access_token
           ?
             <LoggedOut />
           :

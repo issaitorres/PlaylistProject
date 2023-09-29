@@ -23,7 +23,7 @@ const handleLogin = async (req, res) => {
                 }
             },
             process.env.ACCESS_TOKEN_SECRET,
-            { expiresIn: '15m' }
+            { expiresIn: '7d' } // must match time in seconds for accessToken in client pages/auth/login
         )
         const refreshToken = jwt.sign(
             { 
@@ -39,7 +39,7 @@ const handleLogin = async (req, res) => {
 
         res.cookie('jwt', refreshToken, { 
             httpOnly: true, 
-            maxAge: 24 * 60 * 60 * 1000, // matches with refresh token,
+            maxAge: 24 * 60 * 60 * 1000, // matches with refresh token - uses milliseconds,
             sameSite: 'None', 
             secure: true
 
