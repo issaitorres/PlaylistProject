@@ -81,9 +81,9 @@ const Home = () => {
                 ?
                   <DiscoverPlaylist />
                 :
-                  <div className="playlistLinksWrapper">
+                  <div className="home__playlist-tile-wrapper">
                     <h1> Your Playlists</h1>
-                    <div className="playlistLinksContainer">
+                    <div className="home__playlist-tile-container">
                       {playlists.map((playlist, index) => (
                         <PlaylistTile
                           key={index}

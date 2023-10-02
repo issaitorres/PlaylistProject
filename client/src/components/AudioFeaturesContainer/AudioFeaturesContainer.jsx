@@ -1,4 +1,4 @@
-import React, { useEffect} from 'react'
+import React, { useEffect } from 'react'
 import { isInViewport } from "../../helper/PlaylistContainerHelperMethods"
 import SingleTrack from '../SingleTrack/SingleTrack'
 import "./AudioFeaturesContainer.css"
@@ -11,7 +11,7 @@ const AudioFeaturesContainer = ({
     title, 
     icon, 
     animationId, 
-    animationKeyword,
+    animationClassName,
     callback
 }) => {
 
@@ -24,11 +24,11 @@ const AudioFeaturesContainer = ({
             var minScrollTime = 100;
             var now = new Date().getTime();
 
-            const processScroll = (qualityIcon, callback, animationSet, animationKeyword) => {
+            const processScroll = (qualityIcon, callback, animationSet, animationClassName) => {
                 if (isInViewport(qualityIcon)) {
                     if(callback) {
                         if(!animationSet) {
-                            callback(qualityIcon, animationKeyword)
+                            callback(qualityIcon, animationClassName)
                         }
                         animationSet = true
                         window.removeEventListener('scroll', triggerAnimation, false)
@@ -39,13 +39,13 @@ const AudioFeaturesContainer = ({
 
             if (!scrollTimer) {
                 if (now - lastScrollFireTime > (3 * minScrollTime)) {
-                    processScroll(qualityIcon, callback, animationSet, animationKeyword);   // fire immediately on first scroll
+                    processScroll(qualityIcon, callback, animationSet, animationClassName);   // fire immediately on first scroll
                     lastScrollFireTime = now;
                 }
                 scrollTimer = setTimeout(function() {
                     scrollTimer = null;
                     lastScrollFireTime = new Date().getTime();
-                    processScroll(qualityIcon, callback, animationSet, animationKeyword);
+                    processScroll(qualityIcon, callback, animationSet, animationClassName);
                 }, minScrollTime);
             }
         }
@@ -57,13 +57,11 @@ const AudioFeaturesContainer = ({
 
 
   return (
-    <div className="quality-wrapper" >
-        <h2> {`${title}`}</h2>
-        <h3> {`Average Song: ${Math.round(averageQuality * 100)}%`}</h3>
-        <div id="iconContent">
-            {icon}
-        </div>
-        <div className="highestLowestTracks">
+    <div className="audiofeatures__wrapper" >
+        <h2> {title} </h2>
+        <h3> {`Average Song: ${Math.round(averageQuality * 100)}%`} </h3>
+        <div id="iconContent"> {icon} </div>
+        <div className="audiofeatures__highestLowestTracks">
             <div>
                 <h3>Highest: {`${Math.round(highestLowestField.highestScore*100)}%`} </h3>
                 <SingleTrack 

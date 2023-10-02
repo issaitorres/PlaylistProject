@@ -10,33 +10,26 @@ const Navbar = () => {
 
   return (
     <div className="navbar">
-      <div className="navbar-left">
-        <div>
+      <div className="navbar-flex">
+        <div className="navbar-section">
           <NavLink to="/" activeclassname="active">Home </NavLink>
         </div>
+        <div className="navbar-section">
+          {
+            !cookies.access_token
+              ?
+                <>
+                  <NavLink to="/register" activeclassname="active">Register </NavLink>
+                  <NavLink to="/login" activeclassname="active">Login </NavLink>
+                </>
+              :
+                <>
+                  <NavLink to="/user" activeclassname="active"> Account: {username} </NavLink>
+                  <NavLink to="/logout" activeclassname="active">Logout </NavLink>
+                </>
+          }
+        </div>
       </div>
-      {/* <div> */}
-        {!cookies.access_token
-          ?
-            <div className="navbar-right">
-              <div>
-                <NavLink to="/register" activeclassname="active">Register </NavLink>
-              </div>
-              <div>
-                <NavLink to="/login" activeclassname="active">Login </NavLink>
-              </div>
-            </div>
-          :
-            <div className="navbar-right">
-              <div>
-                <NavLink to="/user" activeclassname="active"> {username} </NavLink>
-              </div>
-              <div>
-                <NavLink to="/logout" activeclassname="active">Logout </NavLink>
-              </div>
-            </div>
-        }
-      {/* </div> */}
     </div>
   )
 }

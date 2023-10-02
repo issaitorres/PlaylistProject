@@ -2,6 +2,7 @@ import { useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import FormInput from '../../components/FormInput/FormInput'
+import './auth.css'
 
 
 const Register = () => {
@@ -81,7 +82,7 @@ const Register = () => {
             {...input} // pass all other key: values
           />
         ))}
-        <button className="submit-button">
+        <button className="button submit-theme">
           <div className={`${loader && 'loader'}`}>{!loader && "Submit"}</div>
         </button>
       </form>

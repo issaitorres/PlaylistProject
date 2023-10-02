@@ -12,33 +12,30 @@ const Footer = () => {
   return (
     <div className="footer">
       <div className="footer-flex">
-        <div className='footer-links'>
+        <div className='footer-link-section'>
           <div>
-            <Link to="/" activeclassname="active">Home </Link>
+            <Link to="/" >Home </Link>
           </div>
           {
             !cookies.access_token
               ?
                 <>
                   <div>
-                    <Link to="/register" activeclassname="active">Register </Link>
+                    <Link to="/register">Register </Link>
                   </div>
                   <div>
-                    <Link to="/login" activeclassname="active">Login </Link>
+                    <Link to="/login">Login </Link>
                   </div>
                 </>
               :
                 <div>
-                  <Link to="/logout" activeclassname="active">Logout </Link>
+                  <Link to="/logout">Logout </Link>
                 </div>
           }
         </div>
-        <div className='footer-links'>
+        <div className='footer-link-section'>
           <div>
-            Powered by the
-          </div>
-          <div>
-            <a href="https://developer.spotify.com/documentation/web-api" rel="noreferrer" target="_blank">Spotify Web API</a>
+            <a href="https://developer.spotify.com/documentation/web-api" rel="noreferrer" target="_blank"> Powered by the <br></br>Spotify Web API</a>
           </div>
           <div>
             <a href="https://open.spotify.com/" target="_blank" rel="noreferrer">

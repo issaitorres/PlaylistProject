@@ -67,7 +67,7 @@ const PlaylistContainer = ({ playlist, refreshPlaylist }) => {
 
 
   return (
-    <div className="container">
+    <>
       <div className="flex-container">
         <PlaylistQuickFacts 
           artistSongsInfo={artistSongsInfo}
@@ -81,20 +81,22 @@ const PlaylistContainer = ({ playlist, refreshPlaylist }) => {
           refreshPlaylist={refreshPlaylist}
         />
       </div>
-      <div>
+      <div className="flex-container">
         <Carousel 
           graphGridData={getGraphGridData(artistSongsInfo, genreSongs, yearSongs)}
           trackTable={trackTable}
         />
       </div>
-      <TrackGrid
-        playlistDuplicates={playlistDuplicates}
-        trackTable={trackTable}
-      />
-      <div>
+      <div className="flex-container">
+        <TrackGrid
+          playlistDuplicates={playlistDuplicates}
+          trackTable={trackTable}
+        />
+      </div>
+      <div className='flex-container'>
         <About removePlaylist={() => removePlaylist(playlistObjectId)} deleteLoader={deleteLoader}/>
       </div>
-    </div>
+    </>
   )
 }
 

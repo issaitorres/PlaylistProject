@@ -1,81 +1,104 @@
-.track-table-container {
+.trackgrid__heading {
+    margin: 0px auto 0px 5px;
+}
+
+.trackgrid__heading h2 {
+    margin: 10px 0px;
+}
+
+.trackgrid__container {
     margin: 30px 0px;
-    padding: 0px;
     display: grid;
     grid-template-columns: repeat(22, 1fr);
-    height: 1500px;
     max-height: 800px;
     overflow: scroll;
 }
 
-.track-table-heading {
-    display: block;
-    margin: 0px auto 0px 5px;
-}
-  
-.track-table-heading h2 {
-    margin: 10px 0px 10px 0px
+/* Every other row has different background color to tell rows apart */
+/* will depend on how many columns we have */
+/* works when sorting items by any column type too  */
+/* an + b where a = 2 x N and N is number of headers and b is offset
+N will also determine how high our offset needs to reach starting at 1*/
+/* 22 headers */
+.trackgrid__container > .trackgrid__item:nth-child(44n + 1),
+.trackgrid__container > .trackgrid__item:nth-child(44n + 2),
+.trackgrid__container > .trackgrid__item:nth-child(44n + 3),
+.trackgrid__container > .trackgrid__item:nth-child(44n + 4),
+.trackgrid__container > .trackgrid__item:nth-child(44n + 5),
+.trackgrid__container > .trackgrid__item:nth-child(44n + 6),
+.trackgrid__container > .trackgrid__item:nth-child(44n + 7),
+.trackgrid__container > .trackgrid__item:nth-child(44n + 8),
+.trackgrid__container > .trackgrid__item:nth-child(44n + 9),
+.trackgrid__container > .trackgrid__item:nth-child(44n + 10),
+.trackgrid__container > .trackgrid__item:nth-child(44n + 11),
+.trackgrid__container > .trackgrid__item:nth-child(44n + 12),
+.trackgrid__container > .trackgrid__item:nth-child(44n + 13),
+.trackgrid__container > .trackgrid__item:nth-child(44n + 14),
+.trackgrid__container > .trackgrid__item:nth-child(44n + 15),
+.trackgrid__container > .trackgrid__item:nth-child(44n + 16),
+.trackgrid__container > .trackgrid__item:nth-child(44n + 17),
+.trackgrid__container > .trackgrid__item:nth-child(44n + 18),
+.trackgrid__container > .trackgrid__item:nth-child(44n + 19),
+.trackgrid__container > .trackgrid__item:nth-child(44n + 20),
+.trackgrid__container > .trackgrid__item:nth-child(44n + 21),
+.trackgrid__container > .trackgrid__item:nth-child(44n + 22)
+{
+    background: #e6e6e6;
 }
 
-.track-table-header {
-    margin: 0px 0px;
+.trackgrid__header {
     padding: 10px;
-    font-size: 18px;
     position: sticky;
-    top: 0;
+    top: 0px;
     display: flex;
     align-items: center;
+    /* COME BACK TO THIS AFTER DECIDING COLORS */
     background-color: #878787;
     border: 1px solid #646464;
 }
 
-.table-header {
-    font-size: 18px;
-    padding: 5px 10px;
-}
-
-.header-toggle-sort {
+.trackgrid__header-toggle-sort {
     cursor: pointer;
 }
 
-.sortable-icons {
+.trackgrid__table-header {
+    font-size: 18px;
+    padding: 5px;
+}
+
+.trackgrid__sortable-icons {
     display: flex;
     flex-direction: column;
     margin: auto 5px;
 }
 
-
-.grid-item {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  border: 1px solid #c7c7c7;
-  padding: 5px 0px;
+.trackgrid__arrow {
+    font-size: 10px;
 }
 
-.grid-item > div > img{
+.trackgrid__item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border: 1px solid #c7c7c7;
+    padding: 5px 0px;
+}
+
+.trackgrid__item > div > img{
     padding: 5px;
 }
 
-.grid-item>ul {
+.trackgrid__item > ul {
     margin: 15px 0px;
 }
 
-.tt-arrow {
-  font-size: 10px;
-}
-
-.hidden-arrow {
-    visibility: hidden; /* visibility keeps space*/
-}
-
-.audio-container {
+.trackgrid__audio-container {
     padding: 5px;
     /* margin: 5px; */
 }
 
-.audio-button {
+.trackgrid__audio-button {
     height: 30px;
     width: 30px;
     font-size: 15px;
@@ -85,20 +108,19 @@
     cursor: pointer;
 }
   
-.audio-button>svg{
+.trackgrid__audio-button > svg {
     padding: 2px 1px 1px 1px;
-}
-
-.hidden-button {
-    display: none;
 }
 
 /* prevent icon from interfering with clicks on button 
     - specifically for Font Awesome Play and Pause icons */
-.audio-button [data-prefix='fas'] {
+.trackgrid__audio-button [data-prefix='fas'] {
     pointer-events: none;
-  }
+}
 
+.trackgrid__hidden-button {
+    display: none;
+}
 
 audio::-webkit-media-controls-mute-button {
   display: none !important;
@@ -112,35 +134,6 @@ audio:not([controls]) {
   display: none !important;
 }
 
-
-/* Every other row has different background color to tell rows apart */
-/* will depend on how many columns we have */
-/* works when sorting items by any column type too  */
-/* an + b where a = 2 x N and N is number of headers and b is offset
-N will also determine how high our offset needs to reach starting at 1*/
-/* 22 headers */
-.track-table-container > .grid-item:nth-child(44n + 1),
-.track-table-container > .grid-item:nth-child(44n + 2),
-.track-table-container > .grid-item:nth-child(44n + 3),
-.track-table-container > .grid-item:nth-child(44n + 4),
-.track-table-container > .grid-item:nth-child(44n + 5),
-.track-table-container > .grid-item:nth-child(44n + 6),
-.track-table-container > .grid-item:nth-child(44n + 7),
-.track-table-container > .grid-item:nth-child(44n + 8),
-.track-table-container > .grid-item:nth-child(44n + 9),
-.track-table-container > .grid-item:nth-child(44n + 10),
-.track-table-container > .grid-item:nth-child(44n + 11),
-.track-table-container > .grid-item:nth-child(44n + 12),
-.track-table-container > .grid-item:nth-child(44n + 13),
-.track-table-container > .grid-item:nth-child(44n + 14),
-.track-table-container > .grid-item:nth-child(44n + 15),
-.track-table-container > .grid-item:nth-child(44n + 16),
-.track-table-container > .grid-item:nth-child(44n + 17),
-.track-table-container > .grid-item:nth-child(44n + 18),
-.track-table-container > .grid-item:nth-child(44n + 19),
-.track-table-container > .grid-item:nth-child(44n + 20),
-.track-table-container > .grid-item:nth-child(44n + 21),
-.track-table-container > .grid-item:nth-child(44n + 22)
-{
-    background: #e6e6e6;
+.trackgrid__hidden-arrow {
+    visibility: hidden; /* visibility keeps space*/
 }

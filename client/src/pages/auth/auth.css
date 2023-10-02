@@ -1,0 +1,30 @@
+.auth-background {
+  background: linear-gradient(145deg, var(--default-green) -10%, var(--default-black));
+  background-size: cover;
+  background-position: center;
+}
+
+.login-notice-container {
+  position: absolute;
+  top: 50px;
+  margin: 10px auto;
+}
+
+.login-notice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 400px;
+  background-color: var(--default-red);
+  text-align: center;
+  border: 1px solid var(--default-black);
+  border-radius: 6px;
+  color: white;
+}
+
+.login-notice-icon {
+  width: 25px;
+  height: 25px;
+  margin: 2px;
+  padding: 5px;
+}

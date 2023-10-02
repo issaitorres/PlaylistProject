@@ -3,6 +3,9 @@ import axios from 'axios'
 import { useCookies } from 'react-cookie'
 import FormInput from '../../components/FormInput/FormInput'
 import { useLocation, useNavigate, Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
+import './auth.css'
 
 
 const Login = () => {
@@ -101,7 +104,17 @@ const Login = () => {
 
   return (
     <div className="full-page auth-background">
-      {notice ? <div className="login-notice"> {notice}</div> : null }
+      {
+        notice
+          ? 
+            <div className="login-notice-container">
+              <div className="login-notice"> 
+                <FontAwesomeIcon icon={faExclamationTriangle} className="login-notice-icon" /> {notice}
+              </div>
+            </div>
+          :
+            null
+      }
       <form onSubmit={handleSubmit} className="form">
         <h1> Login</h1>
         {displayWarning &&
@@ -118,7 +131,7 @@ const Login = () => {
             {...input} // pass all other key: values
           />
         ))}
-        <button className="submit-button">
+        <button className="button submit-theme">
           <div className={`${loader && 'loader'}`}>{!loader && "Submit"}</div>
         </button>
         <Link to="/register" className="link">

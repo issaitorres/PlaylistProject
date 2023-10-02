@@ -35,46 +35,46 @@ const Carousel = ({
     };
 
     const activeSlide = (slideIndex) => {
-        var current = document.getElementsByClassName("carousel-button-active");
-        current[0].className = current[0].className.replaceAll("carousel-button-active", "");
-        document.querySelector(`.cb${slideIndex}`).className += "carousel-button-active"
+        var current = document.getElementsByClassName("carousel__button-active");
+        current[0].className = current[0].className.replaceAll("carousel__button-active", "");
+        document.querySelector(`.cb${slideIndex}`).className += "carousel__button-active"
     }
 
-    // give active className to first carousel button on page load
+    // give active className to select first carousel button on page load
     useEffect(() => {
-        document.querySelector('.cb0').className += " carousel-button-active"
+        document.querySelector('.cb0').className += " carousel__button-active"
     }, [])
 
 
   return (
-        <div className="flex-container">
-            <div className="carousel-button-container">
+        <>
+            <div className="carousel__button-container">
                 {graphGridData.map((data, slideIndex) => {
                     return (
                         <React.Fragment key={slideIndex}>
                             <button 
                                 onClick={() => goToSlide(slideIndex)}
-                                className={`carousel-button cb${slideIndex} `}
+                                className={`carousel__button cb${slideIndex} `}
                             >
                                 {data.title}
                             </button>
-                            <div className="vl" ></div>
+                            <div className="carousel__button-divider" ></div>
                         </React.Fragment>
                     )
                 })}
                 <button 
                     key={4}  
                     onClick={() => goToSlide(4)}
-                    className={`carousel-button cb${4} `}
+                    className={`carousel__button cb${4} `}
                 >
                     Extras
                 </button>
             </div>
-            <div className="carousel-container">
+            <div className="carousel__container">
                 {graphGridData.map((graphGrid, index) => {
                     return (
-                    <div className='carousel-item' key={index} style={{transform: `translate(-${currentIndex * 100}%)`}}>
-                        <div className="graph-container">
+                    <div className='carousel__item' key={index} style={{transform: `translate(-${currentIndex * 100}%)`}}>
+                        <div className="carousel__graph-container">
                             {
                                 graphGrid.graph.data
                                     ? 
@@ -93,14 +93,14 @@ const Carousel = ({
                     </div>
                     )})
                 }
-                <div className='carousel-item' key={4} style={{transform: `translate(-${currentIndex * 100}%)`}}>
-                    <div className="more-container">
-                        <div className="more-top-container">
-                            <div className="explicit-container">
-                                <div className="piechart-container">
+                <div className='carousel__item' key={4} style={{transform: `translate(-${currentIndex * 100}%)`}}>
+                    <div className="carousel__extra-container">
+                        <div className="carousel__extras-top-section">
+                            <div className="carousel__explicit-container">
+                                <div className="carousel__piechart-container">
                                     <PieChart trackTable={trackTable} title="Explicit" type="explicit" />
                                 </div>
-                                <div className="piechart-container">
+                                <div className="carousel__piechart-container">
                                     {decadesPieChart}
                                 </div>
                             </div>
@@ -109,7 +109,7 @@ const Carousel = ({
                                 longestTrack={getLongestTrack(trackTable)}
                             />
                         </div>
-                        <div className="more-bottom-container">
+                        <div className="carousel__extras-bottom-section">
                             {audioFeaturesData.map((data, index) => {
                                 return (
                                     <AudioFeaturesContainer {...data} key={index} />
@@ -119,7 +119,7 @@ const Carousel = ({
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     )
 }
 

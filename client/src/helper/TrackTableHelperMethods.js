@@ -54,13 +54,13 @@ const toggleSound = (e) => {
 
     if (audioElem.paused) {
         audioElem.play();
-        playIcon.setAttribute('class', (playIcon.getAttribute("class") || '') + "hidden-button")
-        var newClass = pauseIcon.getAttribute("class").replaceAll("hidden-button", "");
+        playIcon.setAttribute('class', (playIcon.getAttribute("class") || '') + "trackgrid__hidden-button")
+        var newClass = pauseIcon.getAttribute("class").replaceAll("trackgrid__hidden-button", "");
         pauseIcon.setAttribute('class', newClass)
     } else {
         audioElem.pause();
-        pauseIcon.setAttribute('class', (pauseIcon.getAttribute("class") || '') + "hidden-button")
-        var newClass = playIcon.getAttribute("class").replaceAll("hidden-button", "");
+        pauseIcon.setAttribute('class', (pauseIcon.getAttribute("class") || '') + "trackgrid__hidden-button")
+        var newClass = playIcon.getAttribute("class").replaceAll("trackgrid__hidden-button", "");
         playIcon.setAttribute('class', newClass)
     }
 }

@@ -3,15 +3,24 @@ import "./PlaylistTile.css"
 
 
 const PlaylistTile = ({playlist}) => {
+
+  const maxPlaylistNameLength = 22
+  var shortenPlaylistName = playlist.playlistName.slice(0, maxPlaylistNameLength)
+  if(shortenPlaylistName.length == maxPlaylistNameLength) {
+    shortenPlaylistName += "..."
+  }
+
   return (
-    <div className="playlistLinkContainer">
-        <Link to={`/playlist/${playlist.playlistId}`} state={{playlist: playlist}}>
-            <img src={playlist.playlistImage} width="200px" height="200px"/>
-            <div>
-                {playlist.playlistName}
-            </div>
+        <Link
+          to={`/playlist/${playlist.playlistId}`}
+          state={{playlist: playlist}}
+          className="playlist-tile"
+        >
+          <img src={playlist.playlistImage} />
+          <div>
+            {shortenPlaylistName}
+          </div>
         </Link>
-    </div>
   )
 }
 

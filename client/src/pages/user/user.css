@@ -1,0 +1,38 @@
+.user__notice-banner {
+    margin: 10px auto;
+    background-color: var(--default-green);
+    max-width: 600px;
+    text-align: center;
+    border: 2px solid #03774c;
+    border-radius: 6px;
+}
+
+.user__section {
+    max-width: 500px;
+    margin: 10px auto;
+}
+
+.user__playlist-list-container {
+    margin: 20px;
+}
+
+.user__playlist-list {
+    margin: 0px;
+    list-style: none;
+}
+
+.user__playlist-list li:nth-child(n+6) {
+    display: none;
+}
+
+.user__playlist-list li img {
+    vertical-align: middle;
+    margin: 5px 10px 5px 0px;
+}
+
+.user__playlist-list-viewtoggle {
+    cursor: pointer;
+    display: list-item;
+    list-style-type: none;
+    text-decoration: underline;
+}

@@ -27,31 +27,36 @@ const addPlaylist = async (req, res) => {
         addUserIdToPlaylistObjectOwnerUser(mongoUserId, playlistObject._id)
     } else {
         const playlistInfo = await getPlaylistInfo(playlistId)
-        const playlistObject = await Playlist.create({
-            playlistId: playlistId,
-            userOwner: mongoUserId,
-            playlistName: playlistInfo.playlistName,
-            playlistOwner: playlistInfo.playlistOwner,
-            playlistImage: playlistInfo.playlistImage,
-            totalTracks: playlistInfo.totalTracks,
-            snapshotId: playlistInfo.snapshotId,
-            playlistDuplicates: playlistInfo.duplicates,
-            trackTable: playlistInfo.trackTable
-        })
+        if(playlistInfo) {
+            const playlistObject = await Playlist.create({
+                playlistId: playlistId,
+                userOwner: mongoUserId,
+                playlistName: playlistInfo.playlistName,
+                playlistOwner: playlistInfo.playlistOwner,
+                playlistImage: playlistInfo.playlistImage,
+                totalTracks: playlistInfo.totalTracks,
+                snapshotId: playlistInfo.snapshotId,
+                playlistDuplicates: playlistInfo.duplicates,
+                trackTable: playlistInfo.trackTable
+            })
 
-        // filter out the excludedProperties by only returning properties we need
-        const filteredPlaylistObject = {
-            _id: playlistObject._id,
-            playlistId: playlistObject.playlistId,
-            playlistName: playlistObject.playlistName,
-            playlistOwner: playlistObject.playlistOwner,
-            playlistImage: playlistObject.playlistImage,
-            playlistDuplicates: playlistObject.playlistDuplicates,
-            trackTable: playlistObject.trackTable
+            // filter out the excludedProperties by only returning properties we need
+            const filteredPlaylistObject = {
+                _id: playlistObject._id,
+                playlistId: playlistObject.playlistId,
+                playlistName: playlistObject.playlistName,
+                playlistOwner: playlistObject.playlistOwner,
+                playlistImage: playlistObject.playlistImage,
+                playlistDuplicates: playlistObject.playlistDuplicates,
+                trackTable: playlistObject.trackTable
+            }
+
+            res.status(200).json(filteredPlaylistObject)
+            addPlaylistObjectIdToUserPlaylistObjectIds(mongoUserId, playlistObject._id)
+        } else {
+            res.status(204).json({ 'message' : 'Playlist Id not found'})
         }
 
-        res.status(200).json(filteredPlaylistObject)
-        addPlaylistObjectIdToUserPlaylistObjectIds(mongoUserId, playlistObject._id)
     }
 }
 

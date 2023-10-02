@@ -75,33 +75,33 @@ const Grid = ({ grid }) => {
     const toggleSortArrows = (num, toggle, title) => {
         var current = document.getElementsByClassName(`${title}-arrow`);
         for(const cur of current) {
-            cur.className = cur.className.replaceAll("hidden-arrow", "");
+            cur.className = cur.className.replaceAll("grid__hidden-arrow", "");
         }
 
         var triggerArrow = document.getElementsByClassName(`${title}-c${num}-arrow`);
         var pos = toggle ? 0 : 1
 
-        triggerArrow[pos].className += "hidden-arrow"
+        triggerArrow[pos].className += "grid__hidden-arrow"
     }
 
 
   return (
     <>
-        <div className="grid-container" id={`gc-${title}`}>
+        <div className="grid__container" id={`gc-${title}`}>
             {headers.map((header, index) => {
                 return (
                     <div
-                        className={`grid-header ${columnSortable[index] ? "header-toggle-sort grid-header-hoverable ": null }`}
+                        className={`grid__header ${columnSortable[index] ? "grid__header-toggle-sort " : null }`}
                         onClick={() => sortColumn(index)}
                         key={index}
                     >
-                        <b className="table-header">
+                        <b className="grid__table-header">
                             {header}
                         </b>
                         {columnSortable[index]
-                            ?   <div className="sortable-icons">
+                            ?   <div className="grid__sortable-icons">
                                     <div className={`
-                                        arrow 
+                                        grid__arrow
                                         ${title}-arrow
                                         ${title}-c${index}-arrow 
         
@@ -109,10 +109,10 @@ const Grid = ({ grid }) => {
                                         &#9650;
                                     </div>
                                     <div className={`
-                                        arrow 
+                                        grid__arrow
                                         ${title}-arrow
                                         ${title}-c${index}-arrow 
-                                        ${index == 1 && 'hidden-arrow'} 
+                                        ${index == 1 && 'grid__hidden-arrow'}
                                     `}>
                                         &#9660;
                                     </div>
@@ -131,10 +131,10 @@ const Grid = ({ grid }) => {
                                 {Array.isArray(infoTwo)
                                     ? 
                                         <div className={`
-                                            grid-item 
-                                            grid-item-song-titles
-                                            ${infoTwo.length > 5 ? "grid-item-song-titles-min-height" : "" }
-                                            ${index % 2 == 0 ? "grid-item-even-column" : ""}
+                                            grid__item
+                                            grid__item-song-titles
+                                            ${infoTwo.length > 5 ? "grid__item-song-titles-min-height" : "" }
+                                            ${index % 2 == 0 ? "grid__item-even-column" : ""}
                                         `}
                                         >
                                             <ul>
@@ -148,8 +148,8 @@ const Grid = ({ grid }) => {
                                         </div>
                                     : 
                                         <div className={`
-                                            grid-item 
-                                            ${index % 2 == 0 ? "grid-item-even-column" : ""}
+                                            grid__item
+                                            ${index % 2 == 0 ? "grid__item-even-column" : ""}
                                         `}>
                                             {infoTwo}
                                         </div>

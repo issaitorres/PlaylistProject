@@ -20,11 +20,21 @@ const getPlaylistInfo = async (playlistId, refreshPlaylistId=false) => {
     var playlistPosition = 1
     var loop = true
     while(loop) {
-        const res = await axios.get(spotify_playlists_endpoint, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`
+        var res
+        try {
+            res = await axios.get(spotify_playlists_endpoint, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            })
+        } catch (err) {
+            console.log(err)
+            // playlist id not found
+            if(err.response.status == 404) {
+                return false
             }
-        })
+        }
+
 
         if(refreshPlaylistId) {
             if(refreshPlaylistId == res.data.snapshot_id) {

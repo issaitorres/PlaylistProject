@@ -1,5 +1,5 @@
 import "./FormInput.css"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 
@@ -31,12 +31,23 @@ const FormInput = (props) => {
     setPasswordVisible(update)
   }
 
+  useEffect(()=> {
+    var playlistInput = document.getElementById(password == "true" ? `password-input-${inputName}` : id);
+    const enterOnInput = (event) => {
+      if (event.key === "Enter") {
+        handleFocus()
+      }
+    }
+    playlistInput.addEventListener('keypress', enterOnInput);
+    return () => playlistInput.removeEventListener('keypress', enterOnInput)
+  }, [])
+
   return (
     <div className={className}>
         {errMsgPos && <span id="top-err-msg">{errorMessage}</span>}
         <label>{label}</label>
           <input
-            id={password == "true" ? `password-input-${inputName}` : null}
+            id={password == "true" ? `password-input-${inputName}` : id}
             className={errMsgPos}
             onChange={onChange}
             onBlur={handleFocus}

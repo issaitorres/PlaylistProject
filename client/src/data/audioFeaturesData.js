@@ -16,7 +16,7 @@ const getAudioFeaturesData = (trackTable, activateAnimation, setActivateAnimatio
           icon:         
             <svg width="200px" height="200px">
               <polygon
-                  id="lightning"
+                  id="lightning-icon"
                   fill="none"
                   stroke="black"
                   strokeWidth="0.65"
@@ -32,10 +32,10 @@ const getAudioFeaturesData = (trackTable, activateAnimation, setActivateAnimatio
                   transform='scale(10 10)'
               />
             </svg>,
-          animationId: "lightning",
-          animationKeyword: "lightning-animation",
-          callback: (qualityIcon, animationKeyword) => {
-            qualityIcon.setAttribute("class", animationKeyword);
+          animationId: "lightning-icon",
+          animationClassName: "audiofeatures__lightning-animation",
+          callback: (qualityIcon, animationClassName) => {
+            qualityIcon.setAttribute("class", animationClassName);
           }
         },
         {
@@ -44,22 +44,21 @@ const getAudioFeaturesData = (trackTable, activateAnimation, setActivateAnimatio
           averageQuality: getAverageField("valence", trackTable),
           highestLowestField: getHighestLowestField("valence", trackTable),
           icon:
-            <div className="image-container" id="target">
-              <div className="image-wrapper">
-                  <img className="image-icon" src={happyface} width="200" height="200"/>
+            <div className="audiofeatures__image-container" id="happiness-icon">
+              <div className="audiofeatures__image-wrapper">
+                  <img className="audiofeatures__image-icon" src={happyface} width="200" height="200"/>
               </div>
             </div>,
-          animationId: "target",
-          animationKeyword: "lightning-bro",
+          animationId: "happiness-icon",
           callback: () => {
             const happyFaceTopStartingPoint = 12 
             const happyFaceBottomStartingPoint = 187
             const happyFaceInsideHeight = 175
             var endPoint = happyFaceBottomStartingPoint - Math.round(getAverageField("valence", trackTable)*happyFaceInsideHeight)
-            var target = document.getElementById("target")
+            var target = document.getElementById("happiness-icon")
             if(target) {
               target.style.setProperty('--colorEndPoint',`${endPoint}px`);
-              target.className += " liquid-animate"
+              target.className += " audiofeatures__liquid-animate"
             }
           }
         },
@@ -70,12 +69,11 @@ const getAudioFeaturesData = (trackTable, activateAnimation, setActivateAnimatio
           highestLowestField: getHighestLowestField("danceability", trackTable),
           icon:    
             <Sparkles activate={activateAnimation}>
-              <div className="disco-container">
-                <img src={disco} width="200px" height="200px" className="disco-image" />
+              <div id="disco-container">
+                <img src={disco} width="200px" height="200px" className="audiofeatures__disco-image" />
               </div>
             </Sparkles>,
-          animationId: "target",
-          animationKeyword: "lightning-animation",
+          animationId: "disco-container",
           callback: () => { setActivateAnimation(!activateAnimation) }
         },
       ]

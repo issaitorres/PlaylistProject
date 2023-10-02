@@ -1,12 +1,9 @@
 .navbar {
     overflow: hidden;
-    background-color: #333;
-    display: flex;
-    justify-content: space-between;
+    background-color: var(--default-midnight);
 }
   
 .navbar a {
-    /* float: left; */
     color: var(--default-white);
     text-align: center;
     padding: 14px 16px;
@@ -24,28 +21,15 @@
     color: white;
 }
 
-.navbar-left {
-    float: left;
+.navbar-flex {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin: 0px auto;
+    max-width: 1200px;
 }
 
-.navbar-left > div {
-    padding: 10px 0px;
-    margin: 0px 5px 0px 0px;
-}
-
-.navbar-right {
+.navbar-section {
     display: flex;
     flex-direction: row;
-    float: right;
 }
-
-.navbar-right > div {
-    padding: 10px 0px;
-    margin: 0px 0px 0px 5px;
-}
-
-.user-links{
-    color: white;
-}
-  
-  

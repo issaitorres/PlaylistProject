@@ -1,11 +1,11 @@
+import { useState } from "react"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faRefresh } from '@fortawesome/free-solid-svg-icons'
 import {
     convertMStoFormat,
     groupTopItemsByTrackcount,
 } from "../../helper/PlaylistContainerHelperMethods"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faRefresh } from '@fortawesome/free-solid-svg-icons'
-import { useState } from "react"
-
+import "./PlaylistQuickFacts.css"
 
 
 const PlaylistQuickFacts = ({
@@ -39,19 +39,19 @@ const PlaylistQuickFacts = ({
 
   return (
     <>
-        <div className="sidebar">
+        <div className="quickfacts-section">
             <img src={playlistImage} alt="Playlist Image" height="350" width="350"/>
         </div>
-        <div className="sidebar">
+        <div className="quickfacts-section">
             <div>
-                <div className="sidebar-header">
+                <div className="quickfacts-section-header">
                     <div>
-                    <h2 className="playlist-title">
-                        {playlistName}
-                    </h2>
+                        <h2 className="quickfacts-section-playlist-title">
+                            {playlistName}
+                        </h2>
                     </div>
-                    <div className='playlist-author'>
-                    by <b>{playlistOwner}</b>
+                    <div className='quickfacts-section-playlist-author'>
+                        by <b>{playlistOwner}</b>
                     </div>
                 </div>
                 <div>
@@ -80,16 +80,16 @@ const PlaylistQuickFacts = ({
                 </div>
             </div>
         </div>
-        <div className="refresh-corner" onClick={() => getRefreshData()}>
-            <span className="refresh-tooltip">
-                <span className="refresh-text">Outdated Playlist?</span>
+        <div className="quickfacts-refresh-corner" onClick={() => getRefreshData()}>
+            <span className="quickfacts-refresh-tooltip">
+                <span className="quickfacts-refresh-text">Outdated Playlist?</span>
                 &nbsp;
                 <span className="tooltiptext">
                     Playlists are updated all the time.
                     If this information looks outdated, click here to get the latest version!
                 </span>
                 &nbsp;
-                <FontAwesomeIcon icon={faRefresh} className={`refresh-icon ${refresh ? `rotate`: ""}`}/>
+                <FontAwesomeIcon icon={faRefresh} className={`quickfacts-refresh-icon ${refresh ? `rotate`: ""}`}/>
             </span>
         </div>
     </>

@@ -5,6 +5,7 @@ import PlaylistContainer from '../../components/PlaylistContainer/PlaylistContai
 import axios from 'axios'
 import { useCookies } from 'react-cookie'
 import { useNavigate } from 'react-router-dom'
+import "./playlist.css"
 
 
 const Playlist = () => {
@@ -99,14 +100,12 @@ const Playlist = () => {
     <div className="page-container">
       {playlist 
         ?       
-          <div key={playlist._id}>
-            <PlaylistContainer 
-              playlist={playlist}
-              refreshPlaylist={refreshPlaylist}
-            />
-          </div>
+          <PlaylistContainer
+            playlist={playlist}
+            refreshPlaylist={refreshPlaylist}
+          />
         :
-          <div className="loader loader-override-margins"></div>
+          <div className="loader playlist__loader-margins"></div>
       }
     </div>
   )

@@ -1,15 +1,14 @@
-import "./About.css"
-import aboutAudioFeaturesDesc from "../../data/aboutAudioFeaturesDesc"
 import { Link } from "react-router-dom"
+import aboutAudioFeaturesDesc from "../../data/aboutAudioFeaturesDesc"
+import "./About.css"
 
 
 const About = ({ removePlaylist, deleteLoader }) => {
   const descriptions = aboutAudioFeaturesDesc()
 
-
   return (
-    <div className='flex-container'>
-      <div className="about-heading">
+    <>
+      <div className="about-section">
         <h2>
           About Playlist Analyzer
         </h2>
@@ -23,6 +22,8 @@ const About = ({ removePlaylist, deleteLoader }) => {
             display information about any public Spotify playlist.
           </p>
         </div>
+      </div>
+      <div className="about-section">
         <div>
           <h2>
             Audio Features
@@ -44,6 +45,8 @@ const About = ({ removePlaylist, deleteLoader }) => {
             })}
           </tbody>
         </table>
+      </div>
+      <div className="about-section">
         <h2>
             Your Information
         </h2>
@@ -52,7 +55,7 @@ const About = ({ removePlaylist, deleteLoader }) => {
           {/* All playlists submitted are automatically deleted after one week. - Figure how to do this when app is deployed!*/}
         </p>
         <div>
-        <button className="danger-button about-button" onClick={removePlaylist}>
+        <button className="button danger-theme about-button" onClick={removePlaylist}>
           <div className={`${deleteLoader && 'loader'}`}>{!deleteLoader && "Remove this playlist"}</div>
         </button>
         <p>To remove all playlists, visit the &thinsp;
@@ -62,7 +65,7 @@ const About = ({ removePlaylist, deleteLoader }) => {
         </p>
       </div>
       </div>
-    </div>
+    </>
   )
 }
 

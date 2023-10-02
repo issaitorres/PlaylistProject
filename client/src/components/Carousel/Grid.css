@@ -1,4 +1,4 @@
-.grid-container {
+.grid__container {
     display: grid;
     grid-template-columns: repeat(var(--headerLength, 0), 1fr);
     height: 1000px;
@@ -8,12 +8,8 @@
     width: 850px;
     margin: 0px auto;
 }
-  
-.grid-item-even-column {
-    background: #e6e6e6;
-}
 
-.grid-header {
+.grid__header {
     font-size: 20px;
     position: sticky;
     top: 0;
@@ -22,19 +18,51 @@
     border: 1px solid #646464;
     padding: 5px 0px;
 }
-  
-.grid-item-song-titles {
+
+.grid__header-toggle-sort {
+    cursor: pointer;
+}
+
+.grid__table-header {
+    font-size: 18px;
+    padding: 5px;
+}
+
+.grid__sortable-icons {
+    display: flex;
+    flex-direction: column;
+    margin: auto 5px;
+}
+
+.grid__arrow {
+    font-size: 10px;
+}
+
+.grid__hidden-arrow {
+    visibility: hidden; /* visibility keeps space*/
+}
+
+.grid__item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border: 1px solid #c7c7c7;
+    padding: 5px 0px;
+}
+
+.grid__item-even-column {
+    background: #e6e6e6;
+}
+
+.grid__item-song-titles {
     text-align: left !important;
     justify-content: left !important;
     flex-wrap: wrap;
     padding: 0px 0px;
 }
   
-.grid-item-song-titles-min-height {
+.grid__item-song-titles-min-height {
     overflow: auto;
     min-height: 200px;
-}
-
-.arrow {
-    font-size: 10px;
 }

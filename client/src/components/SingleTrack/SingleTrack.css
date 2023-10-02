@@ -1,15 +1,10 @@
-
-.singleTrack-image-percentage{
+.singletrack__grid {
     display: grid;
     grid-template-columns: max-content 1fr;
     gap: 5px;
 }
 
-.singleTrack-grid-item {
+.singletrack__grid-item {
     margin: auto 5px;
     padding: 5px;
-}
-
-.singleTrack-score{
-    margin: 0px;
 }

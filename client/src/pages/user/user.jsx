@@ -3,6 +3,7 @@ import axios from 'axios'
 import FormInput from '../../components/FormInput/FormInput'
 import { useCookies } from 'react-cookie'
 import { useNavigate } from 'react-router-dom'
+import "./user.css"
 
 
 const User = () => {
@@ -160,7 +161,7 @@ const User = () => {
   }
 
   const playlistDisplayedCount = 4
-  // css dependency - .playlist-list li:nth-child(n+(playlistDisplayedCount+2)) {
+  // css dependency - .user__playlist-list li:nth-child(n+(playlistDisplayedCount+2)) {
   const viewToggle = (e) => {
     var listinfo = e.target.parentNode.children
     for (var i = 0; i < listinfo.length - 1; i++) {
@@ -182,8 +183,8 @@ const User = () => {
 
   return (
     <div className="page-container">
-      {successfulUpdate && <div className="notice-banner"> success </div> }
-      <div className="user-section">
+      {successfulUpdate && <div className="user__notice-banner"> success </div> }
+      <div className="user__section">
         <form onSubmit={handleSubmit} className="form">
           <h1> Update Credentials</h1>
           {warning ? <div className="warning">{warning}</div> : null}
@@ -198,25 +199,25 @@ const User = () => {
               {...input} // pass all other key: values
             />
           ))}
-          <button className="submit-button">
+          <button className="button submit-theme">
             <div className={`${updateLoader && 'loader'}`}>{!updateLoader && "Update"}</div>
           </button>
         </form>
       </div>
 
-      <div className="user-section">
+      <div className="user__section">
         <div className="form">
           <h1> Delete My Playlists</h1>
-          <div className="playlist-list-container">
+          <div className="user__playlist-list-container">
             {playlistInfo.length > 0 
               ?
                 <>
                   <p> Playlists count: {playlistInfo.length}</p>
-                  <ul className="playlist-list">
+                  <ul className="user__playlist-list">
                     {playlistInfo.map((playlist, index) => {
                       return (
                         <li key={index}>
-                          <img className="list-image" src={playlist.playlistImage} width="65px" height="65px"/>
+                          <img src={playlist.playlistImage} width="65px" height="65px"/>
                           <span>
                             <b>{playlist.playlistName}</b>
                           </span>
@@ -226,14 +227,14 @@ const User = () => {
                   {
                     playlistInfo.length > playlistDisplayedCount
                     ?
-                      <div className="playlist-list-viewtoggle" onClick={(e) => viewToggle(e)}>
+                      <div className="user__playlist-list-viewtoggle" onClick={(e) => viewToggle(e)}>
                         see more...
                       </div>
                     :
                       null
                   }
                   </ul>
-                  <button className="danger-button" onClick={() => deleteAllUserPlaylists()}>
+                  <button className="button danger-theme" onClick={() => deleteAllUserPlaylists()}>
                     <div className={`${deleteLoader && 'loader'}`}>{!deleteLoader && "Delete My Playlists"}</div>
                   </button>
                 </>
