@@ -40,7 +40,7 @@ const PlaylistQuickFacts = ({
   return (
     <>
         <div className="quickfacts-section">
-            <img src={playlistImage} alt="Playlist Image" height="350" width="350"/>
+            <img src={playlistImage} alt="playlist" height="350" width="350"/>
         </div>
         <div className="quickfacts-section">
             <div>

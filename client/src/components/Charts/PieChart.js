@@ -15,7 +15,7 @@ const PieChart = ({trackTable, title, type}) => {
     const totalTrackCount = trackTable.length
     const trackTitleDisplaylimit = 16
 
-    if (type == "explicit") {
+    if (type === "explicit") {
         const [explicitTrackTitles, cleanTrackTitles] = separateExplicitCleanTrackTitles(trackTable)
         var [
             dataTrack, 
@@ -33,7 +33,7 @@ const PieChart = ({trackTable, title, type}) => {
         var legendDisplay = true
         var subtitlePadding = {}
 
-    } else if (type == "decades") {
+    } else if (type === "decades") {
         var [
             decades,
             dataTrack,

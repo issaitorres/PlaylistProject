@@ -25,11 +25,11 @@ const explicitPieChartProperties = (explicitTrackTitlesLength, cleanTrackTitlesL
     const blueColor = 'rgba(43, 130, 204, transparency)'
     const redColor = 'rgba(255, 99, 132, transparency)'
 
-    if (explicitTrackTitlesLength == 0) {
+    if (explicitTrackTitlesLength === 0) {
         dataTrack.push(cleanTrackTitlesLength)
         labels.push("Clean")
         backgroundColor.push(blueColor)
-    } else if (explicitTrackTitlesLength == totalTrackCount) {
+    } else if (explicitTrackTitlesLength === totalTrackCount) {
         dataTrack.push(explicitTrackTitlesLength)
         labels.push("Explicit")
         backgroundColor.push(redColor)
@@ -49,7 +49,7 @@ const explicitPieChartProperties = (explicitTrackTitlesLength, cleanTrackTitlesL
 
 const explicitTooltipCallbacks = (context, explicitTrackTitles, cleanTrackTitles, trackTitleDisplaylimit) => {
     const totalTrackTitlesLength = explicitTrackTitles.length + cleanTrackTitles.length
-    var trackTitles = context[0].label == "Explicit" ? explicitTrackTitles : cleanTrackTitles
+    var trackTitles = context[0].label === "Explicit" ? explicitTrackTitles : cleanTrackTitles
 
     const calculatePercentage = (trackTitlesLength, totalTrackTitlesLength) => {
         return Math.round((trackTitlesLength/(totalTrackTitlesLength)) * 100)
@@ -166,7 +166,7 @@ const hexToRgbA = (hex) =>{
     var c;
     if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
         c= hex.substring(1).split('');
-        if(c.length== 3){
+        if(c.length === 3){
             c= [c[0], c[0], c[1], c[1], c[2], c[2]];
         }
         c= '0x'+c.join('');

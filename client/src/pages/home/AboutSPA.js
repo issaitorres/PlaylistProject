@@ -27,6 +27,7 @@ const AboutSPA = () => {
         <div className="home__SPA-video-container">
           <iframe 
             src="https://www.youtube.com/embed/tgbNymZ7vqY"
+            title="SPA-video"
           >
           </iframe>
         </div>

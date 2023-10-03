@@ -56,11 +56,11 @@ const User = () => {
       if(window?.localStorage?.userInfo) {
         userInfo = JSON.parse(window.localStorage.userInfo)
 
-        if(userInfo.email != newEmail) {
+        if(userInfo.email !== newEmail) {
           userInfo.email = newEmail
         }
   
-        if(userInfo.username != newUsername) {
+        if(userInfo.username !== newUsername) {
           userInfo.username = newUsername
         }
   
@@ -73,7 +73,7 @@ const User = () => {
         setSuccessfulUpdate(false)
       }, 5000);
     } catch (err) {
-      if(err.response.status == 403) {
+      if(err.response.status === 403) {
         removeCookie("access_token")
         navigate("/login", {state: { notice: "Access has expired. Please login to continue.", leftOffPath: "/" }})
         return
@@ -101,7 +101,7 @@ const User = () => {
         setSuccessfulUpdate(false)
       }, 5000);
     } catch (err) {
-      if(err.response.status == 403) {
+      if(err.response.status === 403) {
         removeCookie("access_token")
         navigate("/login", {state: { notice: "Access has expired. Please login to continue.", leftOffPath: "/" }})
         return
@@ -166,7 +166,7 @@ const User = () => {
     var listinfo = e.target.parentNode.children
     for (var i = 0; i < listinfo.length - 1; i++) {
       if(i > playlistDisplayedCount) {
-        if(listinfo[i].style.display == "list-item") {
+        if(listinfo[i].style.display === "list-item") {
           listinfo[i].style.display = "none"
         } else {
           listinfo[i].style.display = "list-item"
@@ -174,7 +174,7 @@ const User = () => {
       }
     }
 
-    if(e.target.innerText == "see more...") {
+    if(e.target.innerText === "see more...") {
       e.target.innerText = "see less..."
     } else {
       e.target.innerText = "see more..."
@@ -194,7 +194,7 @@ const User = () => {
               value={updatedUserData[input.name]}
               onChange={onChange}
               className="formInput formInput-register-login-width"
-              password={`${input.type == "password" ? true : false}`}
+              password={`${input.type === "password" ? true : false}`}
               inputName={input.name}
               {...input} // pass all other key: values
             />
@@ -219,7 +219,7 @@ const User = () => {
                         <li key={index} className="user__grid">
 
                           <div className="user__grid-item">
-                            <img src={playlist.playlistImage} width="65px" height="65px"/>
+                            <img src={playlist.playlistImage} alt="playlistimage" width="65px" height="65px"/>
                           </div>
 
                           <div className="user__grid-item">

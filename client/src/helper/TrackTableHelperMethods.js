@@ -4,10 +4,10 @@ import { convertMStoFormat } from "./PlaylistContainerHelperMethods"
 const trackTableConversions = (value, convertType=false) => {
     if (!convertType) {
         return value
-    } else if (convertType == "percent") {
+    } else if (convertType === "percent") {
         return Math.ceil(value * 100)
 
-    } else if (convertType == "key") {
+    } else if (convertType === "key") {
         const keyConversion = {
             0: "C",
             1: "C♯/D♭",
@@ -24,21 +24,21 @@ const trackTableConversions = (value, convertType=false) => {
         }
         return keyConversion[value]
 
-    } else if (convertType == "mode") {
+    } else if (convertType === "mode") {
         if(value == 1) {
             return "Major"
         }
         return "Minor"
 
-    } else if (convertType == "db") {
+    } else if (convertType === "db") {
         return Math.ceil(value)
 
-    } else if (convertType == "time_signature") {
+    } else if (convertType === "time_signature") {
         return value
 
-    } else if (convertType == "duration") {
+    } else if (convertType === "duration") {
         return convertMStoFormat(value, true, true)
-    } else if (convertType == "bool") {
+    } else if (convertType === "bool") {
         return value.toString()
     } else {
         return 0

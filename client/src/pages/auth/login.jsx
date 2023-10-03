@@ -25,7 +25,7 @@ const Login = () => {
     if(notice) {
       var time = 5;
       homeInterval = setInterval(() => {
-        if (time == 0) {
+        if (time === 0) {
           removeInterval()
           setNotice(false)
           navigate("/login", { replace: true }); // remove location state
@@ -127,7 +127,7 @@ const Login = () => {
             value={loginData[input.name]}
             onChange={onChange}
             className="formInput formInput-register-login-width"
-            password={`${input.type == "password" ? true : false}`}
+            password={`${input.type === "password" ? true : false}`}
             {...input} // pass all other key: values
           />
         ))}

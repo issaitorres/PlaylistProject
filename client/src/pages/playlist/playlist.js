@@ -85,12 +85,12 @@ const Playlist = () => {
         }
     )
 
-    if(res.status == 200) {
+    if(res.status === 200) {
         const newPlaylistInfo = res.data
         const localStoragePlaylistInfo = window.localStorage.playlistInfo
         if(localStoragePlaylistInfo) {
             var parsedLocalStoragePlaylistInfo = JSON.parse(localStoragePlaylistInfo)
-            var oldPlaylistIndex = parsedLocalStoragePlaylistInfo.findIndex((playlistInfo) => playlistInfo.playlistId == newPlaylistInfo.playlistId)
+            var oldPlaylistIndex = parsedLocalStoragePlaylistInfo.findIndex((playlistInfo) => playlistInfo.playlistId === newPlaylistInfo.playlistId)
             parsedLocalStoragePlaylistInfo[oldPlaylistIndex] = newPlaylistInfo
             window.localStorage.setItem("playlistInfo", JSON.stringify(parsedLocalStoragePlaylistInfo))
             setPlaylist(newPlaylistInfo)

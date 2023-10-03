@@ -46,7 +46,7 @@ const getAudioFeaturesData = (trackTable, activateAnimation, setActivateAnimatio
           icon:
             <div className="audiofeatures__image-container" id="happiness-icon">
               <div className="audiofeatures__image-wrapper">
-                  <img className="audiofeatures__image-icon" src={happyface} width="200" height="200"/>
+                  <img className="audiofeatures__image-icon" alt="happyfaceimage" src={happyface} width="200" height="200"/>
               </div>
             </div>,
           animationId: "happiness-icon",
@@ -70,7 +70,7 @@ const getAudioFeaturesData = (trackTable, activateAnimation, setActivateAnimatio
           icon:    
             <Sparkles activate={activateAnimation}>
               <div id="disco-container">
-                <img src={disco} width="200px" height="200px" className="audiofeatures__disco-image" />
+                <img src={disco} alt="discoimage" width="200px" height="200px" className="audiofeatures__disco-image" />
               </div>
             </Sparkles>,
           animationId: "disco-container",

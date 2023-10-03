@@ -56,13 +56,13 @@ const AddPlaylist = ({ accessToken }) => {
         })
 
 
-        if(res.status == 204) {
+        if(res.status === 204) {
           // couldn't find that playlist id
           setNotice("Could not find a playlist with that id. Please check that this playlist is public on Spotify and submit again.")
           setLoader(false)
           var time = 10;
           homeInterval = setInterval(() => {
-            if (time == 0) {
+            if (time === 0) {
               removeInterval()
               setNotice(false)
             }
@@ -80,7 +80,7 @@ const AddPlaylist = ({ accessToken }) => {
         navigate(`/playlist/${playlistId}`, {state: { playlist: newPlaylistInfo }})
       } catch (err) {
         console.log(err)
-        if(err.response.status == 403) {
+        if(err.response.status === 403) {
           // access token is expired - delete and return to login
           // navigate(0) // refresh to remove access_token - this didn't work because restricted route sent us back to home
           removeCookie("access_token")

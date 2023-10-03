@@ -6,7 +6,6 @@ const Grid = ({ grid }) => {
     const [dataArray, setDataArray] = useState([])
     const [columnToggles, setColumnToggles] = useState([])
     const headers = grid.headers
-    const columnTypes = grid.columnTypes
     const columnSortable = grid.columnSortable
     const columnValues = grid.columnValues
     const initiallySortByColumn = grid.initiallySortByColumn
@@ -23,7 +22,7 @@ const Grid = ({ grid }) => {
             for (let x = 0; x < headers.length; x++) {
                 const currentColumnValue = columnValues[x]
                 var item
-                if(currentColumnValue == "useKey") {
+                if(currentColumnValue === "useKey") {
                     item = key
                 } else {
                     item = typeof(value[currentColumnValue]) == "number"
@@ -63,9 +62,9 @@ const Grid = ({ grid }) => {
     }
 
     const determineColumnTypeAndSort = (columnType, dataArray, columnToggle, colVal) => {
-        if(columnType == "string") {
+        if(columnType === "string") {
             return sortAlphabetically(dataArray, columnToggle, colVal)
-        } else if (columnType == "number") {
+        } else if (columnType === "number") {
             return sortNumerically(dataArray, columnToggle, colVal)
         } else { //array
             return null
@@ -92,7 +91,7 @@ const Grid = ({ grid }) => {
                 return (
                     <div
                         className={`grid__header ${columnSortable[index] ? "grid__header-toggle-sort " : null }`}
-                        onClick={() => sortColumn(index)}
+                        onClick={columnSortable[index] ? () => sortColumn(index) : null}
                         key={index}
                     >
                         <b className="grid__table-header">
@@ -112,7 +111,7 @@ const Grid = ({ grid }) => {
                                         grid__arrow
                                         ${title}-arrow
                                         ${title}-c${index}-arrow 
-                                        ${index == 1 && 'grid__hidden-arrow'}
+                                        ${index === 1 && 'grid__hidden-arrow'}
                                     `}>
                                         &#9660;
                                     </div>
@@ -134,7 +133,7 @@ const Grid = ({ grid }) => {
                                             grid__item
                                             grid__item-song-titles
                                             ${infoTwo.length > 5 ? "grid__item-song-titles-min-height" : "" }
-                                            ${index % 2 == 0 ? "grid__item-even-column" : ""}
+                                            ${index % 2 === 0 ? "grid__item-even-column" : ""}
                                         `}
                                         >
                                             <ul>
@@ -149,7 +148,7 @@ const Grid = ({ grid }) => {
                                     : 
                                         <div className={`
                                             grid__item
-                                            ${index % 2 == 0 ? "grid__item-even-column" : ""}
+                                            ${index % 2 === 0 ? "grid__item-even-column" : ""}
                                         `}>
                                             {infoTwo}
                                         </div>

@@ -21,7 +21,6 @@ const PlaylistContainer = ({ playlist, refreshPlaylist }) => {
   const [deleteLoader, setDeleteLoader] = useState(false)
   const { 
     _id: playlistObjectId,
-    playlistId, 
     playlistName,
     playlistOwner,
     playlistImage,
@@ -48,14 +47,14 @@ const PlaylistContainer = ({ playlist, refreshPlaylist }) => {
 
      // remove playlist from localstorage
      if(window.localStorage.playlistInfo) {
-       var newLocalStorage = JSON.parse(window.localStorage.playlistInfo).filter((info) => info._id != playlistObjectId)
+       var newLocalStorage = JSON.parse(window.localStorage.playlistInfo).filter((info) => info._id !== playlistObjectId)
        window.localStorage.setItem("playlistInfo", JSON.stringify(newLocalStorage))
      }
 
      setDeleteLoader(false)
      navigate('/')
     } catch (err) {
-      if(err.response.status == 403) {
+      if(err.response.status === 403) {
         removeCookie("access_token")
         navigate("/login", {state: { notice: "Access has expired. Please login to continue.", leftOffPath: "/" }})
         return

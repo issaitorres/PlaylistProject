@@ -1,8 +1,8 @@
 const convertMStoFormat = (durationInMs, keepSeconds=false, simplifyAbbreviation=false) => {
-    var durationInMs = Number(durationInMs)
-    const seconds = Math.floor((durationInMs / 1000) % 60);
-    const minutes = Math.floor((durationInMs / 1000 / 60) % 60);
-    const hours = Math.floor((durationInMs / 1000 / 60 / 60) % 24);
+    var durationMs = Number(durationInMs)
+    const seconds = Math.floor((durationMs / 1000) % 60);
+    const minutes = Math.floor((durationMs / 1000 / 60) % 60);
+    const hours = Math.floor((durationMs / 1000 / 60 / 60) % 24);
     var res = ""
     if(!keepSeconds) res += "~ "
     if(hours) res += `${hours} ${hours > 1 ? "hrs": "hr"} `
@@ -116,7 +116,7 @@ const groupTopItemsByTrackcount = (itemSongs, returnType=null) => {
             } else {
                 topItems.push(item)
             }
-        } else if (itemInfo.trackCount == largestTrackcount) {
+        } else if (itemInfo.trackCount === largestTrackcount) {
             if (returnType) {
                 topItems.push(itemInfo[returnType])
             } else {

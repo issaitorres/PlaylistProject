@@ -33,7 +33,7 @@ const FormInput = (props) => {
   }
 
   useEffect(()=> {
-    var playlistInput = document.getElementById(password == "true" ? `password-input-${inputName}` : id);
+    var playlistInput = document.getElementById(password === "true" ? `password-input-${inputName}` : id);
     const enterOnInput = (event) => {
       if (event.key === "Enter") {
         handleFocus()
@@ -48,7 +48,7 @@ const FormInput = (props) => {
         {errMsgPos && <span id="top-err-msg">{errorMessage}</span>}
         <label>{label}</label>
           <input
-            id={password == "true" ? `password-input-${inputName}` : id}
+            id={password === "true" ? `password-input-${inputName}` : id}
             className={errMsgPos}
             onChange={onChange}
             onBlur={handleFocus}
@@ -56,7 +56,7 @@ const FormInput = (props) => {
             focused={focused.toString()}
             {...inputProps}
           />
-            {password == "true"
+            {password === "true"
               ?
                 <span
                   className="field-icon"

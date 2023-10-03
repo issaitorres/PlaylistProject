@@ -13,13 +13,13 @@ const TrackGrid = ({ trackTable, playlistDuplicates }) => {
     const columnHeaders = getTrackDataColumnHeaders()
 
     const determineColTypeAndSort = (colType, dataArray, columnToggle, colVal) => {
-        if(colType == "string") {
+        if(colType === "string") {
             return sortAlphabetically(dataArray, columnToggle, colVal)
-        } else if (colType == "number") {
+        } else if (colType === "number") {
             return sortNumerically(dataArray, columnToggle, colVal)
-        } else if (colType == "boolean") {
+        } else if (colType === "boolean") {
             return sortAlphabetically(dataArray, columnToggle, colVal, true)
-        } else if (colType == "object") {
+        } else if (colType === "object") {
             return sortAlphabetically(dataArray, columnToggle, colVal, false, "artistName")
         }
         else { //array
@@ -104,7 +104,7 @@ const TrackGrid = ({ trackTable, playlistDuplicates }) => {
                 Track Table
             </h2>
             <div>
-                {playlistDuplicates?.duplicateCount == 0 || playlistDuplicates != {}
+                {playlistDuplicates?.duplicateCount === 0 || playlistDuplicates != {}
                     ? "This playlist contains no duplicate tracks."
                     : <div>
                             <div>
@@ -159,7 +159,7 @@ const TrackGrid = ({ trackTable, playlistDuplicates }) => {
                             <div className="trackgrid__item" key={index}>
                                 <div>
                                     {
-                                        index != 3
+                                        index !== 3
                                             ?
                                                 <div>
                                                     {value}
@@ -183,10 +183,10 @@ const TrackGrid = ({ trackTable, playlistDuplicates }) => {
                                                 </div>
                                     }
                                     {
-                                        index == 0 && <img src={info.albumArt} width="65px" height="65px"/>
+                                        index === 0 && <img src={info.albumArt} alt="albumimage" width="65px" height="65px"/>
                                     }
                                     {
-                                        index == 1 && info.trackPreview &&
+                                        index === 1 && info.trackPreview &&
                                             <div className="trackgrid__audio-container">
                                                 <button
                                                     onClick={(e) => toggleSound(e)}

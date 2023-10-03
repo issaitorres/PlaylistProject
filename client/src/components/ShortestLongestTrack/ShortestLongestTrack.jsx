@@ -11,7 +11,7 @@ const ShortestLongestTrack = ({ shortestTrack, longestTrack}) => {
           <h3>
             {convertMStoFormat(shortestTrack.trackDuration, true)}
           </h3>
-          <img src={shortestTrack.album.albumImage} width="160" height="160"/>
+          <img src={shortestTrack.album.albumImage} alt="albumimage" width="160" height="160"/>
         </div>
         <div className="shortestlongesttrack__artist">
             {shortestTrack.trackName} by {
@@ -27,7 +27,7 @@ const ShortestLongestTrack = ({ shortestTrack, longestTrack}) => {
           <h3>
             {convertMStoFormat(longestTrack.trackDuration, true)}
           </h3>
-          <img src={longestTrack?.album?.albumImage ? longestTrack?.album?.albumImage : "nothing"} width="160" height="160"/>
+          <img src={longestTrack?.album?.albumImage ? longestTrack?.album?.albumImage : "nothing"} alt="albumimage" width="160" height="160"/>
         </div>
         <div className="shortestlongesttrack__artist">
             {longestTrack.trackName} by {

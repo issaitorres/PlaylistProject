@@ -11,7 +11,7 @@ const Error = () => {
   var time = 10;
   const homeInterval = setInterval(() => {
     document.getElementById("time").innerHTML = time;
-    if (time == 0) {
+    if (time === 0) {
       removeInterval()
       navigate('/')
     }
@@ -32,7 +32,7 @@ const Error = () => {
     <div className="full-page" style={{alignItems: "start"}}>
       <div className="error-container">
         <h1> 404</h1>
-        <img src={errorIcon} width="300px"/>
+        <img src={errorIcon} alt="missingpageimage" width="300px"/>
         <p> Dude where's my page?</p>
         <div className="time">
           Redirecting back

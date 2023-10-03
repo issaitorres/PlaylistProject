@@ -6,7 +6,7 @@ const PlaylistTile = ({playlist}) => {
 
   const maxPlaylistNameLength = 22
   var shortenPlaylistName = playlist.playlistName.slice(0, maxPlaylistNameLength)
-  if(shortenPlaylistName.length == maxPlaylistNameLength) {
+  if(shortenPlaylistName.length === maxPlaylistNameLength) {
     shortenPlaylistName += "..."
   }
 
@@ -16,7 +16,7 @@ const PlaylistTile = ({playlist}) => {
           state={{playlist: playlist}}
           className="playlist-tile"
         >
-          <img src={playlist.playlistImage} />
+          <img src={playlist.playlistImage} alt="playlist" />
           <div>
             {shortenPlaylistName}
           </div>

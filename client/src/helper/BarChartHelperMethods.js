@@ -44,7 +44,7 @@ const getRangeColors = (dataset) => {
 const groupObjectValuesByFrequency = (object) => {
     const result = {}
     for (let [key, value] of Object.entries(object)) {
-        if(result[value] != undefined) {
+        if(result[value] !== undefined) {
             result[value].push(key)
         } else {
             result[value] = [key]
@@ -114,7 +114,7 @@ const artistGenreTooltipCallbackTitle = (context) => {
 
 const minimizeTicksCallback = (data, label) => {
     var shortenXLabel = data.getLabelForValue(label).slice(0,4)
-    if(shortenXLabel.length == 4) {
+    if(shortenXLabel.length === 4) {
         shortenXLabel.push("...")
     }
     return shortenXLabel
