@@ -50,10 +50,9 @@ input {
 
 
 /* page */
-/* .page-container {
-  position: relative;
-  min-height: 100vh;
-} */
+.page-container {
+  margin: 0px 10px
+}
 
 .full-page {
   display: flex;
@@ -111,6 +110,7 @@ input {
 .home__playlist-tile-container {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .loader {

@@ -1,6 +1,6 @@
-import React from 'react'
-import { Link } from "react-router-dom"
 import { useCookies } from 'react-cookie'
+
+import { Link } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpotify, faGithub } from '@fortawesome/free-brands-svg-icons'
 import "./Footer.css"

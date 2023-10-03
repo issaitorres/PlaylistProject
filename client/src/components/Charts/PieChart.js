@@ -1,4 +1,3 @@
-import React from 'react'
 import { Pie } from 'react-chartjs-2';
 import { 
     separateExplicitCleanTrackTitles,
@@ -9,6 +8,7 @@ import {
     decadesToolTipCallbacks,
     decadesDataLabelsFormatter
 } from "../../helper/PieChartHelperMethods"
+import "../../ChartJS"
 
 
 const PieChart = ({trackTable, title, type}) => {

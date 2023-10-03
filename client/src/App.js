@@ -1,4 +1,3 @@
-import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Home from './pages/home/home.js';
 import Register from './pages/auth/Register';
@@ -11,6 +10,7 @@ import Error from './pages/404/error'
 import User from './pages/user/user'
 import Restricted from './pages/auth/Restricted'
 import Protected from "./pages/auth/Protected"
+import './App.css';
 
 
 function App() {

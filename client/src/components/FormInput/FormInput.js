@@ -1,7 +1,8 @@
-import "./FormInput.css"
 import { useState, useEffect } from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
+import "./FormInput.css"
+
 
 const FormInput = (props) => {
   const { label, errorMessage, onChange, className, id, errMsgPos="", password=false, inputName, ...inputProps } = props

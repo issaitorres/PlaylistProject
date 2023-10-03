@@ -1,0 +1,41 @@
+.home__SPA-container {
+  flex-direction: column;
+  text-align: center;
+  margin: 10px auto;
+}
+
+.home__SPA-image-container {
+  display: flex;
+  margin: 10px auto;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.home__SPA-container div p {
+  text-align: center;
+  max-width: 800px;
+  margin: 0px auto;
+}
+
+.home__SPA-responsive-image {
+  max-width: 100%;
+  margin: 10px;
+  border-radius: 6px;
+}
+
+.home__SPA-video-container {
+  margin: 10px;
+  height: 450px;
+}
+
+.home__SPA-video-container iframe {
+  width: 100%;
+  height: 100%;
+  max-width: 800px;
+  max-height:450px;
+  border: 0px;
+  margin: 0px;
+  padding: 0px;
+}
+  

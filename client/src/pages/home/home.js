@@ -3,7 +3,7 @@ import { useCookies } from 'react-cookie'
 import axios from 'axios'
 import AddPlaylist from '../../components/AddPlaylist/AddPlaylist'
 import PlaylistTile from '../../components/PlaylistTile/PlaylistTile'
-import LoggedOut from './LoggedOut'
+import AboutSPA from './AboutSPA'
 import { useNavigate } from 'react-router-dom'
 import DiscoverPlaylist from "../../components/DiscoverPlaylist/DiscoverPlaylist"
 
@@ -70,11 +70,11 @@ const Home = () => {
 
   return (
     <div className="page-container">
-      <AddPlaylist accessToken={cookies.access_token} fetchPlaylists={fetchPlaylists} />
+      <AddPlaylist accessToken={cookies.access_token} />
       {
         !cookies.access_token
           ?
-            <LoggedOut />
+            <AboutSPA />
           :
             (
               !playlists.length

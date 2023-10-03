@@ -1,16 +1,14 @@
-import React from 'react'
 import { useState, useEffect } from 'react'
 import { useLocation } from "react-router-dom";
-import PlaylistContainer from '../../components/PlaylistContainer/PlaylistContainer'
-import axios from 'axios'
 import { useCookies } from 'react-cookie'
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import PlaylistContainer from '../../components/PlaylistContainer/PlaylistContainer'
 import "./playlist.css"
 
 
 const Playlist = () => {
   const location = useLocation();
-  // const [playlistId, setPlaylistId] = useState("")
   const [playlist, setPlaylist] = useState(location?.state?.playlist)
   const [cookies, setCookies] = useCookies(["access_token"])
   const navigate = useNavigate()
@@ -45,6 +43,13 @@ const Playlist = () => {
                 }
               }
             )
+
+            if(res.status == 204) {
+              // couldn't find that playlist id
+              alert("Could not find a playlist with that id. Please check that this playlist is public on Spotify and submit again.")
+              navigate('/')
+              return
+            }
 
             var newPlaylist = res.data
             var playlistInfo = JSON.parse(window.localStorage.playlistInfo)

@@ -1,9 +1,9 @@
-import albumCover from "../../Assets/movie-soundtracks-cover.jpg"
-import { useCookies } from 'react-cookie'
-import "./DiscoverPlaylist.css"
-import axios from 'axios'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useCookies } from 'react-cookie'
+import axios from 'axios'
+import albumCover from "../../Assets/movie-soundtracks-cover.jpg"
+import "./DiscoverPlaylist.css"
 
 
 const DiscoverPlaylist = () => {

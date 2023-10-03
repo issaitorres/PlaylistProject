@@ -1,8 +1,12 @@
-.add-playlist-notice {
+.addplaylist__container{
+    margin: 10px auto;
+    max-width: 920px;
+}
+
+.addplaylist__notice {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 10px auto;
     max-width: 920px;
     background-color: var(--default-red);
     text-align: center;
@@ -11,33 +15,30 @@
     color: white;
 }
 
-.add-playlist-notice-icon {
+.addplaylist__notice-icon {
     width: 25px;
     height: 25px;
     margin: 2px;
     padding: 5px;
 }
 
-.add-playlist-form {
+.addplaylist__form {
     background-color: var(--default-gray);
     padding: 2px 60px;
     border-radius: 10px;
     text-align: center;
-    align-items: center;
-    max-width: 800px;
-    margin: 10px auto;
 }
 
-.add-playlist-formInput-overrides {
+.addplaylist__formInput-overrides {
     margin: 0px auto;
     max-width: 400px;
 }
 
-.add-playlist-formInput-overrides span {
+.addplaylist__formInput-overrides span {
     max-width: 400px;
     margin: 0px auto;
 }
 
-.add-playlist-button-override {
+.addplaylist__button-override {
     max-width: 400px
 }

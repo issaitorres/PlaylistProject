@@ -30,6 +30,17 @@
     margin: 5px 10px 5px 0px;
 }
 
+.user__grid {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 5px;
+}
+
+.user__grid-item {
+    margin: auto 5px;
+    padding: 5px;
+}
+
 .user__playlist-list-viewtoggle {
     cursor: pointer;
     display: list-item;

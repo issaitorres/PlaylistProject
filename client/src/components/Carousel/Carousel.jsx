@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import BarChart from '../Charts/BarChart';
-import AudioFeaturesContainer from '../AudioFeaturesContainer/AudioFeaturesContainer';
+import BarChart from '../Charts/BarChart'
+import PieChart from '../Charts/PieChart'
+import AudioFeaturesContainer from '../AudioFeaturesContainer/AudioFeaturesContainer'
 import Grid from './Grid';
-import PieChart from '../Charts/PieChart';
 import getAudioFeaturesData from "../../data/audioFeaturesData"
-import ShortestLongestTrack from '../ShortestLongestTrack/ShortestLongestTrack';
+import ShortestLongestTrack from '../ShortestLongestTrack/ShortestLongestTrack'
 import {
     getShortestTrack,
     getLongestTrack,

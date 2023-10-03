@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { Link } from "react-router-dom"
 import { useEffect } from 'react'
+import errorIcon from "../../Assets/404.png"
 import "./error.css"
 
 
@@ -31,6 +32,7 @@ const Error = () => {
     <div className="full-page" style={{alignItems: "start"}}>
       <div className="error-container">
         <h1> 404</h1>
+        <img src={errorIcon} width="300px"/>
         <p> Dude where's my page?</p>
         <div className="time">
           Redirecting back

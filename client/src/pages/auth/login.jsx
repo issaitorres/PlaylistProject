@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import { useCookies } from 'react-cookie'
-import FormInput from '../../components/FormInput/FormInput'
 import { useLocation, useNavigate, Link } from 'react-router-dom';
+import axios from 'axios'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
+import FormInput from '../../components/FormInput/FormInput'
 import './auth.css'
 
 

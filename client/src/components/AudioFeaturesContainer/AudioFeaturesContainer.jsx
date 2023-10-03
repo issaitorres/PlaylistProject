@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { isInViewport } from "../../helper/PlaylistContainerHelperMethods"
 import SingleTrack from '../SingleTrack/SingleTrack'
 import "./AudioFeaturesContainer.css"

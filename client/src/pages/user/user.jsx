@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
-import FormInput from '../../components/FormInput/FormInput'
 import { useCookies } from 'react-cookie'
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import FormInput from '../../components/FormInput/FormInput'
 import "./user.css"
 
 
@@ -216,11 +216,17 @@ const User = () => {
                   <ul className="user__playlist-list">
                     {playlistInfo.map((playlist, index) => {
                       return (
-                        <li key={index}>
-                          <img src={playlist.playlistImage} width="65px" height="65px"/>
-                          <span>
-                            <b>{playlist.playlistName}</b>
-                          </span>
+                        <li key={index} className="user__grid">
+
+                          <div className="user__grid-item">
+                            <img src={playlist.playlistImage} width="65px" height="65px"/>
+                          </div>
+
+                          <div className="user__grid-item">
+                            <span>
+                              <b>{playlist.playlistName}</b>
+                            </span>
+                          </div>
                         </li>
                       )
                     })}

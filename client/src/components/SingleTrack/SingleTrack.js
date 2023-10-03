@@ -1,4 +1,3 @@
-import React from 'react'
 import './SingleTrack.css'
 
 const SingleTrack = ({ albumImage, score, title, artist}) => {

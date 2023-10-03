@@ -8,7 +8,7 @@ import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
 import "./AddPlaylist.css"
 
 
-const AddPlaylist = ({ accessToken, fetchPlaylists }) => {
+const AddPlaylist = ({ accessToken }) => {
   const [playlistId, setPlaylistId] = useState("")
   const [loader, setLoader] = useState(false)
   const navigate = useNavigate()
@@ -92,12 +92,12 @@ const AddPlaylist = ({ accessToken, fetchPlaylists }) => {
   }
 
   return (
-    <>
+    <div className="addplaylist__container">
       {
         notice
           ?
-            <div className="add-playlist-notice">
-              <FontAwesomeIcon icon={faExclamationTriangle} className="add-playlist-notice-icon" /> {notice}
+            <div className="addplaylist__notice">
+              <FontAwesomeIcon icon={faExclamationTriangle} className="addplaylist__notice-icon" /> {notice}
             </div>
           :
             null
@@ -107,7 +107,7 @@ const AddPlaylist = ({ accessToken, fetchPlaylists }) => {
           ?
               <form
                 onSubmit={submitPlaylistId}
-                className="add-playlist-form"
+                className="addplaylist__form"
               >
                 <h1> Spotify Playlist Analyzer</h1>
                 <FormInput
@@ -117,13 +117,13 @@ const AddPlaylist = ({ accessToken, fetchPlaylists }) => {
                   onChange={(event) => setPlaylistId(event.target.value)}
                   pattern=".*playlist\/.{22}|.{22}"
                   placeholder="Playlist URL or playlist ID"
-                  className="formInput add-playlist-formInput-overrides"
+                  className="formInput addplaylist__formInput-overrides"
                   errorMessage="Please submit validplaylist URL or playlist ID. Ex: https://open.spotify.com/playlist/3cT4tGoRr5eC3jGUZT5MTD or  3cT4tGoRr5eC3jGUZT5MTD"
                   errMsgPos="topErrMsg"
                 />
                 <button
                   type="submit"
-                  className="button submit-theme add-playlist-button-override"
+                  className="button submit-theme addplaylist__button-override"
                   formNoValidate
                 >
                   <div className={`${loader && 'loader'}`}>{!loader && "Submit"}</div>
@@ -132,7 +132,7 @@ const AddPlaylist = ({ accessToken, fetchPlaylists }) => {
           :
             null
       }
-    </>
+    </div>
   )
 }
 

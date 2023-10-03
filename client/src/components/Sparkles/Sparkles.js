@@ -1,8 +1,7 @@
-import { useState, useContext } from 'react'
-import "./sparkles.css"
+import { useState } from 'react'
 import styled, { keyframes } from 'styled-components'
-// import { useRandomInterval, range, usePrefersReducedMotion, random } from "./useRandomInterval.js"
 import { useRandomInterval, range, usePrefersReducedMotion, random } from "../../helper/SparkleHelperMethods"
+import "./sparkles.css"
 
 
 const comeInOut = keyframes`
