@@ -45,21 +45,9 @@ const Login = () => {
   const handleSubmit = async (event) => {
     event.preventDefault()
 
-
     setLoader(!loader)
-
-    console.log("\n test this in PROD")
-    console.log(process.env.NODE_ENV)
-    console.log(process.env.REACT_APP_DEV_BACKEND)
-    console.log(process.env.REACT_APP_PROD_BACKEND)
-    console.log("\n look here for info 3")
-    console.log(process.env.NODE_ENV === "development" ? process.env.REACT_APP_DEV_BACKEND : process.env.REACT_APP_PROD_BACKEND)
-
-
-
     try {
-      const res = await axios.post("http://localhost:3500/login", loginData,
-      // const res = await axios.post(`${process.env.NODE_ENV === "development" ? process.env.REACT_APP_DEV_BACKEND : process.env.REACT_APP_PROD_BACKEND}/login`, loginData,
+      const res = await axios.post(`${process.env.NODE_ENV === "development" ? process.env.REACT_APP_DEV_BACKEND : process.env.REACT_APP_PROD_BACKEND}/login`, loginData,
       {
         withCredentials: true
       })
