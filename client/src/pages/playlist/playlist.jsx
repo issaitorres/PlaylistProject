@@ -74,7 +74,7 @@ const Playlist = () => {
   // replace playlist info in localstorage and then useEffect sets new data on page load
   const refreshPlaylist = async () => {
     const playlistIdFromURL = window.location.pathname.split('/')[2]
-    const res = await axios.post(`${process.env.NODE_ENV === "development" ? process.env.REACT_APP_DEV_BACKEND : process.env.REACT_APP_PROD_BACKEND}/refresh`,
+    const res = await axios.post(`${process.env.NODE_ENV === "development" ? process.env.REACT_APP_DEV_BACKEND : process.env.REACT_APP_PROD_BACKEND}/playlists/refresh`,
         {
             playlistId: playlistIdFromURL
         },

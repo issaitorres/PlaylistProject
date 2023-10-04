@@ -43,7 +43,7 @@ const AboutSPA = () => {
           </h2>
 
           <Link to="/register">
-            <button className="button submit-theme add-playlist-button-override">
+            <button className="button submit-theme home__SPA-button-override">
               Register
             </button>
           </Link>
