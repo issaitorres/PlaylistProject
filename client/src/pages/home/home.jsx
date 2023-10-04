@@ -22,7 +22,7 @@ const Home = () => {
       setPlaylists(JSON.parse(window.localStorage.playlistInfo))
     } else {
       try {
-        const res = await axios.post(`${process.env.NODE_ENV === "development" ? process.env.REACT_APP_DEV_BACKEND : process.env.REACT_APP_PROD_BACKEND}/playlists/user`, {
+        const res = await axios.get(`${process.env.NODE_ENV === "development" ? process.env.REACT_APP_DEV_BACKEND : process.env.REACT_APP_PROD_BACKEND}/playlists/user`, {
           headers: {
             authorization: `Bearer ${cookies.access_token}`,
           }
@@ -36,7 +36,7 @@ const Home = () => {
 
         // get new access token if expired
         if(error?.response?.status === 403) {
-          const refreshRes = await axios.post(`${process.env.NODE_ENV === "development" ? process.env.REACT_APP_DEV_BACKEND : process.env.REACT_APP_PROD_BACKEND}/refresh`, {
+          const refreshRes = await axios.get(`${process.env.NODE_ENV === "development" ? process.env.REACT_APP_DEV_BACKEND : process.env.REACT_APP_PROD_BACKEND}/refresh`, {
             withCredentials: true,
             credentials: 'include'
           })
@@ -44,7 +44,7 @@ const Home = () => {
             maxAge: 900
           })
 
-          const res = await axios.post(`${process.env.NODE_ENV === "development" ? process.env.REACT_APP_DEV_BACKEND : process.env.REACT_APP_PROD_BACKEND}/user`, {
+          const res = await axios.get(`${process.env.NODE_ENV === "development" ? process.env.REACT_APP_DEV_BACKEND : process.env.REACT_APP_PROD_BACKEND}/user`, {
             headers: {
               authorization: `Bearer ${refreshRes.data.accessToken}`,
             }

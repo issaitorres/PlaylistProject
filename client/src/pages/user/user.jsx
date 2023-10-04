@@ -44,7 +44,7 @@ const User = () => {
 
       setUpdateLoader(!updateLoader)
     try {
-      const result = await axios.post(`${process.env.NODE_ENV === "development" ? process.env.REACT_APP_DEV_BACKEND : process.env.REACT_APP_PROD_BACKEND}/user`, updatedUserData, {
+      const result = await axios.patch(`${process.env.NODE_ENV === "development" ? process.env.REACT_APP_DEV_BACKEND : process.env.REACT_APP_PROD_BACKEND}/user`, updatedUserData, {
         headers: {
           authorization: `Bearer ${cookies.access_token}`
         }
@@ -87,7 +87,7 @@ const User = () => {
   const deleteAllUserPlaylists = async () => {
     setDeleteLoader(!deleteLoader)
     try {
-      const result = await axios.post(`${process.env.NODE_ENV === "development" ? process.env.REACT_APP_DEV_BACKEND : process.env.REACT_APP_PROD_BACKEND}/user/deletemyplaylists`, {
+      const result = await axios.delete(`${process.env.NODE_ENV === "development" ? process.env.REACT_APP_DEV_BACKEND : process.env.REACT_APP_PROD_BACKEND}/user/deletemyplaylists`, {
         headers: {
           authorization: `Bearer ${cookies.access_token}`
         }

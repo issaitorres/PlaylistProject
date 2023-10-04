@@ -35,7 +35,7 @@ const PlaylistContainer = ({ playlist, refreshPlaylist }) => {
   const removePlaylist = async (playlistObjectId) => {
     setDeleteLoader(!deleteLoader)
     try {
-      const res = await axios.post(`${process.env.NODE_ENV === "development" ? process.env.REACT_APP_DEV_BACKEND : process.env.REACT_APP_PROD_BACKEND}/playlists`,
+      const res = await axios.delete(`${process.env.NODE_ENV === "development" ? process.env.REACT_APP_DEV_BACKEND : process.env.REACT_APP_PROD_BACKEND}/playlists`,
       {
        headers: {
          authorization: `Bearer ${cookies.access_token}`
