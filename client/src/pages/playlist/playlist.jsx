@@ -33,7 +33,7 @@ const Playlist = () => {
         const playlistIdRegex2 = /.{22}/
         if(playlistIdRegex1.test(playlistIdFromURL) || playlistIdRegex2.test(playlistIdFromURL)) {
           try {
-            const res = await axios.post("http://localhost:3500/playlists",
+            const res = await axios.post(`${process.env.NODE_ENV === "development" ? process.env.REACT_APP_DEV_BACKEND : process.env.REACT_APP_PROD_BACKEND}/playlists`,
               {
                 playlistId: playlistIdFromURL
               },
@@ -74,7 +74,7 @@ const Playlist = () => {
   // replace playlist info in localstorage and then useEffect sets new data on page load
   const refreshPlaylist = async () => {
     const playlistIdFromURL = window.location.pathname.split('/')[2]
-    const res = await axios.post("http://localhost:3500/playlists/refresh",
+    const res = await axios.post(`${process.env.NODE_ENV === "development" ? process.env.REACT_APP_DEV_BACKEND : process.env.REACT_APP_PROD_BACKEND}/refresh`,
         {
             playlistId: playlistIdFromURL
         },

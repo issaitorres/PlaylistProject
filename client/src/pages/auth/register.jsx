@@ -20,7 +20,7 @@ const Register = () => {
     event.preventDefault()
     setLoader(!loader)
     try {
-      const result = await axios.post("http://localhost:3500/register", registerUserData)
+      const result = await axios.post(`${process.env.NODE_ENV === "development" ? process.env.REACT_APP_DEV_BACKEND : process.env.REACT_APP_PROD_BACKEND}/register`, registerUserData)
       navigate('/login', {state: {email: registerUserData.email}})
 
     } catch (err) {

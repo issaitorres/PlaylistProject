@@ -46,7 +46,7 @@ const AddPlaylist = ({ accessToken }) => {
 
       setLoader(!loader)
       try {
-        const res = await axios.post("http://localhost:3500/playlists", {
+        const res = await axios.post(`${process.env.NODE_ENV === "development" ? process.env.REACT_APP_DEV_BACKEND : process.env.REACT_APP_PROD_BACKEND}/playlists`, {
           playlistId: extractedPlaylistId
         }, 
         {
