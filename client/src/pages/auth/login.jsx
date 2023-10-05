@@ -2,9 +2,8 @@ import { useState, useEffect } from 'react'
 import { useCookies } from 'react-cookie'
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
 import FormInput from '../../components/FormInput/FormInput'
+import Banner from "../../components/Banner/Banner"
 import './auth.css'
 
 
@@ -16,7 +15,7 @@ const Login = () => {
     email: location?.state?.email || "",
     password: ""
   })
-  const [cookies, setCookies] = useCookies(["access_token"])
+  const [ , setCookies] = useCookies(["access_token"])
   const [displayWarning, setDisplayWarning] = useState(false)
   const navigate = useNavigate()
 
@@ -104,21 +103,18 @@ const Login = () => {
   return (
     <div className="full-page auth-background">
       {
-        notice
-          ? 
-            <div className="login-notice-container">
-              <div className="login-notice"> 
-                <FontAwesomeIcon icon={faExclamationTriangle} className="login-notice-icon" /> {notice}
-              </div>
-            </div>
-          :
-            null
+        notice &&
+          <Banner
+            notice={notice}
+            bannerType="warning"
+            bannerPosition="fixed"
+          />
       }
       <form onSubmit={handleSubmit} className="form">
         <h1> Login</h1>
         {displayWarning &&
-          <div className="warning">
-            Username or password is incorrect
+          <div className="formInputwarning">
+            &#x26A0; Username or password is incorrect
           </div>}
         {inputs.map((input) => (
           <FormInput

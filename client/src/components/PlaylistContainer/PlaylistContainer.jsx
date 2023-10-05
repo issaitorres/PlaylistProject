@@ -17,7 +17,7 @@ import "./PlaylistContainer.css"
 
 const PlaylistContainer = ({ playlist, refreshPlaylist }) => {
   const navigate = useNavigate()
-  const [cookies, setCookies, removeCookie] = useCookies(["access_token"])
+  const [cookies, , removeCookie] = useCookies(["access_token"])
   const [deleteLoader, setDeleteLoader] = useState(false)
   const { 
     _id: playlistObjectId,

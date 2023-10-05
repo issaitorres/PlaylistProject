@@ -13,6 +13,7 @@
     border: 1px solid var(--default-black);
     border-radius: 6px;
     color: white;
+    margin: 10px 0px;
 }
 
 .addplaylist__notice-icon {

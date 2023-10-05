@@ -1,10 +1,14 @@
 .user__notice-banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin: 10px auto;
     background-color: var(--default-green);
     max-width: 600px;
     text-align: center;
     border: 2px solid #03774c;
     border-radius: 6px;
+    color: white;
 }
 
 .user__section {

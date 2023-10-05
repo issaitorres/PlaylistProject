@@ -4,7 +4,7 @@ import './NavBar.css'
 
 
 const Navbar = () => {
-  const [cookies, setCookies] = useCookies(["access_token"])
+  const [cookies] = useCookies(["access_token"])
   const userInfo = window?.localStorage?.userInfo
   const username = userInfo ? JSON.parse(userInfo).username : "user"
 

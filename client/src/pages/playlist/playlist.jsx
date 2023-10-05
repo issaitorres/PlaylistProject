@@ -10,7 +10,7 @@ import "./playlist.css"
 const Playlist = () => {
   const location = useLocation();
   const [playlist, setPlaylist] = useState(location?.state?.playlist)
-  const [cookies, setCookies] = useCookies(["access_token"])
+  const [cookies] = useCookies(["access_token"])
   const navigate = useNavigate()
 
   useEffect(() => {

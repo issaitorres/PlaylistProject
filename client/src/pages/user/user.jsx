@@ -3,11 +3,12 @@ import { useCookies } from 'react-cookie'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import FormInput from '../../components/FormInput/FormInput'
+import Banner from "../../components/Banner/Banner"
 import "./user.css"
 
 
 const User = () => {
-  const [cookies, setCookies, removeCookie] = useCookies(["access_token"])
+  const [cookies, , removeCookie] = useCookies(["access_token"])
   const [updateLoader, setUpdateLoader] = useState(false)
   const [deleteLoader, setDeleteLoader] = useState(false)
   const [warning, setWarning] = useState(false)
@@ -183,11 +184,22 @@ const User = () => {
 
   return (
     <div className="page-container">
-      {successfulUpdate && <div className="user__notice-banner"> success </div> }
+      {
+        successfulUpdate &&
+          <Banner
+            notice={"success"}
+            bannerType="success"
+            bannerPosition="flex"
+        />
+      }
       <div className="user__section">
         <form onSubmit={handleSubmit} className="form">
           <h1> Update Credentials</h1>
-          {warning ? <div className="warning">{warning}</div> : null}
+          {warning &&
+            <div className="formInputwarning">
+              &#x26A0; {warning}
+            </div>
+          }
           {inputs.map((input) => (
             <FormInput
               key={input.id}

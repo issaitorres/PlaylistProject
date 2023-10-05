@@ -7,7 +7,7 @@ import "./DiscoverPlaylist.css"
 
 
 const DiscoverPlaylist = () => {
-    const [cookies, setCookies] = useCookies(["access_token"])
+    const [cookies] = useCookies(["access_token"])
     const [loader, setLoader] = useState(false)
     const discoverPlaylistId = "3cT4tGoRr5eC3jGUZT5MTD"
     const navigate = useNavigate()
@@ -59,7 +59,7 @@ const DiscoverPlaylist = () => {
             <button id="discoverPlaylist" className="discover-playlist" onClick={submitDiscoverPlaylist}>
                 <div className='discover-main'>
                     <div>
-                        <img src={albumCover} width="175px" height="175px" />
+                        <img src={albumCover} alt="discoveralbumart" width="175px" height="175px" />
                     </div>
                     <div>
                         <h3> Movie Soundtracks</h3>

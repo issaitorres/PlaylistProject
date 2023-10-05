@@ -5,7 +5,7 @@ import { useCookies } from 'react-cookie'
 
 const Logout = () => {
     const navigate = useNavigate()
-    const [cookies, setCookies, removeCookie] = useCookies(["access_token"])
+    const [ , , removeCookie] = useCookies(["access_token"])
 
     useEffect(() => {
         removeCookie("access_token", { path: '/' }) // idk if we need this

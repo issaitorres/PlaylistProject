@@ -71,7 +71,11 @@ const Register = () => {
     <div className="full-page auth-background">
       <form onSubmit={handleSubmit} className="form">
         <h1> Register</h1>
-        {warning ? <div className="warning">{warning}</div> : null}
+        {warning &&
+          <div className="formInputwarning">
+            &#x26A0; {warning}
+          </div>
+        }
         {inputs.map((input) => (
           <FormInput
             key={input.id}

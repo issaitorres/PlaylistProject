@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
 import axios from 'axios'
 import FormInput from '../FormInput/FormInput'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
+import Banner from "../../components/Banner/Banner"
 import "./AddPlaylist.css"
 
 
@@ -12,7 +11,7 @@ const AddPlaylist = ({ accessToken }) => {
   const [playlistId, setPlaylistId] = useState("")
   const [loader, setLoader] = useState(false)
   const navigate = useNavigate()
-  const [cookies, setCookies, removeCookie] = useCookies(["access_token"])
+  const [ , , removeCookie] = useCookies(["access_token"])
   const [notice, setNotice] = useState(false)
   var homeInterval
 
@@ -94,13 +93,12 @@ const AddPlaylist = ({ accessToken }) => {
   return (
     <div className="addplaylist__container">
       {
-        notice
-          ?
-            <div className="addplaylist__notice">
-              <FontAwesomeIcon icon={faExclamationTriangle} className="addplaylist__notice-icon" /> {notice}
-            </div>
-          :
-            null
+        notice &&
+          <Banner
+            notice={notice}
+            bannerType="warning"
+            bannerPosition="flex"
+          />
       }
       {
         accessToken

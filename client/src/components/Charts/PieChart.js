@@ -14,9 +14,9 @@ import "../../ChartJS"
 const PieChart = ({trackTable, title, type}) => {
     const totalTrackCount = trackTable.length
     const trackTitleDisplaylimit = 16
-
+    var dataLabelsFormatter, tooltipCallbacks, legendDisplay, subtitlePadding, decades
     if (type === "explicit") {
-        const [explicitTrackTitles, cleanTrackTitles] = separateExplicitCleanTrackTitles(trackTable)
+        const [explicitTrackTitles, cleanTrackTitles] = separateExplicitCleanTrackTitles(trackTable);
         var [
             dataTrack, 
             labels, 
@@ -24,17 +24,17 @@ const PieChart = ({trackTable, title, type}) => {
             borderWidth, 
             hoverBorderWidth
         ] = explicitPieChartProperties(explicitTrackTitles.length, cleanTrackTitles.length, totalTrackCount)
-        var dataLabelsFormatter = (value, context) => {
+        dataLabelsFormatter = (value, context) => {
             return explicitDataLabelsFormatter(value, totalTrackCount) 
         }
-        var tooltipCallbacks = (context) => {
+        tooltipCallbacks = (context) => {
             return explicitTooltipCallbacks(context, explicitTrackTitles, cleanTrackTitles, trackTitleDisplaylimit)
         }
-        var legendDisplay = true
-        var subtitlePadding = {}
+        legendDisplay = true
+        subtitlePadding = {}
 
     } else if (type === "decades") {
-        var [
+        [
             decades,
             dataTrack,
             labels,
@@ -43,14 +43,14 @@ const PieChart = ({trackTable, title, type}) => {
             hoverBorderWidth
         ] = decadesPieChartProperties(trackTable)
 
-        var dataLabelsFormatter = (value, context) => {
+        dataLabelsFormatter = (value, context) => {
             return decadesDataLabelsFormatter(value, context)
         }
-        var tooltipCallbacks = (context) => {
+        tooltipCallbacks = (context) => {
             return decadesToolTipCallbacks(context, decades, trackTitleDisplaylimit, totalTrackCount)
         }
-        var legendDisplay = false
-        var subtitlePadding = {
+        legendDisplay = false
+        subtitlePadding = {
             bottom: 26
         }
     }

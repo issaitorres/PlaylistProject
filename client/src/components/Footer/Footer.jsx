@@ -1,12 +1,11 @@
 import { useCookies } from 'react-cookie'
-
 import { Link } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpotify, faGithub } from '@fortawesome/free-brands-svg-icons'
 import "./Footer.css"
 
 const Footer = () => {
-  const [cookies, setCookies] = useCookies(["access_token"])
+  const [cookies] = useCookies(["access_token"])
 
 
   return (
