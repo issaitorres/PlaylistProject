@@ -24,7 +24,7 @@ const Playlist = () => {
       return playlist.playlistId === playlistIdFromURL
     })
 
-    if(!foundPlaylist || foundPlaylist?.length == 0) {
+    if(!foundPlaylist || foundPlaylist?.length === 0) {
       console.log("playlist was not in localstorage so fetch it")
 
       // playlist was not in localstorage so fetch it
@@ -44,7 +44,7 @@ const Playlist = () => {
               }
             )
 
-            if(res.status == 204) {
+            if(res.status === 204) {
               // couldn't find that playlist id
               alert("Could not find a playlist with that id. Please check that this playlist is public on Spotify and submit again.")
               navigate('/')

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useMemo } from 'react'
 import BarChart from '../Charts/BarChart'
 import PieChart from '../Charts/PieChart'
 import AudioFeaturesContainer from '../AudioFeaturesContainer/AudioFeaturesContainer'
@@ -18,8 +18,9 @@ const Carousel = ({
     const [currentIndex, setCurrentIndex] = useState(0)
     const [activateAnimation, setActivateAnimation] = useState(false)
     const audioFeaturesData = getAudioFeaturesData(trackTable, activateAnimation, setActivateAnimation)
+    const buttonRefs = []
 
-    // need useMemo since activateAnimation causes rerenders which changes the color for decades pie chart
+    // need useMemo since activateAnimation causes rerenders which changes the color for decades pie chart when scrolling
     const decadesPieChart = useMemo(
         () => <PieChart
                 trackTable={trackTable}
@@ -35,15 +36,16 @@ const Carousel = ({
     };
 
     const activeSlide = (slideIndex) => {
-        var current = document.getElementsByClassName("carousel__button-active");
-        current[0].className = current[0].className.replaceAll("carousel__button-active", "");
-        document.querySelector(`.cb${slideIndex}`).className += "carousel__button-active"
+        for(const [refIndex, ref] of Object.entries(buttonRefs)) {
+            if(refIndex === slideIndex) {
+                if(!ref.className.includes("carousel__button-active")) {
+                    ref.className += " carousel__button-active"
+                }
+            } else {
+                ref.className = ref.className.replaceAll("carousel__button-active", "");
+            }
+        }
     }
-
-    // give active className to select first carousel button on page load
-    useEffect(() => {
-        document.querySelector('.cb0').className += " carousel__button-active"
-    }, [])
 
 
   return (
@@ -54,7 +56,8 @@ const Carousel = ({
                         <React.Fragment key={slideIndex}>
                             <button 
                                 onClick={() => goToSlide(slideIndex)}
-                                className={`carousel__button cb${slideIndex} `}
+                                className={`carousel__button ${slideIndex === 0 ? "carousel__button-active" : ""}`}
+                                ref={ref => buttonRefs.push(ref) }
                             >
                                 {data.title}
                             </button>
@@ -65,7 +68,8 @@ const Carousel = ({
                 <button 
                     key={4}  
                     onClick={() => goToSlide(4)}
-                    className={`carousel__button cb${4} `}
+                    className={`carousel__button`}
+                    ref={ref => buttonRefs.push(ref) }
                 >
                     Extras
                 </button>

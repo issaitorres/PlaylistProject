@@ -5,9 +5,9 @@ import "./Banner.css"
 
 const Banner = ({ notice, bannerType, bannerPosition }) => {
 
-    const bannerStyle = bannerType == "success" ? "banner__success" : "banner__warning"
-    const bannerIcon = bannerType == "success" ?  faCheck : faExclamationTriangle
-    const bannerPos = bannerPosition == "fixed" ? "banner__fixed-container" : "banner__flex-container"
+    const bannerStyle = bannerType === "success" ? "banner__success" : "banner__warning"
+    const bannerIcon = bannerType === "success" ?  faCheck : faExclamationTriangle
+    const bannerPos = bannerPosition === "fixed" ? "banner__fixed-container" : "banner__flex-container"
 
   return (
     <div className={bannerPos}>

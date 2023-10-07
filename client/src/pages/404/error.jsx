@@ -1,32 +1,34 @@
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Link } from "react-router-dom"
-import { useEffect } from 'react'
 import errorIcon from "../../Assets/404.png"
 import "./error.css"
 
 
 const Error = () => {
+  const [time, setTime] = useState(10)
   const navigate = useNavigate()
 
-  var time = 10;
-  const homeInterval = setInterval(() => {
-    document.getElementById("time").innerHTML = time;
-    if (time === 0) {
-      removeInterval()
+  useEffect(() => {
+    // save intervalId to clear the interval when the
+    // component re-renders
+    const intervalId = setInterval(() => {
+      setTime(time - 1);
+    }, 1000);
+
+    if (time <= 0) {
+      clearInterval(intervalId)
       navigate('/')
     }
-    time--;
 
-  }, 1000);
-
-  const removeInterval = () => {
-    clearInterval(homeInterval);
-  }
-
-  // remove interval if user leaves page by clicking on any link
-  useEffect(() => {
-    return () => removeInterval();
-  }, [])
+    // clear interval on re-render to avoid memory leaks
+    return () => {
+      // the interval from 10 - 9 gets deleted and then a new gets created that
+      //  goes from 9 - 8 and so on
+      clearInterval(intervalId)
+    };
+    // add time as a dependency to re-rerun the effect when we update it
+  }, [time, navigate]);
 
   return (
     <div className="full-page" style={{alignItems: "start"}}>
@@ -37,11 +39,11 @@ const Error = () => {
         <div className="time">
           Redirecting back
           &thinsp;
-          <Link to="/" className="link" onClick={removeInterval}>
+          <Link to="/" className="link">
               home
           </Link>
           &thinsp;
-          in... <span id="time"></span>
+          in... {time}
         </div>
       </div>
     </div>

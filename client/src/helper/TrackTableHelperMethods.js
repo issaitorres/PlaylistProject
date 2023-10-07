@@ -25,7 +25,7 @@ const trackTableConversions = (value, convertType=false) => {
         return keyConversion[value]
 
     } else if (convertType === "mode") {
-        if(value == 1) {
+        if(value === 1) {
             return "Major"
         }
         return "Minor"
@@ -48,19 +48,40 @@ const trackTableConversions = (value, convertType=false) => {
 
 const toggleSound = (e) => {
     var parent = e.target.parentNode
-    var audioElem = parent.querySelector("audio")
-    var playIcon = parent.querySelector('[data-icon=play]');
-    var pauseIcon = parent.querySelector('[data-icon=pause]');
+    var audioElem
+    var playIcon
+    var pauseIcon
+    var newClass
+
+    // get audio tag, play and pause svg tags
+    for (const child of parent.children) {
+        if(child.tagName === "BUTTON") {
+            for(const innerChild of child.children) {
+                if(innerChild.getAttribute("data-icon") === "play") {
+                    playIcon = innerChild
+                }
+                if(innerChild.getAttribute("data-icon") === "pause") {
+                    pauseIcon = innerChild
+                }
+            }
+        }
+
+        if(child.tagName === "AUDIO") {
+            audioElem = child
+        }
+    }
+
+
 
     if (audioElem.paused) {
         audioElem.play();
         playIcon.setAttribute('class', (playIcon.getAttribute("class") || '') + "trackgrid__hidden-button")
-        var newClass = pauseIcon.getAttribute("class").replaceAll("trackgrid__hidden-button", "");
+        newClass = pauseIcon.getAttribute("class").replaceAll("trackgrid__hidden-button", "");
         pauseIcon.setAttribute('class', newClass)
     } else {
         audioElem.pause();
         pauseIcon.setAttribute('class', (pauseIcon.getAttribute("class") || '') + "trackgrid__hidden-button")
-        var newClass = playIcon.getAttribute("class").replaceAll("trackgrid__hidden-button", "");
+        newClass = playIcon.getAttribute("class").replaceAll("trackgrid__hidden-button", "");
         playIcon.setAttribute('class', newClass)
     }
 }

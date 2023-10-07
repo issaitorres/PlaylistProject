@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import "./FormInput.css"
@@ -8,47 +8,50 @@ const FormInput = (props) => {
   const { label, errorMessage, onChange, className, id, errMsgPos="", password=false, inputName, ...inputProps } = props
   const [focused, setFocused] = useState(false)
   const [passwordVisible, setPasswordVisible] = useState([])
+  const errorMsg = useRef(null);
+  const passwordField = useRef(null);
+  const inputField = useRef(null);
 
   const handleFocus = (e) => {
     setFocused(true)
 
     if(errMsgPos) {
-      var input = document.getElementsByClassName(errMsgPos)[0]
-      if(input.validity.patternMismatch) {
-        var topErrMsg = document.getElementById("top-err-msg")
-        topErrMsg.style.display = "block";
+      if(inputField.current.validity.patternMismatch) {
+        errorMsg.current.style.display = "block";
       } else {
-        var topErrMsg = document.getElementById("top-err-msg")
-        topErrMsg.style.display = "none";
+        errorMsg.current.style.display = "none";
       }
     }
   }
 
   const revealPassword = () => {
-    var passwordInput = document.getElementById(`password-input-${inputName}`)
-    passwordInput.type = passwordVisible[id] ? "password" : "text"
+    passwordField.current.type = passwordVisible[id] ? "password" : "text"
     var update = [...passwordVisible]
     update[id] = !update[id]
     setPasswordVisible(update)
   }
 
   useEffect(()=> {
-    var playlistInput = document.getElementById(password === "true" ? `password-input-${inputName}` : id);
+    // Need to get ref.current here
+    // The problem is that someRef.current is mutable, so by the time the cleanup function runs,
+    // it may have been set to null.
+    // The solution is to capture any mutable values inside the useeffect and then use them in cleanup function (return)
+    const field = password === "true" ? passwordField.current : inputField.current
     const enterOnInput = (event) => {
       if (event.key === "Enter") {
         handleFocus()
       }
     }
-    playlistInput.addEventListener('keypress', enterOnInput);
-    return () => playlistInput.removeEventListener('keypress', enterOnInput)
+    field.addEventListener('keypress', enterOnInput);
+    return () => field.removeEventListener('keypress', enterOnInput)
   }, [])
 
   return (
     <div className={className}>
-        {errMsgPos && <span id="top-err-msg">{errorMessage}</span>}
+        {errMsgPos && <span ref={errorMsg}>{errorMessage}</span>}
         <label>{label}</label>
           <input
-            id={password === "true" ? `password-input-${inputName}` : id}
+            ref={password === "true" ? passwordField : inputField}
             className={errMsgPos}
             onChange={onChange}
             onBlur={handleFocus}

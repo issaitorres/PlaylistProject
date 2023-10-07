@@ -5,18 +5,17 @@ import "./AudioFeaturesContainer.css"
 
 
 const AudioFeaturesContainer = ({
-    quality,
     averageQuality, 
     highestLowestField, 
     title, 
     icon, 
-    animationId, 
+    animationRef,
     animationClassName,
     callback
 }) => {
 
     useEffect(() => {
-        var qualityIcon = document.getElementById(animationId)
+        var qualityIcon = animationRef.current
         var animationSet = false
         var scrollTimer, lastScrollFireTime = 0;
 

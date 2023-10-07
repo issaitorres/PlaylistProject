@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
 import axios from 'axios'
@@ -13,14 +13,22 @@ const AddPlaylist = ({ accessToken }) => {
   const navigate = useNavigate()
   const [ , , removeCookie] = useCookies(["access_token"])
   const [notice, setNotice] = useState(false)
-  var homeInterval
+  const displayNoticeRef = useRef(null)
 
-  const removeInterval = () => {
-    clearInterval(homeInterval);
+  const displayNoticeInterval = (time=0) => {
+    displayNoticeRef.current = setInterval(() => {
+      if (time <= 0) {
+        setNotice(false)
+        clearInterval(displayNoticeRef.current)
+      }
+      time--;
+    }, 1000)
   }
 
   useEffect(()=> {
-    return () => removeInterval();
+    return () => {
+      clearInterval(displayNoticeRef.current)
+    }
   }, [])
 
 
@@ -59,15 +67,7 @@ const AddPlaylist = ({ accessToken }) => {
           // couldn't find that playlist id
           setNotice("Could not find a playlist with that id. Please check that this playlist is public on Spotify and submit again.")
           setLoader(false)
-          var time = 10;
-          homeInterval = setInterval(() => {
-            if (time === 0) {
-              removeInterval()
-              setNotice(false)
-            }
-            time--;
-          }, 1000);
-
+          displayNoticeInterval(10)
           return
         }
 

@@ -11,6 +11,7 @@ const TrackGrid = ({ trackTable, playlistDuplicates }) => {
     const [columnToggles, setColumnToggles] = useState([])
     const [dataArray, setDataArray] = useState([])
     const columnHeaders = getTrackDataColumnHeaders()
+    const columnRefs = []
 
     const determineColTypeAndSort = (colType, dataArray, columnToggle, colVal) => {
         if(colType === "string") {
@@ -33,25 +34,42 @@ const TrackGrid = ({ trackTable, playlistDuplicates }) => {
         var sampleVal = dataArray[0][headKeyName]
         const sorted = determineColTypeAndSort(typeof(sampleVal), dataArray, update[index], headKeyName)
         setDataArray(sorted)
-        updateSortArrows(index, update[index])
+        updateSortArrows(index)
         update[index] = !update[index]
         setColumnToggles(update)
     }
 
-    const updateSortArrows = (index, toggle) => {
-        var current = document.getElementsByClassName('trackgrid__arrow');
-        for(const cur of current) {
-            cur.className = cur.className.replaceAll("trackgrid__hidden-arrow", "");
+    const updateSortArrows = (index) => {
+        for(const [refIndex, ref] of Object.entries(columnRefs)) {
+            if(refIndex === index) {
+                // handle switching the arrows for column that was clicked
+                for(const [ , child] of Object.entries(ref.children)) {
+                    if(child.className.includes("trackgrid__sortable-icons")) {
+                        if(columnToggles[index] && columnToggles[index] !== null && columnToggles[index] !== undefined) {
+                            child.children[0].className += " trackgrid__hidden-arrow"
+                            child.children[1].className = child.children[1].className.replaceAll("trackgrid__hidden-arrow", "");
+                        } else {
+                            child.children[1].className += " trackgrid__hidden-arrow"
+                            child.children[0].className = child.children[0].className.replaceAll("trackgrid__hidden-arrow", "");
+                        }
+                    }
+                }
+            } else {
+                // handle clearing the arrows for other columns
+                for(const [ , child] of Object.entries(ref.children)) {
+                    if(child.className.includes("trackgrid__sortable-icons")) {
+                        for(const innerChild of child.children) {
+                            innerChild.className = innerChild.className.replaceAll("trackgrid__hidden-arrow", "");
+                        }
+                    }
+                }
+            }
         }
-
-        var triggerArrow = document.getElementsByClassName(`h${index}-arrow`);
-        var pos = toggle ? 0 : 1
-        triggerArrow[pos].className += "trackgrid__hidden-arrow"
     }
 
     useEffect(() => {
         var initialDataArray=[]
-        for (let [trackId, trackInfo] of Object.entries(trackTable)) {
+        for (let [ , trackInfo] of Object.entries(trackTable)) {
             initialDataArray.push({
                 "#": trackInfo.playlistPosition,
                 "albumArt": trackInfo.album.albumImage,
@@ -90,9 +108,6 @@ const TrackGrid = ({ trackTable, playlistDuplicates }) => {
             })
         }
 
-        // set up arrow sort initial on load
-        var initialTriggerArrow = document.getElementsByClassName(`h0-arrow`);
-        initialTriggerArrow[0].className += " trackgrid__hidden-arrow"
         setDataArray(initialDataArray)
     }, [trackTable])
 
@@ -104,6 +119,7 @@ const TrackGrid = ({ trackTable, playlistDuplicates }) => {
                 Track Table
             </h2>
             <div>
+                {/* come back here and check: playlistDuplicates != {} - maybe this can never possibly happen  */}
                 {playlistDuplicates?.duplicateCount === 0 || playlistDuplicates != {}
                     ? "This playlist contains no duplicate tracks."
                     : <div>
@@ -129,22 +145,17 @@ const TrackGrid = ({ trackTable, playlistDuplicates }) => {
                 <div
                     className="trackgrid__header trackgrid__header-toggle-sort"
                     onClick={() => gridHeaderToggle(header, index)}
+                    ref={ref => columnRefs.push(ref) }
                     key={index}
                 >
                     <b className="trackgrid__table-header">
                         {header}
                     </b>
                     <div className="trackgrid__sortable-icons">
-                        <div className={`
-                            trackgrid__arrow
-                            h${index}-arrow
-                        `}>
+                        <div className={`trackgrid__arrow ${index === 0 ? "trackgrid__hidden-arrow" : ""}`}>
                             &#9650;
                         </div>
-                        <div className={`
-                            trackgrid__arrow
-                            h${index}-arrow
-                        `}>
+                        <div className="trackgrid__arrow">
                             &#9660;
                         </div>
                     </div>

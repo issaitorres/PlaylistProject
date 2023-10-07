@@ -1,20 +1,21 @@
-import React, { useState, useEffect} from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { sortNumerically, sortAlphabetically } from "../../helper/TableColumnHelperMethods"
 import "./Grid.css"
 
 const Grid = ({ grid }) => {
     const [dataArray, setDataArray] = useState([])
     const [columnToggles, setColumnToggles] = useState([])
+    const gridRef = useRef(null);
+    const columnRefs = []
     const headers = grid.headers
     const columnSortable = grid.columnSortable
     const columnValues = grid.columnValues
     const initiallySortByColumn = grid.initiallySortByColumn
     const data = grid.data
-    const title = grid.title
 
     useEffect(() => {
-        // set number of columns
-        document.getElementById(`gc-${title}`).style.setProperty('--headerLength',headers.length);
+        // set number of columns - column count is different per grid
+        gridRef.current.style.setProperty('--headerLength',headers.length);
 
         var initialDataArray = []
         for (let [key, value] of Object.entries(data)) {
@@ -23,7 +24,9 @@ const Grid = ({ grid }) => {
                 const currentColumnValue = columnValues[x]
                 var item
                 if(currentColumnValue === "useKey") {
-                    item = key
+                    // keys are always converted to string so the years get confused as strings
+                    var parsedKey = parseInt(key)
+                    item = parsedKey ? parsedKey : key
                 } else {
                     item = typeof(value[currentColumnValue]) == "number"
                             ? Number(value[currentColumnValue])
@@ -58,7 +61,7 @@ const Grid = ({ grid }) => {
         
         setDataArray(sorted)
         setColumnToggles(update)
-        toggleSortArrows(columnIndex, columnToggles[columnIndex], title)
+        toggleSortArrows(columnIndex)
     }
 
     const determineColumnTypeAndSort = (columnType, dataArray, columnToggle, colVal) => {
@@ -71,27 +74,44 @@ const Grid = ({ grid }) => {
         }
     }
 
-    const toggleSortArrows = (num, toggle, title) => {
-        var current = document.getElementsByClassName(`${title}-arrow`);
-        for(const cur of current) {
-            cur.className = cur.className.replaceAll("grid__hidden-arrow", "");
+    const toggleSortArrows = (index) => {
+        for(const [refIndex, ref] of Object.entries(columnRefs)) {
+            if(refIndex === index) {
+                // handle switching the arrows for column that was clicked
+                for(const [ , child] of Object.entries(ref.children)) {
+                    if(child.className.includes("grid__sortable-icons")) {
+                        if(columnToggles[index] && columnToggles[index] !== null && columnToggles[index] !== undefined) {
+                            child.children[0].className += " grid__hidden-arrow"
+                            child.children[1].className = child.children[1].className.replaceAll("grid__hidden-arrow", "");
+                        } else {
+                            child.children[1].className += " grid__hidden-arrow"
+                            child.children[0].className = child.children[0].className.replaceAll("grid__hidden-arrow", "");
+                        }
+                    }
+                }
+            } else {
+                // handle clearing the arrows for other columns
+                for(const [ , child] of Object.entries(ref.children)) {
+                    if(child.className.includes("grid__sortable-icons")) {
+                        for(const innerChild of child.children) {
+                            innerChild.className = innerChild.className.replaceAll("grid__hidden-arrow", "");
+                        }
+                    }
+                }
+            }
         }
-
-        var triggerArrow = document.getElementsByClassName(`${title}-c${num}-arrow`);
-        var pos = toggle ? 0 : 1
-
-        triggerArrow[pos].className += "grid__hidden-arrow"
     }
 
 
   return (
     <>
-        <div className="grid__container" id={`gc-${title}`}>
+        <div className="grid__container" ref={gridRef}>
             {headers.map((header, index) => {
                 return (
                     <div
-                        className={`grid__header ${columnSortable[index] ? "grid__header-toggle-sort " : null }`}
+                        className={`grid__header ${columnSortable[index] ? "grid__header-toggle-sort " : ""}`}
                         onClick={columnSortable[index] ? () => sortColumn(index) : null}
+                        ref={ref => columnRefs.push(ref) }
                         key={index}
                     >
                         <b className="grid__table-header">
@@ -99,20 +119,10 @@ const Grid = ({ grid }) => {
                         </b>
                         {columnSortable[index]
                             ?   <div className="grid__sortable-icons">
-                                    <div className={`
-                                        grid__arrow
-                                        ${title}-arrow
-                                        ${title}-c${index}-arrow 
-        
-                                    `}>
+                                    <div className="grid__arrow">
                                         &#9650;
                                     </div>
-                                    <div className={`
-                                        grid__arrow
-                                        ${title}-arrow
-                                        ${title}-c${index}-arrow 
-                                        ${index === 1 && 'grid__hidden-arrow'}
-                                    `}>
+                                    <div className={`grid__arrow ${index === 1 ? 'grid__hidden-arrow' : ""}`}>
                                         &#9660;
                                     </div>
                                 </div>

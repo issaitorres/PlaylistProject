@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
 import axios from 'axios'
@@ -9,14 +9,14 @@ import "./DiscoverPlaylist.css"
 const DiscoverPlaylist = () => {
     const [cookies] = useCookies(["access_token"])
     const [loader, setLoader] = useState(false)
+    const discoverPlaylistRef = useRef(null);
     const discoverPlaylistId = "3cT4tGoRr5eC3jGUZT5MTD"
     const navigate = useNavigate()
 
     const submitDiscoverPlaylist = async (event) => {
         event.preventDefault()
 
-        const discoverPlaylistElement = document.getElementById("discoverPlaylist")
-        discoverPlaylistElement.classList.add("discover-loading");
+        discoverPlaylistRef.current.classList.add("discover-loading");
         setLoader(true)
         
         // compare with localstorage
@@ -56,7 +56,7 @@ const DiscoverPlaylist = () => {
     <div className="discover">
         <h2> Try submitting a playlist! </h2>
         <div className="dp-container">
-            <button id="discoverPlaylist" className="discover-playlist" onClick={submitDiscoverPlaylist}>
+            <button ref={discoverPlaylistRef} className="discover-playlist" onClick={submitDiscoverPlaylist}>
                 <div className='discover-main'>
                     <div>
                         <img src={albumCover} alt="discoveralbumart" width="175px" height="175px" />

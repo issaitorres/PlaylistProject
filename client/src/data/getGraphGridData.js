@@ -22,7 +22,6 @@ const getGraphGridData = (artistSongsInfo, genreSongs, yearSongs ) => {
                     headers: ["Artist", "# of songs", "Songs"],
                     columnSortable: [true, true, false],
                     columnValues: ["artistName", "trackCount", "trackNames"],
-                    initialSort: ["colTwoValue", "Number"],
                     initiallySortByColumn: 1 // 0 indexed columns
                 }
             },
@@ -47,7 +46,6 @@ const getGraphGridData = (artistSongsInfo, genreSongs, yearSongs ) => {
                     headers: ["Genre", "# of songs", "Songs", "Artists"],
                     columnSortable: [true, true, false, false],
                     columnValues: ["useKey", "trackCount", "trackNames", "trackArtists"],
-                    initialSort: ["colTwoValue", "Number"],
                     initiallySortByColumn: 1 // 0 indexed columns
 
                 }
@@ -73,7 +71,6 @@ const getGraphGridData = (artistSongsInfo, genreSongs, yearSongs ) => {
                     headers: ["Year", "# of songs", "Songs"],
                     columnSortable: [true, true, false],
                     columnValues: ["useKey", "trackCount", "trackNames"],
-                    initialSort: ["colTwoValue", "Number"],
                     initiallySortByColumn: 1 // 0 indexed columns
 
                 }
@@ -99,7 +96,6 @@ const getGraphGridData = (artistSongsInfo, genreSongs, yearSongs ) => {
                     headers: ["Artist", "Popularity", "# of songs"],
                     columnSortable: [true, true, true],
                     columnValues: ["artistName", "artistPopularity", "trackCount"],
-                    initialSort: ["colTwoValue", "Number"],
                     initiallySortByColumn: 1 // 0 indexed columns
 
                 }

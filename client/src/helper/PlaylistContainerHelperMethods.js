@@ -30,7 +30,7 @@ const convertMStoFormat = (durationInMs, keepSeconds=false, simplifyAbbreviation
 
 const getArtistSongsInfo = (trackTable) => {
     var artistSongsInfo = {}
-    for(const [trackID, trackInfo] of Object.entries(trackTable)) {
+    for(const [ , trackInfo] of Object.entries(trackTable)) {
         for(const artistInfo of Object.values(trackInfo.trackArtists)) {
             if(artistSongsInfo[artistInfo.id]) {
                 artistSongsInfo[artistInfo.id].trackCount += 1
@@ -53,7 +53,10 @@ const getArtistSongsInfo = (trackTable) => {
 // set artists related to genres here!!!!!
 const getGenreSongs = (trackTable) => {
     var genreSongs = {}
-    for(const [trackID, trackInfo] of Object.entries(trackTable)) {
+    var trackNamesSet = new Set()
+    var trackArtistsSet = new Set()
+
+    for(const [ , trackInfo] of Object.entries(trackTable)) {
         for (const artistInfo of Object.values(trackInfo.trackArtists)) {
             for (const genre of artistInfo.artistGenres) {
                 if(genreSongs[genre]) {
@@ -61,10 +64,9 @@ const getGenreSongs = (trackTable) => {
                     Object.values(trackInfo.trackArtists).map((artistInfo) => genreSongs[genre].trackArtists.add(artistInfo.name))
 
                 } else {
-                    var trackNamesSet = new Set()
+                    trackNamesSet.clear()
+                    trackArtistsSet.clear()
                     trackNamesSet.add(trackInfo.trackName)
-
-                    var trackArtistsSet = new Set()
                     Object.values(trackInfo.trackArtists).map((artistInfo) => trackArtistsSet.add(artistInfo.name))
 
                     genreSongs[genre] = {
@@ -77,7 +79,7 @@ const getGenreSongs = (trackTable) => {
         }
     }
 
-    for(const [genre, genreInfo] of Object.entries(genreSongs)) {
+    for(const [ , genreInfo] of Object.entries(genreSongs)) {
         genreInfo["trackCount"] = genreInfo.trackNames.size
         genreInfo.trackNames = Array.from(genreInfo.trackNames)
         genreInfo.trackArtists = Array.from(genreInfo.trackArtists)
@@ -89,7 +91,7 @@ const getGenreSongs = (trackTable) => {
 
 const getYearSongs = (trackTable) => {
     var yearSongs = {}
-    for(const [trackID, trackInfo] of Object.entries(trackTable)) {
+    for(const [ , trackInfo] of Object.entries(trackTable)) {
         if(yearSongs[trackInfo.album.albumReleaseYear]) {
             yearSongs[trackInfo.album.albumReleaseYear].trackCount += 1
             yearSongs[trackInfo.album.albumReleaseYear].trackNames.push(trackInfo.trackName)
@@ -129,7 +131,7 @@ const groupTopItemsByTrackcount = (itemSongs, returnType=null) => {
 
 const getShortestTrack = (trackTable) => {
     var trackObject = {}
-    for(const [track, trackInfo] of Object.entries(trackTable)) {
+    for(const [ , trackInfo] of Object.entries(trackTable)) {
         if (trackObject?.trackDuration){
             if(trackInfo.trackDuration < trackObject.trackDuration) {
                 trackObject = trackInfo
@@ -144,7 +146,7 @@ const getShortestTrack = (trackTable) => {
 
 const getLongestTrack = (trackTable) => {
     var trackObject = {}
-    for(const [track, trackInfo] of Object.entries(trackTable)) {
+    for(const [ , trackInfo] of Object.entries(trackTable)) {
         if (trackObject?.trackDuration){
             if(trackInfo.trackDuration > trackObject.trackDuration) {
                 trackObject = trackInfo
@@ -161,7 +163,7 @@ const getShortestDuration = (trackTable) => {
     var duration
     var name
 
-    for(const [track, trackInfo] of Object.entries(trackTable)) {
+    for(const [ , trackInfo] of Object.entries(trackTable)) {
     if (duration){
         if(trackInfo.trackDuration < duration) {
             duration = trackInfo.trackDuration
@@ -180,7 +182,7 @@ const getLongestDuration = (trackTable) => {
     var duration
     var name
 
-    for(const [track, trackInfo] of Object.entries(trackTable)) {
+    for(const [ , trackInfo] of Object.entries(trackTable)) {
         if (duration){
             if(trackInfo.trackDuration > duration) {
             duration = trackInfo.trackDuration
@@ -197,7 +199,7 @@ const getLongestDuration = (trackTable) => {
 // only energy, dancibility.. for now
 const getAverageField = (fieldName, trackTable) => {
     var average = 0
-    for(const [track, trackInfo] of Object.entries(trackTable)) {
+    for(const [ , trackInfo] of Object.entries(trackTable)) {
         average += trackInfo[fieldName]
     }
     return (average/Object.keys(trackTable).length).toFixed(2)
@@ -233,7 +235,7 @@ const getHighestLowestField = (fieldName, trackTable) => {
 
     }
 
-    for(const [track, trackInfo] of Object.entries(trackTable)) {
+    for(const [ , trackInfo] of Object.entries(trackTable)) {
         if(highestLowest["highestScore"] == null) {
             setHighestScoreNameArtist(trackInfo[fieldName], trackInfo.trackName, trackInfo.trackArtists, trackInfo.album.albumImage )
         } else {
