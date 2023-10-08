@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { sortNumerically, sortAlphabetically } from "../../helper/TableColumnHelperMethods"
+import { toggleSortArrows } from "../../helper/globalGridHelperMethods"
 import "./Grid.css"
 
 const Grid = ({ grid }) => {
@@ -61,7 +62,8 @@ const Grid = ({ grid }) => {
         
         setDataArray(sorted)
         setColumnToggles(update)
-        toggleSortArrows(columnIndex)
+        toggleSortArrows(columnIndex, columnRefs, columnToggles, "grid__sortable-icons", " grid__hidden-arrow")
+
     }
 
     const determineColumnTypeAndSort = (columnType, dataArray, columnToggle, colVal) => {
@@ -71,34 +73,6 @@ const Grid = ({ grid }) => {
             return sortNumerically(dataArray, columnToggle, colVal)
         } else { //array
             return null
-        }
-    }
-
-    const toggleSortArrows = (index) => {
-        for(const [refIndex, ref] of Object.entries(columnRefs)) {
-            if(refIndex === index) {
-                // handle switching the arrows for column that was clicked
-                for(const [ , child] of Object.entries(ref.children)) {
-                    if(child.className.includes("grid__sortable-icons")) {
-                        if(columnToggles[index] && columnToggles[index] !== null && columnToggles[index] !== undefined) {
-                            child.children[0].className += " grid__hidden-arrow"
-                            child.children[1].className = child.children[1].className.replaceAll("grid__hidden-arrow", "");
-                        } else {
-                            child.children[1].className += " grid__hidden-arrow"
-                            child.children[0].className = child.children[0].className.replaceAll("grid__hidden-arrow", "");
-                        }
-                    }
-                }
-            } else {
-                // handle clearing the arrows for other columns
-                for(const [ , child] of Object.entries(ref.children)) {
-                    if(child.className.includes("grid__sortable-icons")) {
-                        for(const innerChild of child.children) {
-                            innerChild.className = innerChild.className.replaceAll("grid__hidden-arrow", "");
-                        }
-                    }
-                }
-            }
         }
     }
 

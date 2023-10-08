@@ -53,26 +53,24 @@ const getArtistSongsInfo = (trackTable) => {
 // set artists related to genres here!!!!!
 const getGenreSongs = (trackTable) => {
     var genreSongs = {}
-    var trackNamesSet = new Set()
-    var trackArtistsSet = new Set()
+    var trackNamesSet
+    var trackArtistsSet
 
     for(const [ , trackInfo] of Object.entries(trackTable)) {
         for (const artistInfo of Object.values(trackInfo.trackArtists)) {
+            trackNamesSet = new Set()
+            trackArtistsSet = new Set()
             for (const genre of artistInfo.artistGenres) {
                 if(genreSongs[genre]) {
                     genreSongs[genre].trackNames.add(trackInfo.trackName)
                     Object.values(trackInfo.trackArtists).map((artistInfo) => genreSongs[genre].trackArtists.add(artistInfo.name))
 
                 } else {
-                    trackNamesSet.clear()
-                    trackArtistsSet.clear()
                     trackNamesSet.add(trackInfo.trackName)
                     Object.values(trackInfo.trackArtists).map((artistInfo) => trackArtistsSet.add(artistInfo.name))
-
                     genreSongs[genre] = {
                         "trackNames": trackNamesSet,
                         "trackArtists": trackArtistsSet
-
                     }
                 }
             }

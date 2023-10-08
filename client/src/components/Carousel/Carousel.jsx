@@ -37,7 +37,7 @@ const Carousel = ({
 
     const activeSlide = (slideIndex) => {
         for(const [refIndex, ref] of Object.entries(buttonRefs)) {
-            if(refIndex === slideIndex) {
+            if(Number(refIndex) === slideIndex) {
                 if(!ref.className.includes("carousel__button-active")) {
                     ref.className += " carousel__button-active"
                 }

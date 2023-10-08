@@ -4,6 +4,7 @@ import { faPause, faPlay } from '@fortawesome/free-solid-svg-icons'
 import getTrackDataColumnHeaders from '../../data/getTrackDataColumnHeaders'
 import { sortNumerically, sortAlphabetically } from '../../helper/TableColumnHelperMethods'
 import { trackTableConversions, toggleSound } from "../../helper/TrackTableHelperMethods"
+import { toggleSortArrows } from "../../helper/globalGridHelperMethods"
 import "./TrackGrid.css"
 
 
@@ -12,6 +13,7 @@ const TrackGrid = ({ trackTable, playlistDuplicates }) => {
     const [dataArray, setDataArray] = useState([])
     const columnHeaders = getTrackDataColumnHeaders()
     const columnRefs = []
+    const soundRefs = {}
 
     const determineColTypeAndSort = (colType, dataArray, columnToggle, colVal) => {
         if(colType === "string") {
@@ -34,38 +36,11 @@ const TrackGrid = ({ trackTable, playlistDuplicates }) => {
         var sampleVal = dataArray[0][headKeyName]
         const sorted = determineColTypeAndSort(typeof(sampleVal), dataArray, update[index], headKeyName)
         setDataArray(sorted)
-        updateSortArrows(index)
+        toggleSortArrows(index, columnRefs, columnToggles, "trackgrid__sortable-icons", " trackgrid__hidden-arrow")
         update[index] = !update[index]
         setColumnToggles(update)
     }
 
-    const updateSortArrows = (index) => {
-        for(const [refIndex, ref] of Object.entries(columnRefs)) {
-            if(refIndex === index) {
-                // handle switching the arrows for column that was clicked
-                for(const [ , child] of Object.entries(ref.children)) {
-                    if(child.className.includes("trackgrid__sortable-icons")) {
-                        if(columnToggles[index] && columnToggles[index] !== null && columnToggles[index] !== undefined) {
-                            child.children[0].className += " trackgrid__hidden-arrow"
-                            child.children[1].className = child.children[1].className.replaceAll("trackgrid__hidden-arrow", "");
-                        } else {
-                            child.children[1].className += " trackgrid__hidden-arrow"
-                            child.children[0].className = child.children[0].className.replaceAll("trackgrid__hidden-arrow", "");
-                        }
-                    }
-                }
-            } else {
-                // handle clearing the arrows for other columns
-                for(const [ , child] of Object.entries(ref.children)) {
-                    if(child.className.includes("trackgrid__sortable-icons")) {
-                        for(const innerChild of child.children) {
-                            innerChild.className = innerChild.className.replaceAll("trackgrid__hidden-arrow", "");
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     useEffect(() => {
         var initialDataArray=[]
@@ -162,7 +137,7 @@ const TrackGrid = ({ trackTable, playlistDuplicates }) => {
                 </div>
             ))}
 
-            {dataArray.map((info) => {
+            {dataArray.map((info, rowIndex) => {
                 return (
                     Object.values(columnHeaders).map((head, index) => {
                         var value = trackTableConversions(info[head.keyName], head.convertType)
@@ -198,16 +173,18 @@ const TrackGrid = ({ trackTable, playlistDuplicates }) => {
                                     }
                                     {
                                         index === 1 && info.trackPreview &&
-                                            <div className="trackgrid__audio-container">
+                                            <div className="trackgrid__audio-container" ref={ref => soundRefs[rowIndex] = ref}>
+                                            {/* <div className="trackgrid__audio-container" ref={ref => soundRefs.push(ref)}> */}
                                                 <button
-                                                    onClick={(e) => toggleSound(e)}
+                                                    // onClick={() => test(rowIndex)}
+                                                    onClick={() => toggleSound(rowIndex, soundRefs)}
                                                     className="trackgrid__audio-button"
                                                 >
                                                     <FontAwesomeIcon icon={faPlay} />
                                                     <FontAwesomeIcon className="trackgrid__hidden-button" icon={faPause} />
                                                 </button>
                                                 <audio
-                                                    id={`${index}-player`}
+                                                    id={`${rowIndex}-player`}
                                                     src={info.trackPreview}
                                                 ></audio>
                                             </div>

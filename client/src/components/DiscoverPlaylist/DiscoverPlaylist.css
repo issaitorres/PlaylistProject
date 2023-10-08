@@ -1,10 +1,10 @@
-.discover {
+.discoverplaylist__container {
     margin: 10px auto;
     max-width: 400px;
     text-align: center;
 }
 
-.discover-playlist {
+.discoverplaylist__button {
     display: flex;
     flex-direction: column;
     border: 1px solid black;
@@ -14,12 +14,12 @@
     position: relative;
 }
 
-.discover-playlist:hover {
+.discoverplaylist__button:hover {
     background-color: var(--default-green);
     cursor: pointer;
 } 
 
-.discover-main {
+.discoverplaylist__main {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -27,21 +27,16 @@
     padding: 5px;
 }
 
-.discover-main div {
+.discoverplaylist__main div {
     margin: 0px 10px;
     text-align: left;
 }
 
-.discover-loader {
+.discoverplaylist__loader {
     position: relative;
     bottom: 110px;
 }
 
-.discover-hidden {
-    visibility: visible;
-}
-
-.discover-loading {
+.discoverplaylist__loading {
     filter: brightness(0.4);
 }
-

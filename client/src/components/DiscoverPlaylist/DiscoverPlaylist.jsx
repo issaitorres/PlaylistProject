@@ -16,7 +16,7 @@ const DiscoverPlaylist = () => {
     const submitDiscoverPlaylist = async (event) => {
         event.preventDefault()
 
-        discoverPlaylistRef.current.classList.add("discover-loading");
+        discoverPlaylistRef.current.classList.add("discoverplaylist__loading");
         setLoader(true)
         
         // compare with localstorage
@@ -53,11 +53,11 @@ const DiscoverPlaylist = () => {
     }
 
   return (
-    <div className="discover">
+    <div className="discoverplaylist__container">
         <h2> Try submitting a playlist! </h2>
-        <div className="dp-container">
-            <button ref={discoverPlaylistRef} className="discover-playlist" onClick={submitDiscoverPlaylist}>
-                <div className='discover-main'>
+        <div>
+            <button ref={discoverPlaylistRef} className="discoverplaylist__button" onClick={submitDiscoverPlaylist}>
+                <div className='discoverplaylist__main'>
                     <div>
                         <img src={albumCover} alt="discoveralbumart" width="175px" height="175px" />
                     </div>
@@ -72,7 +72,7 @@ const DiscoverPlaylist = () => {
                     </div>
                 </div>
             </button>
-            <div className={`discover-loader ${loader && 'loader'}`}></div>
+            <div className={`discoverplaylist__loader ${loader && 'loader'}`}></div>
         </div>
     </div>
   )
