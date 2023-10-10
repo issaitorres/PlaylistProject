@@ -6,6 +6,7 @@ import {
   getArtistSongsInfo,
   getGenreSongs,
   getYearSongs,
+  filterTracktable
 } from "../../helper/PlaylistContainerHelperMethods"
 import TrackGrid from '../TrackGrid/TrackGrid';
 import Carousel from '../Carousel/Carousel';
@@ -25,11 +26,13 @@ const PlaylistContainer = ({ playlist, refreshPlaylist }) => {
     playlistOwner,
     playlistImage,
     playlistDuplicates,
+    missingTracks,
     trackTable
   } = playlist
-  var artistSongsInfo = getArtistSongsInfo(trackTable)
-  var genreSongs = getGenreSongs(trackTable)
-  var yearSongs = getYearSongs(trackTable)
+  var filteredTracktable = filterTracktable(trackTable) // remove missing tracks
+  var artistSongsInfo = getArtistSongsInfo(filteredTracktable)
+  var genreSongs = getGenreSongs(filteredTracktable)
+  var yearSongs = getYearSongs(filteredTracktable)
 
 
   const removePlaylist = async (playlistObjectId) => {
@@ -72,10 +75,11 @@ const PlaylistContainer = ({ playlist, refreshPlaylist }) => {
           artistSongsInfo={artistSongsInfo}
           genreSongs={genreSongs}
           playlistDuplicates={playlistDuplicates}
+          missingTracks={missingTracks}
           playlistImage={playlistImage}
           playlistName={playlistName}
           playlistOwner={playlistOwner}
-          trackTable={trackTable}
+          trackTable={filteredTracktable}
           yearSongs={yearSongs}
           refreshPlaylist={refreshPlaylist}
         />
@@ -83,13 +87,14 @@ const PlaylistContainer = ({ playlist, refreshPlaylist }) => {
       <div className="flex-container">
         <Carousel 
           graphGridData={getGraphGridData(artistSongsInfo, genreSongs, yearSongs)}
-          trackTable={trackTable}
+          trackTable={filteredTracktable}
         />
       </div>
       <div className="flex-container">
         <TrackGrid
           playlistDuplicates={playlistDuplicates}
-          trackTable={trackTable}
+          missingTracks={missingTracks}
+          trackTable={trackTable} // original tracktable
         />
       </div>
       <div className='flex-container'>

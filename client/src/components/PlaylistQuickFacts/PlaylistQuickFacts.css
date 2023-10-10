@@ -1,4 +1,4 @@
-.quickfacts-section {
+.quickfacts__section {
     margin: 15px 10px;
     padding: 0px 10px;
     display: flex;
@@ -9,41 +9,67 @@
     max-width: 400px;
 }
   
-.quickfacts-section-header {
+.quickfacts__section-header {
     padding: 15px 0px
 }
   
-.quickfacts-section-playlist-title {
+.quickfacts__section-playlist-title {
     margin: 9px 0px 0px 0px;
 }
 
-.quickfacts-section-playlist-author{
+.quickfacts__section-playlist-author {
     margin-bottom: 10px;
 }
 
-.quickfacts-refresh-corner {
+.quickfacts__fact-container {
+    position: relative;
+    transition: all 0.3s ease-in-out;
+}
+
+.quickfacts__fact-container .tooltiptext {
+    left: 5%;
+}
+
+.quickfacts__fact-container .tooltiptext::after {
+    content: " ";
+    position: absolute;
+    top: 100%; /* At the bottom of the tooltip */
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: black transparent transparent transparent;
+    opacity: 1;
+}
+
+.quickfacts__fact-container:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+.quickfacts__refresh-corner {
     position: absolute;
     bottom: 10px;
     right: 10px;
-    pointer-events: auto !important;
     cursor: pointer;
 }
 
-.quickfacts-refresh-corner:hover {
+.quickfacts__refresh-corner:hover {
     color: green;
 }
 
-.quickfacts-refresh-corner .quickfacts-refresh-text {
+.quickfacts__refresh-corner .quickfacts__refresh-text {
     text-decoration: underline;
 }
 
-.quickfacts-refresh-tooltip {
+.quickfacts__refresh-tooltip {
     position: relative;
     display: inline-block;
     transition: all 0.3s ease-in-out;
 }
 
-.quickfacts-refresh-tooltip .tooltiptext {
+.tooltiptext {
+/* .quickfacts-refresh-tooltip .tooltiptext { */
     visibility: hidden;
     width: 120px;
     background-color: var(--default-midnight);
@@ -67,7 +93,7 @@
     margin-left: -80px; /* Use half of the width (120/2 = 60), to center the tooltip */
 }
 
-.quickfacts-refresh-tooltip .tooltiptext::after {
+.quickfacts__refresh-tooltip .tooltiptext::after {
     content: " ";
     position: absolute;
     top: 100%; /* At the bottom of the tooltip */
@@ -79,12 +105,8 @@
     opacity: 1;
 }
 
-.quickfacts-refresh-icon:hover {
-    cursor: pointer;
-}
-
 /* Show the tooltip text when you mouse over the tooltip container */
-.quickfacts-refresh-tooltip:hover .tooltiptext {
+.quickfacts__refresh-tooltip:hover .tooltiptext {
     visibility: visible;
     opacity: 1;
 }

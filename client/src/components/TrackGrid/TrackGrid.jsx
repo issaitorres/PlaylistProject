@@ -5,10 +5,11 @@ import getTrackDataColumnHeaders from '../../data/getTrackDataColumnHeaders'
 import { sortNumerically, sortAlphabetically } from '../../helper/TableColumnHelperMethods'
 import { trackTableConversions, toggleSound } from "../../helper/TrackTableHelperMethods"
 import { toggleSortArrows } from "../../helper/globalGridHelperMethods"
+import missingAlbumImage from "../../Assets/missing-album-image.png"
 import "./TrackGrid.css"
 
 
-const TrackGrid = ({ trackTable, playlistDuplicates }) => {
+const TrackGrid = ({ trackTable, playlistDuplicates, missingTracks }) => {
     const [columnToggles, setColumnToggles] = useState([])
     const [dataArray, setDataArray] = useState([])
     const columnHeaders = getTrackDataColumnHeaders()
@@ -57,9 +58,9 @@ const TrackGrid = ({ trackTable, playlistDuplicates }) => {
                             )),
                 "genres": Array.from(new Set(Object.values(trackInfo.trackArtists)
                             .map((artistInfo) => {
-                                var genres = artistInfo.artistGenres
-                                 if (genres.length > 0) return genres
-                                 return ["unknown"]
+                                var genres = artistInfo?.artistGenres
+                                if (genres?.length > 0) return genres
+                                return ["unknown"]
                             })
                             .reduce((acc, currArray) => acc.concat(currArray))))
                             .join(', '),
@@ -95,21 +96,30 @@ const TrackGrid = ({ trackTable, playlistDuplicates }) => {
             </h2>
             <div>
                 {/* come back here and check: playlistDuplicates != {} - maybe this can never possibly happen  */}
-                {playlistDuplicates?.duplicateCount === 0 || playlistDuplicates != {}
-                    ? "This playlist contains no duplicate tracks."
-                    : <div>
+                {
+                    playlistDuplicates?.duplicateCount === 0
+                        ?
+                            "This playlist contains no duplicate tracks."
+                        :
                             <div>
-                                Duplicate Tracks
+                                <div>
+                                    Duplicate Tracks
+                                </div>
+                                <ul>
+                                    {Object.values(playlistDuplicates.duplicateTracks).map((trackValues, index) => {
+                                        return (
+                                            <li key={index}>
+                                                {trackValues.title}  -  # {trackValues.positions.join(', ')}
+                                            </li>
+                                        )
+                                    })}
+                                </ul>
                             </div>
-                            <ul>
-                                {Object.values(playlistDuplicates.duplicateTracks).map((trackValues, index) => {
-                                    return (
-                                        <li key={index}>
-                                            {trackValues.title}  -  # {trackValues.positions.join(', ')}
-                                        </li>
-                                    )
-                                })}
-                            </ul>
+                }
+                {
+                    missingTracks?.length > 0 &&
+                        <div>
+                            The following tracks songs were omitted from the analysis because of missing information: # {missingTracks.join(', ')}
                         </div>
                 }
             </div>
@@ -169,14 +179,17 @@ const TrackGrid = ({ trackTable, playlistDuplicates }) => {
                                                 </div>
                                     }
                                     {
-                                        index === 0 && <img src={info.albumArt} alt="albumimage" width="65px" height="65px"/>
+                                        index === 0 &&
+                                            (
+                                                info.albumArt
+                                                    ? <img src={info.albumArt} alt="albumimage" width="65px" height="65px"/>
+                                                    : <img src={missingAlbumImage} alt="albumimage" width="65px" height="65px"/>
+                                            )
                                     }
                                     {
                                         index === 1 && info.trackPreview &&
                                             <div className="trackgrid__audio-container" ref={ref => soundRefs[rowIndex] = ref}>
-                                            {/* <div className="trackgrid__audio-container" ref={ref => soundRefs.push(ref)}> */}
                                                 <button
-                                                    // onClick={() => test(rowIndex)}
                                                     onClick={() => toggleSound(rowIndex, soundRefs)}
                                                     className="trackgrid__audio-button"
                                                 >

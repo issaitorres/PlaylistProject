@@ -20,6 +20,9 @@ const playlistSchema = new mongoose.Schema(
             type: Map,
             of: mongoose.Schema.Types.Mixed
         },
+        missingTracks: [{
+            type: Number
+        }],
         trackTable: {
             type: Array,
             of: mongoose.Schema.Types.Mixed

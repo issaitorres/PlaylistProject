@@ -37,6 +37,7 @@ const addPlaylist = async (req, res) => {
                 totalTracks: playlistInfo.totalTracks,
                 snapshotId: playlistInfo.snapshotId,
                 playlistDuplicates: playlistInfo.duplicates,
+                missingTracks: playlistInfo.missingTracks,
                 trackTable: playlistInfo.trackTable
             })
 
@@ -48,6 +49,7 @@ const addPlaylist = async (req, res) => {
                 playlistOwner: playlistObject.playlistOwner,
                 playlistImage: playlistObject.playlistImage,
                 playlistDuplicates: playlistObject.playlistDuplicates,
+                missingTracks: playlistInfo.missingTracks,
                 trackTable: playlistObject.trackTable
             }
 
@@ -97,6 +99,7 @@ const refreshPlaylist = async (req, res) => {
                 totalTracks: playlistInfo.totalTracks,
                 snapshotId: playlistInfo.snapshotId,
                 playlistDuplicates: playlistInfo.duplicates,
+                missingTracks: playlistInfo.missingTracks,
                 trackTable: playlistInfo.trackTable
             })
 
@@ -108,6 +111,7 @@ const refreshPlaylist = async (req, res) => {
                 playlistOwner: playlistInfo.playlistOwner,
                 playlistImage: playlistInfo.playlistImage,
                 playlistDuplicates: playlistInfo.duplicates,
+                missingTracks: playlistInfo.missingTracks,
                 trackTable: playlistInfo.trackTable
             }
 

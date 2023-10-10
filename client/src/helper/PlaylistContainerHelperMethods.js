@@ -60,17 +60,18 @@ const getGenreSongs = (trackTable) => {
         for (const artistInfo of Object.values(trackInfo.trackArtists)) {
             trackNamesSet = new Set()
             trackArtistsSet = new Set()
-            for (const genre of artistInfo.artistGenres) {
-                if(genreSongs[genre]) {
-                    genreSongs[genre].trackNames.add(trackInfo.trackName)
-                    Object.values(trackInfo.trackArtists).map((artistInfo) => genreSongs[genre].trackArtists.add(artistInfo.name))
-
-                } else {
-                    trackNamesSet.add(trackInfo.trackName)
-                    Object.values(trackInfo.trackArtists).map((artistInfo) => trackArtistsSet.add(artistInfo.name))
-                    genreSongs[genre] = {
-                        "trackNames": trackNamesSet,
-                        "trackArtists": trackArtistsSet
+            if(artistInfo.id !== null) {
+                for (const genre of artistInfo.artistGenres) {
+                    if(genreSongs[genre]) {
+                        genreSongs[genre].trackNames.add(trackInfo.trackName)
+                        Object.values(trackInfo.trackArtists).map((artistInfo) => genreSongs[genre].trackArtists.add(artistInfo.name))
+                    } else {
+                        trackNamesSet.add(trackInfo.trackName)
+                        Object.values(trackInfo.trackArtists).map((artistInfo) => trackArtistsSet.add(artistInfo.name))
+                        genreSongs[genre] = {
+                            "trackNames": trackNamesSet,
+                            "trackArtists": trackArtistsSet
+                        }
                     }
                 }
             }
@@ -270,6 +271,12 @@ const getHighestLowestField = (fieldName, trackTable) => {
     }
 }
 
+// remove tracks with missing information from analysis
+const filterTracktable = (tracktable) => {
+    const newTrackTable = tracktable.filter((trackInfo) => trackInfo.trackId !== null)
+    return newTrackTable
+}
+
 
 export {
     convertMStoFormat,
@@ -283,5 +290,6 @@ export {
     getLongestTrack,
     getAverageField,
     getHighestLowestField,
-    isInViewport
+    isInViewport,
+    filterTracktable
 }

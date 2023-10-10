@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faRefresh } from '@fortawesome/free-solid-svg-icons'
+import { faRefresh, faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 import {
     convertMStoFormat,
     groupTopItemsByTrackcount,
@@ -13,6 +13,7 @@ const PlaylistQuickFacts = ({
     playlistName, 
     playlistOwner,
     playlistDuplicates,
+    missingTracks,
     artistSongsInfo, 
     genreSongs,
     yearSongs,
@@ -20,14 +21,16 @@ const PlaylistQuickFacts = ({
     refreshPlaylist
 }) => {
 
-    const trackCount = Object.keys(trackTable).length
+    // missingTracks ternary works with existing playlists in prod database
+    // missingTracks?.length would work find otherwise
+    const trackCount = Object.keys(trackTable).length + (missingTracks ? missingTracks?.length : 0)
     const artistCount = Object.keys(artistSongsInfo).length
     const topArtists = groupTopItemsByTrackcount(artistSongsInfo, "artistName")
     const topGenres = groupTopItemsByTrackcount(genreSongs)
     const topYears = groupTopItemsByTrackcount(yearSongs)
     const totalPlaylistDuration = Object.values(trackTable).map((track) => track.trackDuration).reduce((acc, val) => acc + val)
     const avgTrackDuration = totalPlaylistDuration / trackCount
-    const totalBPM = Object.values(trackTable).map((track) => track.trackTempo).reduce((acc, val) => acc + val)
+    const totalBPM = Object.values(trackTable).map((track) => track.trackTempo ? track.trackTempo : 0).reduce((acc, val) => acc + val)
     const avgBPM = Math.ceil(totalBPM / trackCount)
 
     const [refresh, setRefresh] = useState(false)
@@ -39,18 +42,18 @@ const PlaylistQuickFacts = ({
 
   return (
     <>
-        <div className="quickfacts-section">
+        <div className="quickfacts__section">
             <img src={playlistImage} alt="playlist" height="350" width="350"/>
         </div>
-        <div className="quickfacts-section">
+        <div className="quickfacts__section">
             <div>
-                <div className="quickfacts-section-header">
+                <div className="quickfacts__section-header">
                     <div>
-                        <h2 className="quickfacts-section-playlist-title">
+                        <h2 className="quickfacts__section-playlist-title">
                             {playlistName}
                         </h2>
                     </div>
-                    <div className='quickfacts-section-playlist-author'>
+                    <div className='quickfacts__section-playlist-author'>
                         by <b>{playlistOwner}</b>
                     </div>
                 </div>
@@ -70,22 +73,36 @@ const PlaylistQuickFacts = ({
                     <label> Total Duration: </label> <span><b>{convertMStoFormat(totalPlaylistDuration)}</b></span>
                 </div>
                 <div>
-                    <label> Avg. Track length: </label> <span><b>{convertMStoFormat(avgTrackDuration)}</b></span>
+                    <label> Avg. Track Duration: </label> <span><b>{convertMStoFormat(avgTrackDuration)}</b></span>
                 </div>
                 <div>
                     <label> Avg. BPM: </label> <span><b>{avgBPM}</b></span>
                 </div>
-                <div>
+                <div className="quickfacts__fact-container">
+                    <span className="tooltiptext">
+                        Learn more below in the Track Table.
+                    </span>
+                    <FontAwesomeIcon icon={faCircleInfo} className="quickfacts__more-info"/>
                     <label> Duplicate Tracks: </label> <span><b>{playlistDuplicates.duplicateCount}</b></span>
                 </div>
+                {
+                    missingTracks?.length > 0 &&
+                    <div className="quickfacts__fact-container">
+                        <span className="tooltiptext">
+                            Learn more below in the Track Table.
+                        </span>
+                        <FontAwesomeIcon icon={faCircleInfo} className="quickfacts__more-info"/>
+                        <label> Missing Tracks: </label> <span><b>{missingTracks.length}</b></span>
+                    </div>
+                }
+
             </div>
         </div>
-        <div className="quickfacts-refresh-corner" onClick={() => getRefreshData()}>
-            <span className="quickfacts-refresh-tooltip">
-                <span className="quickfacts-refresh-text">Outdated Playlist?</span>
+        <div className="quickfacts__refresh-corner" onClick={() => getRefreshData()}>
+            <span className="quickfacts__refresh-tooltip">
+                <span className="quickfacts__refresh-text">Outdated Playlist?</span>
                 &nbsp;
                 <span className="tooltiptext">
-                    Playlists are updated all the time.
                     If this information looks outdated, click here to get the latest version!
                 </span>
                 &nbsp;
