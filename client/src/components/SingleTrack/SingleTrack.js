@@ -1,13 +1,15 @@
+import AlbumArtAudio from '../AlbumArtAudio/AlbumArtAudio'
 import './SingleTrack.css'
 
-const SingleTrack = ({ albumImage, score, title, artist}) => {
+const SingleTrack = ({ track }) => {
+
   return (
     <div className="singletrack__grid">
       <div className="singletrack__grid-item">
-        <img src={albumImage} alt="albumimage" width="95px" height="95px"/>
+        <AlbumArtAudio track={track} area={"audioFeatures"} size="95" />
       </div>
       <div className="singletrack__grid-item">
-        {title} by {artist}
+        {track.trackName} by {Object.values(track.trackArtists).map((artistInfo) => artistInfo.name).join(' & ') }
       </div>
     </div>
   )

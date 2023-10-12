@@ -55,6 +55,7 @@ N will also determine how high our offset needs to reach starting at 1*/
     /* COME BACK TO THIS AFTER DECIDING COLORS */
     background-color: #878787;
     border: 1px solid #646464;
+    z-index: 1;
 }
 
 .trackgrid__header-toggle-sort {
@@ -85,7 +86,7 @@ N will also determine how high our offset needs to reach starting at 1*/
     padding: 5px 0px;
 }
 
-.trackgrid__item > div > img{
+.trackgrid__item > div > div > img{
     padding: 5px;
 }
 
@@ -116,10 +117,6 @@ N will also determine how high our offset needs to reach starting at 1*/
     - specifically for Font Awesome Play and Pause icons */
 .trackgrid__audio-button [data-prefix='fas'] {
     pointer-events: none;
-}
-
-.trackgrid__hidden-button {
-    display: none;
 }
 
 audio::-webkit-media-controls-mute-button {

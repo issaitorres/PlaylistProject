@@ -37,3 +37,28 @@
 .shortestlongesttrack__right-track h2 {
     margin: 30px 0px 15px 0px;
 }
+
+.shortestlongesttrack__albumart-audio-container {
+    position: relative;
+    cursor: pointer;
+}
+
+.shortestlongesttrack__albumart-audio-container img {
+    display: block;
+}
+
+.shortestlongesttrack__albumart-audio-container button {
+    background:rgba(255,255,255, 0.5);
+    height: 30px;
+    width: 30px;
+    font-size: 15px;
+    border-radius: 50%;
+    text-align: center;
+    border: 2px solid black;
+}
+
+.shortestlongesttrack__albumart-audio-container .shortestlongesttrack__audio-container{
+    position: absolute;
+    bottom: 41%;
+    left: 39%;
+}

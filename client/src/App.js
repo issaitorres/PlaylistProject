@@ -10,6 +10,7 @@ import Error from './pages/404/error'
 import User from './pages/user/user'
 import Restricted from './pages/auth/Restricted'
 import Protected from "./pages/auth/Protected"
+import { AudioProvider } from "./AudioContext"
 import './App.css';
 
 
@@ -22,7 +23,9 @@ function App() {
           <Route path="/" element={<Home />} />
            <Route element={<Protected />}> {/* user must be logged in to access these pages */}
             <Route path="/logout" element={<Logout />} />
-            <Route path="/playlist/:id" element={<Playlist/>} />
+            <Route element={<AudioProvider />}>
+              <Route path="/playlist/:id" element={<Playlist/>} />
+            </Route>
             <Route path="/user" element={<User/>} />
           </Route>
           <Route element={<Restricted />}>{/* user cannot access these pages while logged in*/}

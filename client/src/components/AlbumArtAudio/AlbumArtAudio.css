@@ -1,0 +1,38 @@
+.albumartaudio__container {
+    position: relative;
+    cursor: pointer;
+}
+
+.albumartaudio__container {
+    position: relative;
+    cursor: pointer;
+    margin: 5px
+}
+
+.albumartaudio__container img {
+    display: block;
+    margin: 0px auto;
+}
+
+.albumartaudio__container button {
+    background:rgba(255,255,255, 0.5);
+    height: 30px;
+    width: 30px;
+    font-size: 15px;
+    border-radius: 50%;
+    text-align: center;
+    border: 2px solid black;
+    cursor: pointer;
+}
+
+.albumartaudio__container .albumartaudio__audio-container {
+    position: absolute;
+    bottom: 31%;
+    left: 33%;
+}
+
+.shortestlongeststyles .albumartaudio__audio-container {
+    bottom: 41%;
+    left: 41%;
+}
+

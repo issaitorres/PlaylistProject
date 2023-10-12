@@ -1,11 +1,9 @@
 import React, { useState, useEffect} from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPause, faPlay } from '@fortawesome/free-solid-svg-icons'
 import getTrackDataColumnHeaders from '../../data/getTrackDataColumnHeaders'
 import { sortNumerically, sortAlphabetically } from '../../helper/TableColumnHelperMethods'
-import { trackTableConversions, toggleSound } from "../../helper/TrackTableHelperMethods"
+import { trackTableConversions } from "../../helper/TrackTableHelperMethods"
 import { toggleSortArrows } from "../../helper/globalGridHelperMethods"
-import missingAlbumImage from "../../Assets/missing-album-image.png"
+import AlbumArtAudio from '../AlbumArtAudio/AlbumArtAudio'
 import "./TrackGrid.css"
 
 
@@ -14,7 +12,6 @@ const TrackGrid = ({ trackTable, playlistDuplicates, missingTracks }) => {
     const [dataArray, setDataArray] = useState([])
     const columnHeaders = getTrackDataColumnHeaders()
     const columnRefs = []
-    const soundRefs = {}
 
     const determineColTypeAndSort = (colType, dataArray, columnToggle, colVal) => {
         if(colType === "string") {
@@ -180,27 +177,7 @@ const TrackGrid = ({ trackTable, playlistDuplicates, missingTracks }) => {
                                     }
                                     {
                                         index === 0 &&
-                                            (
-                                                info.albumArt
-                                                    ? <img src={info.albumArt} alt="albumimage" width="65px" height="65px"/>
-                                                    : <img src={missingAlbumImage} alt="albumimage" width="65px" height="65px"/>
-                                            )
-                                    }
-                                    {
-                                        index === 1 && info.trackPreview &&
-                                            <div className="trackgrid__audio-container" ref={ref => soundRefs[rowIndex] = ref}>
-                                                <button
-                                                    onClick={() => toggleSound(rowIndex, soundRefs)}
-                                                    className="trackgrid__audio-button"
-                                                >
-                                                    <FontAwesomeIcon icon={faPlay} />
-                                                    <FontAwesomeIcon className="trackgrid__hidden-button" icon={faPause} />
-                                                </button>
-                                                <audio
-                                                    id={`${rowIndex}-player`}
-                                                    src={info.trackPreview}
-                                                ></audio>
-                                            </div>
+                                            <AlbumArtAudio track={info} size="80"/>
                                     }
                                 </div>
                             </div>
@@ -214,4 +191,3 @@ const TrackGrid = ({ trackTable, playlistDuplicates, missingTracks }) => {
 }
 
 export default TrackGrid
-

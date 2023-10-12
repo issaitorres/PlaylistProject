@@ -13,7 +13,7 @@ import "./carousel.css"
 
 const Carousel = ({ 
     trackTable,
-    graphGridData, 
+    graphGridData
 }) => {
     const [currentIndex, setCurrentIndex] = useState(0)
     const [activateAnimation, setActivateAnimation] = useState(false)

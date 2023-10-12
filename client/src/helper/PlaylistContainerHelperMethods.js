@@ -157,44 +157,6 @@ const getLongestTrack = (trackTable) => {
     return trackObject
 }
 
-
-const getShortestDuration = (trackTable) => {
-    var duration
-    var name
-
-    for(const [ , trackInfo] of Object.entries(trackTable)) {
-    if (duration){
-        if(trackInfo.trackDuration < duration) {
-            duration = trackInfo.trackDuration
-            name = trackInfo.trackName
-        }
-    } else {
-        duration = trackInfo.trackDuration
-        name = trackInfo.trackName
-    }
-    }
-    return [duration, name]
-}
-
-
-const getLongestDuration = (trackTable) => {
-    var duration
-    var name
-
-    for(const [ , trackInfo] of Object.entries(trackTable)) {
-        if (duration){
-            if(trackInfo.trackDuration > duration) {
-            duration = trackInfo.trackDuration
-            name = trackInfo.trackName
-            }
-        } else {
-            duration = trackInfo.trackDuration
-            name = trackInfo.trackName
-        }
-    }
-    return [duration, name]
-}
-
 // only energy, dancibility.. for now
 const getAverageField = (fieldName, trackTable) => {
     var average = 0
@@ -204,53 +166,30 @@ const getAverageField = (fieldName, trackTable) => {
     return (average/Object.keys(trackTable).length).toFixed(2)
 }
 
-// only energy, dancibility.. for now
-const getHighestLowestField = (fieldName, trackTable) => {
+const getHighestLowestTrack = (fieldName, trackTable) => {
     var highestLowest = {
-        "highestScore": null,
-        "highestName": "",
-        "highestArtist": "",
-        "lowestScore": null,
-        "lowestName": "",
-        "lowestArtist": "",
-    }
-
-    const setHighestScoreNameArtist = (score, name, artist, albumImage) => {
-        highestLowest["highestScore"] = score
-        highestLowest["highestName"] = name
-        highestLowest["highestArtist"] = Object.values(artist)
-                                            .map((artistInfo) => artistInfo.name)
-                                            .join(' & ')
-        highestLowest["highestAlbumImage"] = albumImage
-
-    }
-    const setLowestScoreNameArtist = (score, name, artist, albumImage) => {
-        highestLowest["lowestScore"] = score
-        highestLowest["lowestName"] = name
-        highestLowest["lowestArtist"] = Object.values(artist)
-                                            .map((artistInfo) => artistInfo.name)
-                                            .join(' & ')
-        highestLowest["lowestAlbumImage"] = albumImage
-
+        "highestTrack": null,
+        "lowestTrack": null
     }
 
     for(const [ , trackInfo] of Object.entries(trackTable)) {
-        if(highestLowest["highestScore"] == null) {
-            setHighestScoreNameArtist(trackInfo[fieldName], trackInfo.trackName, trackInfo.trackArtists, trackInfo.album.albumImage )
+        if(highestLowest["highestTrack"] == null) {
+            highestLowest.highestTrack = trackInfo
         } else {
-            if(trackInfo[fieldName] > highestLowest["highestScore"]) {
-                setHighestScoreNameArtist(trackInfo[fieldName], trackInfo.trackName, trackInfo.trackArtists, trackInfo.album.albumImage )
+            if(trackInfo[fieldName] > highestLowest["highestTrack"][fieldName]) {
+                highestLowest.highestTrack = trackInfo
             }
         }
 
-        if(highestLowest["lowestScore"] == null) {
-            setLowestScoreNameArtist(trackInfo[fieldName], trackInfo.trackName, trackInfo.trackArtists, trackInfo.album.albumImage )
+        if(highestLowest["lowestTrack"] == null) {
+            highestLowest.lowestTrack = trackInfo
         } else {
-            if(trackInfo[fieldName] < highestLowest["lowestScore"]) {
-                setLowestScoreNameArtist(trackInfo[fieldName], trackInfo.trackName, trackInfo.trackArtists, trackInfo.album.albumImage )
+            if(trackInfo[fieldName] < highestLowest["lowestTrack"][fieldName]) {
+                highestLowest.lowestTrack = trackInfo
             }
         }
     }
+
     return highestLowest
 }
 
@@ -284,12 +223,10 @@ export {
     getGenreSongs,
     getYearSongs,
     groupTopItemsByTrackcount,
-    getShortestDuration,
-    getLongestDuration,
     getShortestTrack,
     getLongestTrack,
     getAverageField,
-    getHighestLowestField,
+    getHighestLowestTrack,
     isInViewport,
     filterTracktable
 }

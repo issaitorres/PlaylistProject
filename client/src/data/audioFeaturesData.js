@@ -1,5 +1,5 @@
 
-import { getAverageField, getHighestLowestField } from "../helper/PlaylistContainerHelperMethods"
+import { getAverageField, getHighestLowestTrack } from "../helper/PlaylistContainerHelperMethods"
 import Sparkles from '../components/Sparkles/Sparkles';
 import happyface from "../Assets/happy-icon.png"
 import disco from "../Assets/disco.png"
@@ -14,10 +14,10 @@ const GetAudioFeaturesData = (trackTable, activateAnimation, setActivateAnimatio
   return (
     [
       {
-        quality: "Energy",
+        quality: "energy",
         title: "Energy",
         averageQuality: getAverageField("energy", trackTable),
-        highestLowestField: getHighestLowestField("energy", trackTable),
+        highestLowestField: getHighestLowestTrack("energy", trackTable),
         icon:
           <svg width="200px" height="200px">
             <polygon
@@ -44,10 +44,10 @@ const GetAudioFeaturesData = (trackTable, activateAnimation, setActivateAnimatio
         }
       },
       {
-        quality: "Happiness",
+        quality: "valence",
         title: "Happiness",
         averageQuality: getAverageField("valence", trackTable),
-        highestLowestField: getHighestLowestField("valence", trackTable),
+        highestLowestField: getHighestLowestTrack("valence", trackTable),
         icon:
           <div className="audiofeatures__image-container" ref={happinessIconRef}>
             <div className="audiofeatures__image-wrapper">
@@ -67,10 +67,10 @@ const GetAudioFeaturesData = (trackTable, activateAnimation, setActivateAnimatio
         }
       },
       {
-        quality: "Danceability",
+        quality: "danceability",
         title: "Danceability",
         averageQuality: getAverageField("danceability", trackTable),
-        highestLowestField: getHighestLowestField("danceability", trackTable),
+        highestLowestField: getHighestLowestTrack("danceability", trackTable),
         icon:
           <Sparkles activate={activateAnimation}>
             <div ref={discoIconRef}>

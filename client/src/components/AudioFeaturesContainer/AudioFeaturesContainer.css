@@ -57,7 +57,7 @@
 
 .audiofeatures__disco-image {
     position: relative;
-    transform: scale(3,3);
+    transform: scale(1.25,1.25);
     z-index: 1;
 }
 

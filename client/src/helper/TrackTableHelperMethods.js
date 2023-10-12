@@ -46,41 +46,4 @@ const trackTableConversions = (value, convertType=false) => {
 }
 
 
-const toggleSound = (rowIndex, soundRefs) => {
-    var audioElem
-    var playIcon
-    var pauseIcon
-    var newClass
-
-    for (const [key, gridItem] of Object.entries(soundRefs)) {
-        pauseIcon = gridItem.children[0].children[1]
-        audioElem = gridItem.children[1]
-        playIcon = gridItem.children[0].children[0]
-
-        if(Number(key) === rowIndex) {
-            if (audioElem.paused) {
-                audioElem.play();
-                playIcon.setAttribute('class', (playIcon.getAttribute("class") || '') + " trackgrid__hidden-button")
-                newClass = pauseIcon.getAttribute("class").replaceAll("trackgrid__hidden-button", "");
-                pauseIcon.setAttribute('class', newClass)
-            } else {
-                audioElem.pause();
-                pauseIcon.setAttribute('class', (pauseIcon.getAttribute("class") || '') + " trackgrid__hidden-button")
-                newClass = playIcon.getAttribute("class").replaceAll("trackgrid__hidden-button", "");
-                playIcon.setAttribute('class', newClass)
-            }
-        } else {
-            pauseIcon.setAttribute('class', (pauseIcon.getAttribute("class") || '') + " trackgrid__hidden-button")
-            newClass = playIcon.getAttribute("class").replaceAll("trackgrid__hidden-button", "");
-            playIcon.setAttribute('class', newClass)
-
-            if (!audioElem.paused) {
-                audioElem.pause();
-            }
-        }
-
-    }
-}
-
-
-export { trackTableConversions, toggleSound }
+export { trackTableConversions }

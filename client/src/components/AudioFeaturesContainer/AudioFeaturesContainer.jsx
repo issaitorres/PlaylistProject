@@ -5,6 +5,7 @@ import "./AudioFeaturesContainer.css"
 
 
 const AudioFeaturesContainer = ({
+    quality,
     averageQuality, 
     highestLowestField, 
     title, 
@@ -62,21 +63,15 @@ const AudioFeaturesContainer = ({
         <div id="iconContent"> {icon} </div>
         <div className="audiofeatures__highestLowestTracks">
             <div>
-                <h3>Highest: {`${Math.round(highestLowestField.highestScore*100)}%`} </h3>
+                <h3>Highest: {`${Math.round(highestLowestField.highestTrack[quality]*100)}%`} </h3>
                 <SingleTrack 
-                    albumImage={highestLowestField.highestAlbumImage}
-                    score={highestLowestField.highestScore}
-                    title={highestLowestField.highestName}
-                    artist={highestLowestField.highestArtist}
+                    track={highestLowestField.highestTrack}
                 />
             </div>
             <div>
-                <h3>Lowest: {`${Math.round(highestLowestField.lowestScore*100)}%`} </h3>
+                <h3>Lowest: {`${Math.round(highestLowestField.lowestTrack[quality]*100)}%`} </h3>
                 <SingleTrack 
-                    albumImage={highestLowestField.lowestAlbumImage}
-                    score={highestLowestField.lowestScore}
-                    title={highestLowestField.lowestName}
-                    artist={highestLowestField.lowestArtist}
+                    track={highestLowestField.lowestTrack}
                 />
             </div>
         </div>
