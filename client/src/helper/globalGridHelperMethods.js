@@ -1,31 +1,27 @@
 
-// include space in hidden arrow - " trackgrid__hidden-arrow"
-const toggleSortArrows = (index, columnRefs, columnToggles, sortableIconsClassname, gridHiddenArrowClassname) => {
-    for(const [refIndex, ref] of Object.entries(columnRefs)) {
-        if(Number(refIndex) === index) {
-            // handle switching the arrows for column that was clicked
-            for(const [ , child] of Object.entries(ref.children)) {
-                if(child.className.includes(sortableIconsClassname)) {
-                    if(columnToggles[index] && columnToggles[index] !== null && columnToggles[index] !== undefined) {
-                        child.children[0].className += gridHiddenArrowClassname
-                        child.children[1].className = child.children[1].className.replaceAll(gridHiddenArrowClassname, " ");
-                    } else {
-                        child.children[1].className += gridHiddenArrowClassname
-                        child.children[0].className = child.children[0].className.replaceAll(gridHiddenArrowClassname, " ");
-                    }
-                }
-            }
-        } else {
-            // handle clearing the arrows for other columns
-            for(const [ , child] of Object.entries(ref.children)) {
-                if(child.className.includes(sortableIconsClassname)) {
-                    for(const innerChild of child.children) {
-                        innerChild.className = innerChild.className.replaceAll(gridHiddenArrowClassname, " ");
-                    }
-                }
-            }
-        }
+const toggleSortArrows = (previousSortArrowsRef, newSortArrows, columnIndex, columnToggles) => {
+    var oldSortArrows = previousSortArrowsRef.current
+    var upArrow
+    var downArrow
+
+    // clear old sort arrows
+    upArrow = oldSortArrows.children[1].children[0]
+    downArrow = oldSortArrows.children[1].children[1]
+    upArrow.className = upArrow.className.replaceAll(" hide-visibility", " ");
+    downArrow.className = downArrow.className.replaceAll(" hide-visibility", " ");
+
+    // update new arrows
+    upArrow = newSortArrows.children[1].children[0]
+    downArrow = newSortArrows.children[1].children[1]
+    if(columnToggles[columnIndex] && columnToggles[columnIndex] !== null && columnToggles[columnIndex] !== undefined) {
+        upArrow.className += " hide-visibility"
+        downArrow.className = downArrow.className.replaceAll(" hide-visibility", " ");
+    } else {
+        downArrow.className += " hide-visibility"
+        upArrow.className = upArrow.className.replaceAll(" hide-visibility", " ");
     }
+
+    previousSortArrowsRef.current = newSortArrows
 }
 
 export { toggleSortArrows }

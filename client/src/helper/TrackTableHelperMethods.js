@@ -2,6 +2,8 @@ import { convertMStoFormat } from "./PlaylistContainerHelperMethods"
 
 
 const trackTableConversions = (value, convertType=false) => {
+    if(value === -99) return -99 // handle missing
+
     if (!convertType) {
         return value
     } else if (convertType === "percent") {

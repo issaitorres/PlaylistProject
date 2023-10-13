@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useRef } from 'react'
 import BarChart from '../Charts/BarChart'
 import PieChart from '../Charts/PieChart'
 import AudioFeaturesContainer from '../AudioFeaturesContainer/AudioFeaturesContainer'
@@ -18,7 +18,7 @@ const Carousel = ({
     const [currentIndex, setCurrentIndex] = useState(0)
     const [activateAnimation, setActivateAnimation] = useState(false)
     const audioFeaturesData = getAudioFeaturesData(trackTable, activateAnimation, setActivateAnimation)
-    const buttonRefs = []
+    const carouselPreviousItem = useRef(null)
 
     // need useMemo since activateAnimation causes rerenders which changes the color for decades pie chart when scrolling
     const decadesPieChart = useMemo(
@@ -30,21 +30,16 @@ const Carousel = ({
         [trackTable]
     );
 
-    const goToSlide = (slideIndex) => {
+    const goToSlide = (slideIndex, currentTarget) => {
         setCurrentIndex(slideIndex);
-        activeSlide(slideIndex)
+        activeSlide(currentTarget)
     };
 
-    const activeSlide = (slideIndex) => {
-        for(const [refIndex, ref] of Object.entries(buttonRefs)) {
-            if(Number(refIndex) === slideIndex) {
-                if(!ref.className.includes("carousel__button-active")) {
-                    ref.className += " carousel__button-active"
-                }
-            } else {
-                ref.className = ref.className.replaceAll("carousel__button-active", "");
-            }
-        }
+    const activeSlide = (currentTarget) => {
+        var prev = carouselPreviousItem.current
+        prev.className = prev.className.replaceAll("carousel__button-active", "");
+        currentTarget.className += " carousel__button-active"
+        carouselPreviousItem.current = currentTarget
     }
 
 
@@ -55,9 +50,9 @@ const Carousel = ({
                     return (
                         <React.Fragment key={slideIndex}>
                             <button 
-                                onClick={() => goToSlide(slideIndex)}
+                                onClick={(e) => goToSlide(slideIndex, e.currentTarget)}
                                 className={`carousel__button ${slideIndex === 0 ? "carousel__button-active" : ""}`}
-                                ref={ref => buttonRefs.push(ref) }
+                                ref={slideIndex === 0 ? carouselPreviousItem : null }
                             >
                                 {data.title}
                             </button>
@@ -67,9 +62,9 @@ const Carousel = ({
                 })}
                 <button 
                     key={4}  
-                    onClick={() => goToSlide(4)}
+                    onClick={(e) => goToSlide(4, e.currentTarget)}
                     className={`carousel__button`}
-                    ref={ref => buttonRefs.push(ref) }
+                    ref={null}
                 >
                     Extras
                 </button>

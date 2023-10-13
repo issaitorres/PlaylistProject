@@ -131,6 +131,3 @@ audio:not([controls]) {
   display: none !important;
 }
 
-.trackgrid__hidden-arrow {
-    visibility: hidden; /* visibility keeps space*/
-}

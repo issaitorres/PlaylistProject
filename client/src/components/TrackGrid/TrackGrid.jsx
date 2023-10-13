@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react'
+import React, { useState, useEffect, useRef} from 'react'
 import getTrackDataColumnHeaders from '../../data/getTrackDataColumnHeaders'
 import { sortNumerically, sortAlphabetically } from '../../helper/TableColumnHelperMethods'
 import { trackTableConversions } from "../../helper/TrackTableHelperMethods"
@@ -11,7 +11,7 @@ const TrackGrid = ({ trackTable, playlistDuplicates, missingTracks }) => {
     const [columnToggles, setColumnToggles] = useState([])
     const [dataArray, setDataArray] = useState([])
     const columnHeaders = getTrackDataColumnHeaders()
-    const columnRefs = []
+    const trackgridPreviousSortArrows = useRef(null)
 
     const determineColTypeAndSort = (colType, dataArray, columnToggle, colVal) => {
         if(colType === "string") {
@@ -28,15 +28,40 @@ const TrackGrid = ({ trackTable, playlistDuplicates, missingTracks }) => {
         }
     }
 
-    const gridHeaderToggle = (header, index) => {
+    const gridHeaderToggle = (header, index, currentTarget) => {
         var headKeyName = columnHeaders[header].keyName
         var update = [...columnToggles]
         var sampleVal = dataArray[0][headKeyName]
         const sorted = determineColTypeAndSort(typeof(sampleVal), dataArray, update[index], headKeyName)
         setDataArray(sorted)
-        toggleSortArrows(index, columnRefs, columnToggles, "trackgrid__sortable-icons", " trackgrid__hidden-arrow")
+        toggleSortArrows(trackgridPreviousSortArrows, currentTarget, index, columnToggles)
         update[index] = !update[index]
         setColumnToggles(update)
+    }
+
+    const updateArrowRef = (newSortArrows, index, columnToggles) => {
+        var oldSortArrows = trackgridPreviousSortArrows.current
+        var upArrow
+        var downArrow
+
+        // clear old sort arrows
+        upArrow = oldSortArrows.children[1].children[0]
+        downArrow = oldSortArrows.children[1].children[1]
+        upArrow.className = upArrow.className.replaceAll(" hide-visibility", " ");
+        downArrow.className = downArrow.className.replaceAll(" hide-visibility", " ");
+
+        // update new arrows
+        upArrow = newSortArrows.children[1].children[0]
+        downArrow = newSortArrows.children[1].children[1]
+        if(columnToggles[index] && columnToggles[index] !== null && columnToggles[index] !== undefined) {
+            upArrow.className += " hide-visibility"
+            downArrow.className = downArrow.className.replaceAll(" hide-visibility", " ");
+        } else {
+            downArrow.className += " hide-visibility"
+            upArrow.className = upArrow.className.replaceAll(" hide-visibility", " ");
+        }
+
+        trackgridPreviousSortArrows.current = newSortArrows
     }
 
 
@@ -48,11 +73,13 @@ const TrackGrid = ({ trackTable, playlistDuplicates, missingTracks }) => {
                 "albumArt": trackInfo.album.albumImage,
                 "song": trackInfo.trackName,
                 "trackPreview": trackInfo.trackPreview,
-                "songPop": trackInfo.trackPopularity,
+                "songPop": isNaN(trackInfo.trackPopularity) ? -99 : trackInfo.trackPopularity,
                 "artist": Object.values(trackInfo.trackArtists)
-                            .map((artistInfo) => (
-                                {"artistName": artistInfo.name, "artistId": artistInfo.id}
-                            )),
+                            .map((artistInfo) => {
+                                return {
+                                    "artistName": artistInfo.name !== "" ? artistInfo.name : "unknown" ,
+                                    "artistId": artistInfo.id
+                                }}),
                 "genres": Array.from(new Set(Object.values(trackInfo.trackArtists)
                             .map((artistInfo) => {
                                 var genres = artistInfo?.artistGenres
@@ -61,22 +88,22 @@ const TrackGrid = ({ trackTable, playlistDuplicates, missingTracks }) => {
                             })
                             .reduce((acc, currArray) => acc.concat(currArray))))
                             .join(', '),
-                "album": trackInfo.album.albumName,
-                "albumPop" : trackInfo.album.albumPopularity,
-                "albumReleaseYear": trackInfo.album.albumReleaseYear,
-                "bpm": Math.ceil(trackInfo.trackTempo),
-                "loudness": trackInfo.loudness,
-                "danceability": trackInfo.danceability,
-                "energy": trackInfo.energy,
-                "instrumentalness": trackInfo.instrumentalness,
-                "valence": trackInfo.valence,
-                "speechiness": trackInfo.speechiness,
-                "liveness": trackInfo.liveness,
-                "key": trackInfo.key,
-                "mode": trackInfo.mode,
-                "time_signature": trackInfo.time_signature,
-                "duration": trackInfo.trackDuration,
-                "acousticness": trackInfo.acousticness,
+                "album": trackInfo.album.albumName || "unknown",
+                "albumPop" : isNaN(trackInfo.album.albumPopularity) ? -99 : trackInfo.album.albumPopularity,
+                "albumReleaseYear": isNaN(trackInfo.album.albumReleaseYear) ? -99 : trackInfo.album.albumReleaseYear,
+                "bpm": isNaN(trackInfo.trackTempo) ? -99 : Math.ceil(trackInfo.trackTempo),
+                "loudness": isNaN(trackInfo.loudness) ? -99 : trackInfo.loudness, // loudness can have negative values
+                "danceability": isNaN(trackInfo.danceability) ? -99 : trackInfo.danceability,
+                "energy" : isNaN(trackInfo.energy) ? -99 : trackInfo.energy,
+                "instrumentalness": isNaN(trackInfo.instrumentalness) ? -99 : trackInfo.instrumentalness,
+                "valence": isNaN(trackInfo.valence) ? -99 : trackInfo.valence,
+                "speechiness": isNaN(trackInfo.speechiness) ? -99 : trackInfo.speechiness,
+                "liveness": isNaN(trackInfo.liveness) ? -99 : trackInfo.liveness,
+                "key" : isNaN(trackInfo.key) ? -99 : trackInfo.key,
+                "mode" : isNaN(trackInfo.mode) ? -99 : trackInfo.mode,
+                "acousticness": isNaN(trackInfo.acousticness) ? -99 : trackInfo.acousticness,
+                "time_signature": trackInfo.time_signature ? trackInfo.time_signature : -99,
+                "duration": isNaN(trackInfo.trackDuration) ? -99 : trackInfo.trackDuration,
                 "explicit": trackInfo.trackExplicit
             })
         }
@@ -116,7 +143,7 @@ const TrackGrid = ({ trackTable, playlistDuplicates, missingTracks }) => {
                 {
                     missingTracks?.length > 0 &&
                         <div>
-                            The following tracks songs were omitted from the analysis because of missing information: # {missingTracks.join(', ')}
+                            The following tracks songs were omitted from the analysis because of missing information: # {missingTracks.map((positions) => positions + 1).join(', ')}
                         </div>
                 }
             </div>
@@ -126,15 +153,15 @@ const TrackGrid = ({ trackTable, playlistDuplicates, missingTracks }) => {
             {Object.keys(columnHeaders).map((header, index) => (
                 <div
                     className="trackgrid__header trackgrid__header-toggle-sort"
-                    onClick={() => gridHeaderToggle(header, index)}
-                    ref={ref => columnRefs.push(ref) }
+                    onClick={(e) => gridHeaderToggle(header, index, e.currentTarget)}
+                    ref={index == 0 ? trackgridPreviousSortArrows : null}
                     key={index}
                 >
                     <b className="trackgrid__table-header">
                         {header}
                     </b>
                     <div className="trackgrid__sortable-icons">
-                        <div className={`trackgrid__arrow ${index === 0 ? "trackgrid__hidden-arrow" : ""}`}>
+                        <div className={`trackgrid__arrow ${index === 0 ? "hide-visibility" : ""}`}>
                             &#9650;
                         </div>
                         <div className="trackgrid__arrow">
@@ -148,6 +175,7 @@ const TrackGrid = ({ trackTable, playlistDuplicates, missingTracks }) => {
                 return (
                     Object.values(columnHeaders).map((head, index) => {
                         var value = trackTableConversions(info[head.keyName], head.convertType)
+                        value = value === -99 ? "-" : value // handle missing info
                         return (
                             <div className="trackgrid__item" key={index}>
                                 <div>
@@ -162,14 +190,26 @@ const TrackGrid = ({ trackTable, playlistDuplicates, missingTracks }) => {
                                                     {value.map((info, index) => {
                                                         return (
                                                             <React.Fragment key={index}>
-                                                                <a
-                                                                    href={`https://open.spotify.com/artist/${info.artistId}`} 
-                                                                    target="_blank"
-                                                                    rel="noreferrer"
-                                                                >
-                                                                    {info.artistName}
-                                                                </a>
-                                                                { index + 1 < value.length ? `, `: "" }
+                                                                {
+                                                                    info.artistId
+                                                                        ?
+                                                                            <>
+                                                                                <a
+                                                                                    href={`https://open.spotify.com/artist/${info.artistId}`}
+                                                                                    target="_blank"
+                                                                                    rel="noreferrer"
+                                                                                >
+                                                                                    {info.artistName}
+                                                                                </a>
+                                                                                { index + 1 < value.length ? `, `: "" }
+                                                                            </>
+
+                                                                        :
+                                                                            <>
+                                                                                {info.artistName}
+                                                                            </>
+                                                                }
+
                                                             </React.Fragment>
                                                         )
                                                     })}

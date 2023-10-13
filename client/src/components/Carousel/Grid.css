@@ -38,10 +38,6 @@
     font-size: 10px;
 }
 
-.grid__hidden-arrow {
-    visibility: hidden; /* visibility keeps space*/
-}
-
 .grid__item {
     display: flex;
     align-items: center;

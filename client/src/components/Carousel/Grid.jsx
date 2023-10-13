@@ -7,7 +7,7 @@ const Grid = ({ grid }) => {
     const [dataArray, setDataArray] = useState([])
     const [columnToggles, setColumnToggles] = useState([])
     const gridRef = useRef(null);
-    const columnRefs = []
+    const gridPreviousSortArrows = useRef(null)
     const headers = grid.headers
     const columnSortable = grid.columnSortable
     const columnValues = grid.columnValues
@@ -54,7 +54,7 @@ const Grid = ({ grid }) => {
     }, [data])
 
 
-    const sortColumn = (columnIndex) => {
+    const sortColumn = (columnIndex, currentTarget) => {
         var update = [...columnToggles]
         update[columnIndex] = !update[columnIndex]
         const columnType = typeof(dataArray[0][columnIndex])
@@ -62,8 +62,7 @@ const Grid = ({ grid }) => {
         
         setDataArray(sorted)
         setColumnToggles(update)
-        toggleSortArrows(columnIndex, columnRefs, columnToggles, "grid__sortable-icons", " grid__hidden-arrow")
-
+        toggleSortArrows(gridPreviousSortArrows, currentTarget, columnIndex, columnToggles)
     }
 
     const determineColumnTypeAndSort = (columnType, dataArray, columnToggle, colVal) => {
@@ -84,8 +83,8 @@ const Grid = ({ grid }) => {
                 return (
                     <div
                         className={`grid__header ${columnSortable[index] ? "grid__header-toggle-sort " : ""}`}
-                        onClick={columnSortable[index] ? () => sortColumn(index) : null}
-                        ref={ref => columnRefs.push(ref) }
+                        onClick={columnSortable[index] ? (e) => sortColumn(index, e.currentTarget) : null}
+                        ref={index == 1 ? gridPreviousSortArrows : null}
                         key={index}
                     >
                         <b className="grid__table-header">
@@ -96,7 +95,7 @@ const Grid = ({ grid }) => {
                                     <div className="grid__arrow">
                                         &#9650;
                                     </div>
-                                    <div className={`grid__arrow ${index === 1 ? 'grid__hidden-arrow' : ""}`}>
+                                    <div className={`grid__arrow ${index === 1 ? 'hide-visibility' : ""}`}>
                                         &#9660;
                                     </div>
                                 </div>
