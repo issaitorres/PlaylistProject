@@ -76,7 +76,7 @@ const AddPlaylist = ({ accessToken }) => {
         var parsedLocalStoragePlaylistInfo = localStoragePlaylistInfo ? JSON.parse(localStoragePlaylistInfo) : []
         parsedLocalStoragePlaylistInfo.push(newPlaylistInfo)
         window.localStorage.setItem("playlistInfo", JSON.stringify(parsedLocalStoragePlaylistInfo))
-        navigate(`/playlist/${playlistId}`, {state: { playlist: newPlaylistInfo }})
+        navigate(`/playlist/${extractedPlaylistId}`, {state: { playlist: newPlaylistInfo }})
       } catch (err) {
         console.log(err)
         if(err.response.status === 403) {
