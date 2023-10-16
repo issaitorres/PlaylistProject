@@ -1,6 +1,6 @@
+import { useAudio } from '../../AudioContext'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPause, faPlay } from '@fortawesome/free-solid-svg-icons'
-import { useAudio } from '../../AudioContext'
 import missingAlbumImage from "../../Assets/missing-album-image.png"
 import "./AlbumArtAudio.css"
 

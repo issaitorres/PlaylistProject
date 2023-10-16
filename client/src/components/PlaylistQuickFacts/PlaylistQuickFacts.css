@@ -54,8 +54,9 @@
     cursor: pointer;
 }
 
-.quickfacts__refresh-corner:hover {
-    color: green;
+.quickfacts__refresh-corner:hover .quickfacts__refresh-text {
+    text-decoration: none;
+    color: #4d4d4d;
 }
 
 .quickfacts__refresh-corner .quickfacts__refresh-text {
@@ -69,28 +70,25 @@
 }
 
 .tooltiptext {
-/* .quickfacts-refresh-tooltip .tooltiptext { */
     visibility: hidden;
     width: 120px;
     background-color: var(--default-midnight);
     box-shadow: 0 0 3px rgba(56, 54, 54, 0.86);
     opacity: .40;
-    color: #fff;
+    color: var(--default-white);
     text-align: center;
     padding: 5px;
-    border-radius: 6px;
+    border-radius: var(--button-border-radius);
 
-    /* Position the tooltip text - see examples below! */
     position: absolute;
     z-index: 1;
     font-size: 16px;
     transition: all 0.3s ease-in-out;
 
-
     width: 140px;
     bottom: 120%;
     left: 50%;
-    margin-left: -80px; /* Use half of the width (120/2 = 60), to center the tooltip */
+    margin-left: -80px;
 }
 
 .quickfacts__refresh-tooltip .tooltiptext::after {
@@ -109,8 +107,4 @@
 .quickfacts__refresh-tooltip:hover .tooltiptext {
     visibility: visible;
     opacity: 1;
-}
-
-.rotate {
-    animation: spin 2s linear infinite;
 }

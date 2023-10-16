@@ -3,41 +3,36 @@
     max-width: 920px;
 }
 
-.addplaylist__notice {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    max-width: 920px;
-    background-color: var(--default-red);
-    text-align: center;
-    border: 1px solid var(--default-black);
-    border-radius: 6px;
-    color: white;
-    margin: 10px 0px;
-}
-
-.addplaylist__notice-icon {
-    width: 25px;
-    height: 25px;
-    margin: 2px;
-    padding: 5px;
-}
-
 .addplaylist__form {
-    background-color: var(--default-gray);
+    background-color: var(--default-lighter-gray);
     padding: 2px 60px;
-    border-radius: 10px;
+    border-radius: var(--form-border-radius);
     text-align: center;
+}
+
+.addplaylist__form-title {
+    margin-bottom: 0px;
+}
+
+.addplaylist__form-subtitle {
+    margin-top: 8px;
+    font-weight: normal;
+    font-size: 18px;
 }
 
 .addplaylist__formInput-overrides {
     margin: 0px auto;
-    max-width: 400px;
+    max-width: 450px;
+}
+
+.addplaylist__formInput-overrides input{
+    margin: 0px auto;
 }
 
 .addplaylist__formInput-overrides span {
-    max-width: 400px;
-    margin: 0px auto;
+    max-width: 450px;
+    margin: 0px auto 15px auto;
+    color: var(--default-dark-red);
 }
 
 .addplaylist__button-override {

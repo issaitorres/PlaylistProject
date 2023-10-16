@@ -9,25 +9,27 @@
     align-items: center;
     justify-content: center;
     max-width: 920px;
-    /* background-color: var(--default-red); */
     text-align: center;
-    /* border: 1px solid var(--default-black); */
-    /* border-radius: 6px; */
-    color: white;
-    margin: 10px 0px;
+    margin: 10px auto;
 }
   
 .banner {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 400px;
     background-color: var(--default-red);
     text-align: center;
     border: 1px solid var(--default-black);
-    border-radius: 6px;
-    color: white;
+    border-radius: var(--button-border-radius);
+    color: var(--default-white);
     font-size: 18px;
+    width: 100%;
+    max-width: 500px;
+    align-items: center;
+    justify-content: left;
+    display: grid;
+    grid-template-columns: 20% 80%;
+}
+
+.banner__notice {
+    width: fit-content;
 }
 
 .banner__success {

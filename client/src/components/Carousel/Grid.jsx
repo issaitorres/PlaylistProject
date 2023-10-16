@@ -84,7 +84,7 @@ const Grid = ({ grid }) => {
                     <div
                         className={`grid__header ${columnSortable[index] ? "grid__header-toggle-sort " : ""}`}
                         onClick={columnSortable[index] ? (e) => sortColumn(index, e.currentTarget) : null}
-                        ref={index == 1 ? gridPreviousSortArrows : null}
+                        ref={index === 1 ? gridPreviousSortArrows : null}
                         key={index}
                     >
                         <b className="grid__table-header">
@@ -116,7 +116,7 @@ const Grid = ({ grid }) => {
                                             grid__item
                                             grid__item-song-titles
                                             ${infoTwo.length > 5 ? "grid__item-song-titles-min-height" : "" }
-                                            ${index % 2 === 0 ? "grid__item-even-column" : ""}
+                                            ${index % 2 !== 0 ? "grid__item-even-row" : ""}
                                         `}
                                         >
                                             <ul>
@@ -131,7 +131,7 @@ const Grid = ({ grid }) => {
                                     : 
                                         <div className={`
                                             grid__item
-                                            ${index % 2 === 0 ? "grid__item-even-column" : ""}
+                                            ${index % 2 !== 0 ? "grid__item-even-row" : ""}
                                         `}>
                                             {infoTwo}
                                         </div>

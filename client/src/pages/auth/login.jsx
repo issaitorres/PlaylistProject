@@ -4,6 +4,7 @@ import { useLocation, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios'
 import FormInput from '../../components/FormInput/FormInput'
 import Banner from "../../components/Banner/Banner"
+import InputWarning from '../../components/InputWarning/InputWarning';
 import './auth.css'
 
 
@@ -111,17 +112,14 @@ const Login = () => {
           />
       }
       <form onSubmit={handleSubmit} className="form">
-        <h1> Login</h1>
-        {displayWarning &&
-          <div className="formInputwarning">
-            &#x26A0; Username or password is incorrect
-          </div>}
+        <h1>Login</h1>
+        {displayWarning && <InputWarning warning="Username or password is incorrect" />}
         {inputs.map((input) => (
           <FormInput
             key={input.id}
             value={loginData[input.name]}
             onChange={onChange}
-            className="formInput formInput-register-login-width"
+            className="formInput__default-width"
             password={`${input.type === "password" ? true : false}`}
             {...input} // pass all other key: values
           />

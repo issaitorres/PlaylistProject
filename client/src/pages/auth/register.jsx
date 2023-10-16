@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import FormInput from '../../components/FormInput/FormInput'
+import InputWarning from '../../components/InputWarning/InputWarning'
 import './auth.css'
 
 
@@ -71,17 +72,13 @@ const Register = () => {
     <div className="full-page auth-background">
       <form onSubmit={handleSubmit} className="form">
         <h1> Register</h1>
-        {warning &&
-          <div className="formInputwarning">
-            &#x26A0; {warning}
-          </div>
-        }
+        {warning && <InputWarning warning={warning} /> }
         {inputs.map((input) => (
           <FormInput
             key={input.id}
             value={registerUserData[input.name]}
             onChange={onChange}
-            className="formInput formInput-register-login-width"
+            className="formInput__default-width"
             password={`${input.type == "password" ? true : false}`}
             {...input} // pass all other key: values
           />

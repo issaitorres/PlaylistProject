@@ -107,7 +107,8 @@ const AddPlaylist = ({ accessToken }) => {
                 onSubmit={submitPlaylistId}
                 className="addplaylist__form"
               >
-                <h1> Spotify Playlist Analyzer</h1>
+                <h1 className="addplaylist__form-title"> Spotify Playlist Analyzer</h1>
+                <h4 className="addplaylist__form-subtitle"> Get information on any Spotify playlist!</h4>
                 <FormInput
                   id="playlistInput"
                   key={1}
@@ -115,8 +116,14 @@ const AddPlaylist = ({ accessToken }) => {
                   onChange={(event) => setPlaylistId(event.target.value)}
                   pattern=".*playlist\/.{22}|.{22}"
                   placeholder="Playlist URL or playlist ID"
-                  className="formInput addplaylist__formInput-overrides"
-                  errorMessage="Please submit validplaylist URL or playlist ID. Ex: https://open.spotify.com/playlist/3cT4tGoRr5eC3jGUZT5MTD or  3cT4tGoRr5eC3jGUZT5MTD"
+                  className="addplaylist__formInput-overrides"
+                  errorMessage={
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: "Please submit validplaylist URL or playlist ID. Ex: \n <b> https://open.spotify.com/playlist/3cT4tGoRr5eC3jGUZT5MTD </b> \n or \n <b> 3cT4tGoRr5eC3jGUZT5MTD </b>"
+                      }}
+                    />
+                  }
                   errMsgPos="topErrMsg"
                 />
                 <button

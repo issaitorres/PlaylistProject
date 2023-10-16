@@ -14,8 +14,8 @@
     position: sticky;
     top: 0;
     display: flex;
-    background-color: #878787;
-    border: 1px solid #646464;
+    background-color: var( --grid-header-background);
+    border: 1px solid var(--grid-header-border);
     padding: 5px 0px;
 }
 
@@ -43,12 +43,13 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    border: 1px solid #c7c7c7;
+    border: 1px solid var(--grid-border);
     padding: 5px 0px;
+    background-color: var(--grid-row-background);
 }
 
-.grid__item-even-column {
-    background: #e6e6e6;
+.grid__item-even-row {
+    background: var(--grid-even-row-background);
 }
 
 .grid__item-song-titles {

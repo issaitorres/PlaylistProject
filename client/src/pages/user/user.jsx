@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import FormInput from '../../components/FormInput/FormInput'
 import Banner from "../../components/Banner/Banner"
+import InputWarning from '../../components/InputWarning/InputWarning'
 import "./user.css"
 
 
@@ -167,10 +168,10 @@ const User = () => {
     var listinfo = e.target.parentNode.children
     for (var i = 0; i < listinfo.length - 1; i++) {
       if(i > playlistDisplayedCount) {
-        if(listinfo[i].style.display === "list-item") {
+        if(listinfo[i].style.display === "grid") {
           listinfo[i].style.display = "none"
         } else {
-          listinfo[i].style.display = "list-item"
+          listinfo[i].style.display = "grid"
         }
       }
     }
@@ -193,19 +194,17 @@ const User = () => {
         />
       }
       <div className="user__section">
-        <form onSubmit={handleSubmit} className="form">
+        <form onSubmit={handleSubmit} className="form user__form-overrides">
           <h1> Update Credentials</h1>
           {warning &&
-            <div className="formInputwarning">
-              &#x26A0; {warning}
-            </div>
+            <InputWarning warning={warning} />
           }
           {inputs.map((input) => (
             <FormInput
               key={input.id}
               value={updatedUserData[input.name]}
               onChange={onChange}
-              className="formInput formInput-register-login-width"
+              className="formInput__default-width"
               password={`${input.type === "password" ? true : false}`}
               inputName={input.name}
               {...input} // pass all other key: values
@@ -218,14 +217,15 @@ const User = () => {
       </div>
 
       <div className="user__section">
-        <div className="form">
+        <div className="form user__form-overrides">
           <h1> Delete My Playlists</h1>
-          <div className="user__playlist-list-container">
+          <div>
             {playlistInfo.length > 0 
               ?
                 <>
-                  <p> Playlists count: {playlistInfo.length}</p>
                   <ul className="user__playlist-list">
+                  <p> Playlists count: {playlistInfo.length}</p>
+
                     {playlistInfo.map((playlist, index) => {
                       return (
                         <li key={index} className="user__grid">

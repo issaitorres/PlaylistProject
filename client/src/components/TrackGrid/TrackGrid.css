@@ -43,7 +43,7 @@ N will also determine how high our offset needs to reach starting at 1*/
 .trackgrid__container > .trackgrid__item:nth-child(44n + 21),
 .trackgrid__container > .trackgrid__item:nth-child(44n + 22)
 {
-    background: #e6e6e6;
+    background-color: var(--grid-even-row-background);
 }
 
 .trackgrid__header {
@@ -52,9 +52,8 @@ N will also determine how high our offset needs to reach starting at 1*/
     top: 0px;
     display: flex;
     align-items: center;
-    /* COME BACK TO THIS AFTER DECIDING COLORS */
-    background-color: #878787;
-    border: 1px solid #646464;
+    background-color: var( --grid-header-background);
+    border: 1px solid var(--grid-header-border);
     z-index: 1;
 }
 
@@ -84,6 +83,7 @@ N will also determine how high our offset needs to reach starting at 1*/
     text-align: center;
     border: 1px solid #c7c7c7;
     padding: 5px 0px;
+    background-color: var(--grid-row-background);
 }
 
 .trackgrid__item > div > div > img{
@@ -92,42 +92,5 @@ N will also determine how high our offset needs to reach starting at 1*/
 
 .trackgrid__item > ul {
     margin: 15px 0px;
-}
-
-.trackgrid__audio-container {
-    padding: 5px;
-    /* margin: 5px; */
-}
-
-.trackgrid__audio-button {
-    height: 30px;
-    width: 30px;
-    font-size: 15px;
-    border-radius: 50%;
-    border: 2px solid var(--default-gray);
-    text-align: center;
-    cursor: pointer;
-}
-  
-.trackgrid__audio-button > svg {
-    padding: 2px 1px 1px 1px;
-}
-
-/* prevent icon from interfering with clicks on button 
-    - specifically for Font Awesome Play and Pause icons */
-.trackgrid__audio-button [data-prefix='fas'] {
-    pointer-events: none;
-}
-
-audio::-webkit-media-controls-mute-button {
-  display: none !important;
-}
-
-audio::-webkit-media-controls-volume-slider {
-  display: none !important;
-}
-
-audio:not([controls]) {
-  display: none !important;
 }
 

@@ -18,8 +18,8 @@
   background-color: var(--default-red);
   text-align: center;
   border: 1px solid var(--default-black);
-  border-radius: 6px;
-  color: white;
+  border-radius: var(--button-border-radius);
+  color: var(--default-white);
 }
 
 .login-notice-icon {

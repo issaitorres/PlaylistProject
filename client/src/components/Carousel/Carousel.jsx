@@ -51,7 +51,11 @@ const Carousel = ({
                         <React.Fragment key={slideIndex}>
                             <button 
                                 onClick={(e) => goToSlide(slideIndex, e.currentTarget)}
-                                className={`carousel__button ${slideIndex === 0 ? "carousel__button-active" : ""}`}
+                                className={
+                                    `carousel__button
+                                    ${slideIndex === 0 ? "carousel__button-active carousel__button-left-curve" : ""}
+                                    ${slideIndex === 0 ? "carousel__button-left-curve" : ""}
+                                `}
                                 ref={slideIndex === 0 ? carouselPreviousItem : null }
                             >
                                 {data.title}
@@ -63,7 +67,7 @@ const Carousel = ({
                 <button 
                     key={4}  
                     onClick={(e) => goToSlide(4, e.currentTarget)}
-                    className={`carousel__button`}
+                    className={`carousel__button carousel__button-right-curve`}
                     ref={null}
                 >
                     Extras

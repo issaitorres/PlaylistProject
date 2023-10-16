@@ -1,6 +1,6 @@
 .footer {
   background-color: var(--default-midnight);
-  color: white;
+  color: var(--footer-white);
   width: 100%;
   min-height: 150px;
   margin: 20px 0px 0px 0px;
@@ -12,7 +12,7 @@
 }
 
 .footer a {
-  color: white;
+  color: var(--footer-white);
 }
 
 .footer-flex {

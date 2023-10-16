@@ -3,15 +3,12 @@
     flex-direction: column;
 }
 
-.formInput-register-login-width {
-    width: 280px;
-}
-
 .formInput input {
     padding: 15px;
     margin: 10px 0px;
-    border-radius: 5px;
-    border: 1px solid gray;
+    border-radius: var(--input-border-radius);
+    border: 1px solid var(--input-border);
+    background-color: var(--input-background);
 }
 
 .formInput label {
@@ -20,7 +17,7 @@
 }
 
 .formInput span {
-    font-size: 14px;
+    font-size: 16px;
     padding: 3px;
     color: var(--default-red);
     display: none;
@@ -34,8 +31,8 @@
     display:block;
 }
 
-.input {
-    position: relative;
+.formInput__default-width {
+    width: 280px;
 }
 
 .form-container span {
@@ -48,10 +45,8 @@
 .formInput .field-icon {
     width: 20px;
     height: 20px;
-    margin: -45px 5px 15px auto
+    margin: -45px 5px 15px auto;
+    display: block;
+    color: var(--input-security-icon);
 }
 
-.password-icon {
-    width: 20px;
-    height: 20px;
-}

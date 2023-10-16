@@ -1,0 +1,13 @@
+.forminputwarning {
+  font-size: 18px;
+  padding: 10px 0px;
+  margin: 15px auto;
+  background-color: var(--default-light-red);
+  border: 1px solid var(--default-red);
+  color: black;
+  align-items: center;
+  border-radius: var(--input-border-radius);
+  display: grid;
+  grid-template-columns: 20% 80%;
+  width: 280px;
+}

@@ -5,7 +5,7 @@
   padding: 10px;
   flex-wrap: wrap;
   background-color: var(--default-lighter-gray);
-  border-radius: 10px;
+  border-radius: var(--form-border-radius);
   min-width: 300px;
   max-width: 1200px;
   position: relative;

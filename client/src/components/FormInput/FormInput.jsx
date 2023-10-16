@@ -47,8 +47,8 @@ const FormInput = (props) => {
   }, [])
 
   return (
-    <div className={className}>
-        {errMsgPos && <span ref={errorMsg}>{errorMessage}</span>}
+    <div className={`formInput ${className}`}>
+        {errMsgPos && <span ref={errorMsg} data-html="true">{errorMessage}</span>}
         <label>{label}</label>
           <input
             ref={password === "true" ? passwordField : inputField}
@@ -63,13 +63,12 @@ const FormInput = (props) => {
               ?
                 <span
                   className="field-icon"
-                  style={{display: "block", color: "black"}}
                   onClick={() => revealPassword()}
                 >
                   {
                     passwordVisible[id]
-                      ? <FontAwesomeIcon icon={faEye} className="password-icon"/>
-                      : <FontAwesomeIcon icon={faEyeSlash} className="password-icon"/>
+                      ? <FontAwesomeIcon icon={faEye} />
+                      : <FontAwesomeIcon icon={faEyeSlash} />
                   }
                 </span>
               :

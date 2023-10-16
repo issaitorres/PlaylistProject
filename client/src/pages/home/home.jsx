@@ -6,6 +6,7 @@ import PlaylistTile from '../../components/PlaylistTile/PlaylistTile'
 import AboutSPA from './AboutSPA'
 import { useNavigate } from 'react-router-dom'
 import DiscoverPlaylist from "../../components/DiscoverPlaylist/DiscoverPlaylist"
+import "./home.css"
 
 
 const Home = () => {

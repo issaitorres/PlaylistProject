@@ -1,7 +1,7 @@
 .playlist-tile {
     margin: 5px;
-    background-color: var(--default-gray);
-    border-radius: 10px;
+    background-color: var(--default-lighter-gray);
+    border-radius: var(--form-border-radius);
     text-align: center;
     max-width: 220px;
 }
@@ -16,8 +16,8 @@
 }
 
 .playlist-tile img {
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    border-top-left-radius: var(--form-border-radius);
+    border-top-right-radius: var(--form-border-radius);
     margin: 0px auto;
     width: 100%;
     height: 85%;
@@ -25,9 +25,10 @@
 }
 
 .playlist-tile div {
-    color: var(--default-white);
+    color: var(--default-black);
     font-size: 20px;
     margin: 0px 5px;
+    font-weight: bold;
     text-decoration: none;
     text-decoration-line: none;
 }

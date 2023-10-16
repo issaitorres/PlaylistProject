@@ -58,7 +58,7 @@ const About = ({ removePlaylist, deleteLoader }) => {
         <button className="button danger-theme about-button" onClick={removePlaylist}>
           <div className={`${deleteLoader && 'loader'}`}>{!deleteLoader && "Remove this playlist"}</div>
         </button>
-        <p>To remove all playlists, visit the &thinsp;
+        <p>To remove all your playlists, visit the &thinsp;
           <Link to="/user" className="link">
             user page
           </Link>

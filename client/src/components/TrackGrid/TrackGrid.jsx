@@ -39,31 +39,6 @@ const TrackGrid = ({ trackTable, playlistDuplicates, missingTracks }) => {
         setColumnToggles(update)
     }
 
-    const updateArrowRef = (newSortArrows, index, columnToggles) => {
-        var oldSortArrows = trackgridPreviousSortArrows.current
-        var upArrow
-        var downArrow
-
-        // clear old sort arrows
-        upArrow = oldSortArrows.children[1].children[0]
-        downArrow = oldSortArrows.children[1].children[1]
-        upArrow.className = upArrow.className.replaceAll(" hide-visibility", " ");
-        downArrow.className = downArrow.className.replaceAll(" hide-visibility", " ");
-
-        // update new arrows
-        upArrow = newSortArrows.children[1].children[0]
-        downArrow = newSortArrows.children[1].children[1]
-        if(columnToggles[index] && columnToggles[index] !== null && columnToggles[index] !== undefined) {
-            upArrow.className += " hide-visibility"
-            downArrow.className = downArrow.className.replaceAll(" hide-visibility", " ");
-        } else {
-            downArrow.className += " hide-visibility"
-            upArrow.className = upArrow.className.replaceAll(" hide-visibility", " ");
-        }
-
-        trackgridPreviousSortArrows.current = newSortArrows
-    }
-
 
     useEffect(() => {
         var initialDataArray=[]
@@ -119,7 +94,6 @@ const TrackGrid = ({ trackTable, playlistDuplicates, missingTracks }) => {
                 Track Table
             </h2>
             <div>
-                {/* come back here and check: playlistDuplicates != {} - maybe this can never possibly happen  */}
                 {
                     playlistDuplicates?.duplicateCount === 0
                         ?
@@ -154,7 +128,7 @@ const TrackGrid = ({ trackTable, playlistDuplicates, missingTracks }) => {
                 <div
                     className="trackgrid__header trackgrid__header-toggle-sort"
                     onClick={(e) => gridHeaderToggle(header, index, e.currentTarget)}
-                    ref={index == 0 ? trackgridPreviousSortArrows : null}
+                    ref={index === 0 ? trackgridPreviousSortArrows : null}
                     key={index}
                 >
                     <b className="trackgrid__table-header">

@@ -6,7 +6,7 @@ import "./home.css"
 
 const AboutSPA = () => {
   return (
-    <div className="flex-container home__SPA-container">
+    <div className="flex-container home__aboutSPA-container">
         <div>
           <h1>
               Welcome to Spotify Playlist Analyzer!
@@ -19,12 +19,12 @@ const AboutSPA = () => {
           </p>
         </div>
 
-        <div className="home__SPA-image-container">
-          <img src={spa2} alt="Nature" className="home__SPA-responsive-image" width="415px" height="250px"/>
-          <img src={spa1} alt="Nature" className="home__SPA-responsive-image" width="415px" height="415px"/>
+        <div className="home__aboutSPA-image-container">
+          <img src={spa2} alt="home_page" className="home__aboutSPA-responsive-image" width="415px" height="250px"/>
+          <img src={spa1} alt="playlist_page" className="home__aboutSPA-responsive-image" width="415px" height="415px"/>
         </div>
 
-        <div className="home__SPA-video-container">
+        <div className="home__aboutSPA-video-container">
           <iframe 
             src="https://www.youtube.com/embed/tgbNymZ7vqY"
             title="SPA-video"
@@ -43,7 +43,7 @@ const AboutSPA = () => {
           </h2>
 
           <Link to="/register">
-            <button className="button submit-theme home__SPA-button-override">
+            <button className="button submit-theme home__aboutSPA-button-override">
               Register
             </button>
           </Link>
