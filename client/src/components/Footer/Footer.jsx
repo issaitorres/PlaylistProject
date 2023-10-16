@@ -40,7 +40,7 @@ const Footer = () => {
             <a href="https://open.spotify.com/" target="_blank" rel="noreferrer">
               <FontAwesomeIcon icon={faSpotify} className="footer-icon" />
             </a>
-            <a href="https://open.spotify.com/" target="_blank" rel="noreferrer">
+            <a href="https://github.com/issaitorres/PlaylistProject" target="_blank" rel="noreferrer">
               <FontAwesomeIcon icon={faGithub} className="footer-icon" />
             </a>
           </div>
