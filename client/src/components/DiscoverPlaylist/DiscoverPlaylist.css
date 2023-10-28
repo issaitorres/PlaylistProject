@@ -7,7 +7,7 @@
 .discoverplaylist__button {
     display: flex;
     flex-direction: column;
-    border: 1px solid black;
+    border: 1px solid var(--default-black);
     border-radius: var(--button-border-radius);
     margin: 0px auto;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;

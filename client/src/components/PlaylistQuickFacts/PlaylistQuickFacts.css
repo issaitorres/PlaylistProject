@@ -38,7 +38,7 @@
     margin-left: -5px;
     border-width: 5px;
     border-style: solid;
-    border-color: black transparent transparent transparent;
+    border-color: var(--default-black) transparent transparent transparent;
     opacity: 1;
 }
 
@@ -72,10 +72,10 @@
 .tooltiptext {
     visibility: hidden;
     width: 120px;
-    background-color: var(--default-midnight);
+    background-color: var(--tooltip-background);
     box-shadow: 0 0 3px rgba(56, 54, 54, 0.86);
     opacity: .40;
-    color: var(--default-white);
+    color: var(--text-light);
     text-align: center;
     padding: 5px;
     border-radius: var(--button-border-radius);

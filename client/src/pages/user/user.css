@@ -8,7 +8,7 @@
     text-align: center;
     border: 2px solid #03774c;
     border-radius: var(--button-border-radius);
-    color: var(--default-white);
+    color: var(--text-light);
 }
 
 .user__section {
@@ -17,7 +17,7 @@
 }
 
 .user__form-overrides {
-    background-color: var(--default-lighter-gray) !important;
+    background-color: var(--background-secondary-color) !important;
     padding: 20px 60px !important;
     margin: 0px auto;
 }

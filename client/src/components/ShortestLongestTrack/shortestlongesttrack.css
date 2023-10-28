@@ -15,12 +15,12 @@
 
 .shortestlongesttrack__left-track {
     margin: 5px 0px 5px 5px;
-    border-right: 1px solid black;
+    border-right: 1px solid var(--default-black);
 }
 
 .shortestlongesttrack__right-track {
     margin: 5px 5px 5px 0px;
-    border-left: 1px solid black;
+    border-left: 1px solid var(--default-black);
 }
 
 .shortestlongesttrack__left-track h2 {
@@ -54,7 +54,7 @@
     font-size: 15px;
     border-radius: 50%;
     text-align: center;
-    border: 2px solid black;
+    border: 2px solid var(--default-black);
 }
 
 .shortestlongesttrack__albumart-audio-container .shortestlongesttrack__audio-container{

@@ -13,7 +13,7 @@
 
 .formInput label {
     font-size: 16px;
-    color: var(--default-black);
+    color: var(--text-dark);
 }
 
 .formInput span {

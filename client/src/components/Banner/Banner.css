@@ -18,7 +18,7 @@
     text-align: center;
     border: 1px solid var(--default-black);
     border-radius: var(--button-border-radius);
-    color: var(--default-white);
+    color: var(--text-light);
     font-size: 18px;
     width: 100%;
     max-width: 500px;

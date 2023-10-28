@@ -4,7 +4,7 @@
   margin: 15px auto;
   background-color: var(--default-light-red);
   border: 1px solid var(--default-red);
-  color: black;
+  color: var(--text-dark);
   align-items: center;
   border-radius: var(--input-border-radius);
   display: grid;

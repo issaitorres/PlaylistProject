@@ -75,7 +75,7 @@
 
 .carousel__extras-top-section > div {
     margin: 10px;
-    background-color: var(--default-lighter-gray);
+    background-color: var(--background-secondary-color);
     border-radius: var(--form-border-radius);
 }
 
@@ -99,7 +99,7 @@
 }
 
 .carousel__extras-bottom-section > div {
-    background-color: var(--default-lighter-gray);
+    background-color: var(--background-secondary-color);
     border-radius: var(--form-border-radius);
     margin: 10px;
     min-width: 300px;

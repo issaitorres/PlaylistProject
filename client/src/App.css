@@ -11,23 +11,26 @@ body,
 html {
   margin: 0;
   padding: 0;
-  background: #FFFFFF;
+  background: var(--background-color);
 }
 
 :root {
   /* colors */
-  --default-white: #f2f2f2;
+  --background-color: #FFFFFF;
+  --background-secondary-color: #c7c7c7;
+  --navbar-footer-color: #333;
+  --text-light: #f2f2f2;
+  --button-text: #FFFFFF;
+  --button-hover: #FFFFFF;
+  --text-dark: #1C1C1E;
   --default-black: #1C1C1E;
-  --default-midnight: #333;
-  --default-gray: #a1a1a1;
-  --default-lighter-gray: #c7c7c7;
+  --tooltip-background: #333;
   --default-green: #04AA6D;
   --default-dark-green: #03774c;
   --default-light-red: #eb8c8c;
   --default-red: #e35b5b;
   --default-dark-red: #9f4040;
-  --hover-white: #ddd;
-  --fullwidth: 100%;
+  --login-register-form-background: #FFFFFF;
 
   --carousel-container-background: #f1f1f1;
   --carousel-button-background: #9f9f9f;
@@ -43,13 +46,52 @@ html {
   --input-background: #FFFFFF;
   --input-security-icon: #000000;
 
-
-  --footer-white: #FFFFFF;
-
   /* radius */
   --form-border-radius: 10px; /* large containers */
   --button-border-radius: 5px; /* also banner, tooltip */
   --input-border-radius: 5px;
+
+  --fullwidth: 100%;
+  --playlist-tile-brightness: 85%;
+}
+
+@media (prefers-color-scheme: dark) {
+
+  /* --background-secondary-color: #646464; */
+  body.dark {
+    --background-color: #333;
+    --background-secondary-color: #9f9f9f;
+    --navbar-footer-color: #121212;
+
+    --text-light: #dadada;
+    --button-text: #dadada;
+    --button-hover: #dadada;
+    --text-dark: #1C1C1E;
+    --default-black: #1C1C1E;
+    --tooltip-background: #333;
+    --default-green: #038857;
+    --default-dark-green: #03774c;
+    --default-light-red: #eb8c8c;
+    --default-red: #cc5252;
+    --default-dark-red: #9f4040;
+    --login-register-form-background: #c7c7c7;
+
+    --carousel-container-background: #c1c1c1;
+    --carousel-button-background: #8f8f8f;
+    --carousel-button-border: #5d5d5d;
+
+    --grid-header-background: #7f7f7f;
+    --grid-header-border: #5d5d5d;
+    --grid-row-background:  #c1c1c1;
+    --grid-even-row-background: #b8b8b8;
+    --grid-border: #9f9f9f;
+
+    --input-border: #666666;
+    --input-background: #d6d6d6;
+    --input-security-icon: #000000;
+
+    --playlist-tile-brightness: 115%;
+  }
 }
 
 button {
@@ -59,7 +101,7 @@ button {
 
 /* Forms */
 .form {
-  background-color: white;
+  background-color: var(--login-register-form-background);
   padding: 0px 60px;
   border-radius: var(--form-border-radius);
 }
@@ -88,6 +130,11 @@ input {
 .link {
   display: inline-block;
   margin: 5px 0px 10px 0px;
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
 }
 
 .button {
@@ -95,7 +142,7 @@ input {
   height: 50px;
   padding: 10px;
   border: none;
-  color: white;
+  color: var(--button-text);
   border-radius: var(--button-border-radius);
   font-weight: bold;
   font-size: 18px;
@@ -104,7 +151,7 @@ input {
 }
 
 .button:hover {
-  background-color: var(--default-white);
+  background-color: var(--button-hover);
   color: var(--default-black);
 }
 

@@ -1,6 +1,6 @@
 .footer {
-  background-color: var(--default-midnight);
-  color: var(--footer-white);
+  background-color: var(--navbar-footer-color);
+  color: var(--text-light);
   width: 100%;
   min-height: 150px;
   margin: 20px 0px 0px 0px;
@@ -12,7 +12,7 @@
 }
 
 .footer a {
-  color: var(--footer-white);
+  color: var(--text-light);
 }
 
 .footer-flex {

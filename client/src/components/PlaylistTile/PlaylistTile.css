@@ -1,13 +1,14 @@
 .playlist-tile {
     margin: 5px;
-    background-color: var(--default-lighter-gray);
+    background-color: var(--background-secondary-color);
     border-radius: var(--form-border-radius);
     text-align: center;
     max-width: 220px;
 }
 
 .playlist-tile:hover {
-    -webkit-filter: brightness(85%);
+    -webkit-filter: brightness(var(--playlist-tile-brightness));
+    /* -webkit-filter: brightness(85%); */
     -webkit-transition: all 10ms ease;
     -moz-transition: all 10ms ease;
     -o-transition: all 10ms ease;
@@ -25,7 +26,7 @@
 }
 
 .playlist-tile div {
-    color: var(--default-black);
+    color: var(--text-dark);
     font-size: 20px;
     margin: 0px 5px;
     font-weight: bold;
