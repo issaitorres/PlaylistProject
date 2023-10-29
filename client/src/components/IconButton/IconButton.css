@@ -1,0 +1,20 @@
+.iconbutton {
+    margin: 2px;
+    display: block;
+    align-items: center;
+    padding: 8px 0px 8px 14px;
+    width: 20px;
+    height: 20px;
+    border: none;
+    transition: all 0.2s ease-in-out;
+    font-size: 30px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+.iconbutton__icon-container {
+    display: flex;
+    color: var(--default-text);
+}

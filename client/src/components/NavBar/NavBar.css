@@ -15,7 +15,7 @@
 
 .navbar a:hover {
     filter: brightness(130%);
-    background-color: #1a1a1a;
+    background-color: var(--navbar-footer-color);
 }
 
 .navbar a.active {

@@ -22,27 +22,40 @@
   margin: 10px auto;
 }
 
-.footer-link-section {
+.footer__link-section {
   padding: 10px;
 }
 
-.footer-link-section div {
-  margin: 2px 0px
+.footer__link-section div {
+  margin: 2px 0px;
 }
 
-.footer-link-section a {
+.footer__link-section a {
   text-decoration: none;
 }
 
-.footer-link-section a:hover {
+.footer__link-section a:hover {
   text-decoration: underline;
+  filter: brightness(140%);
 }
 
-.footer-icon{
+.footer__right {
+  text-align: right;
+}
+
+.footer__icon-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.footer__portofolio-icon {
   width: 30px;
   height: 30px;
   margin: 2px;
   padding: 5px;
+  border-radius: 50%;
+  transition: all 0.2s ease-in-out;
+  filter: invert();
 }
 
 .footer-end {
