@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
+import { clearAppInfo } from '../../utils/components'
 
 
 const Logout = () => {
@@ -11,8 +12,7 @@ const Logout = () => {
         removeCookie("access_token", { path: '/' }) // idk if we need this
         removeCookie("access_token") // we need this
         //jwt cookie -  http only cookie - can only be changed from server, not frontend
-        window.localStorage.removeItem("userInfo")
-        window.localStorage.removeItem("playlistInfo")
+        clearAppInfo()
         navigate("/")
         navigate(0) // refresh needed to clear access_token
     },[])

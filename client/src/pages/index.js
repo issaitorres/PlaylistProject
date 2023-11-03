@@ -1,0 +1,10 @@
+export { default as Home } from "./home/home"
+export { default as Restricted } from "./auth/Restricted"
+export { default as Protected } from "./auth/Protected"
+export { default as Register } from "./auth/register"
+export { default as Login } from "./auth/login"
+export { default as Logout } from "./auth/logout"
+export { default as Playlist } from "./playlist/playlist"
+export { default as User } from "./user/user"
+export { default as Error } from "./404/error"
+

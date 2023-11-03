@@ -5,6 +5,10 @@ import axios from 'axios'
 import FormInput from '../../components/FormInput/FormInput'
 import Banner from "../../components/Banner/Banner"
 import InputWarning from '../../components/InputWarning/InputWarning';
+import {
+  setUserInfoInLocalStorage,
+  environment
+} from '../../utils/components';
 import './auth.css'
 
 
@@ -47,20 +51,18 @@ const Login = () => {
 
     setLoader(!loader)
     try {
-      const res = await axios.post(`${process.env.NODE_ENV === "development" ? process.env.REACT_APP_DEV_BACKEND : process.env.REACT_APP_PROD_BACKEND}/login`, loginData,
-      {
-        withCredentials: true
-      })
+      const res = await axios.post(`${environment}/login`, loginData,
+        {
+          withCredentials: true
+        }
+      )
 
       // must match time in seconds for accessToken in loginController - maxAge uses seconds
       setCookies("access_token", res.data.accessToken, {
         maxAge: 7 * 24 * 60 * 60
       })
-      window.localStorage.setItem("userInfo", JSON.stringify({
-        id: res.data.userID,
-        email: res.data.userEmail,
-        username: res.data.username
-      }))
+
+      setUserInfoInLocalStorage(res.data)
       navigate('/')
 
     } catch (err) {

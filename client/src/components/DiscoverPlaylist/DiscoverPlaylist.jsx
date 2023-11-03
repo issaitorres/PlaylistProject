@@ -4,7 +4,11 @@ import { useCookies } from 'react-cookie'
 import axios from 'axios'
 import albumCover from "../../Assets/movie-soundtracks-cover.jpg"
 import "./DiscoverPlaylist.css"
-
+import {
+    addNewPlaylistInfoToLocalStorage,
+    playlistExistsInLocalStorage,
+    environment
+} from '../../utils/components'
 
 const DiscoverPlaylist = () => {
     const [cookies] = useCookies(["access_token"])
@@ -20,19 +24,21 @@ const DiscoverPlaylist = () => {
         setLoader(true)
         
         // compare with localstorage
-        const localStoragePlaylistInfo = window?.localStorage?.playlistInfo
-        if(localStoragePlaylistInfo) {
-            const currentPlaylistIds = JSON.parse(localStoragePlaylistInfo).map((info) => info.playlistId)
-            if(currentPlaylistIds.includes(discoverPlaylistId)) {
-                // navigate to playlist and exit - this would submit another playlist without this return
-                navigate(`/playlist/${discoverPlaylistId}`)
-                return
-            }
+        // edge case: discover playlist can flash for like a second before the user's playlists are loaded
+        //            in which they can submit the discover playlist and then have two copies in their local storage
+        //            but this if statement won't catch it since the local storage was empty initially
+        //            Recap: so LS is empty, user submits discoverplaylist, then LS gets populated with user's playlists
+        //            which includes a copy of discoverplaylist
+        //            maybe we can handle this when we load the playlists in
+        if(playlistExistsInLocalStorage(discoverPlaylistId)) {
+            // navigate to playlist and exit - this would submit another playlist without this return
+            navigate(`/playlist/${discoverPlaylistId}`)
+            return
         }
     
         setLoader(!loader)
         try {
-            const res = await axios.post(`${process.env.NODE_ENV === "development" ? process.env.REACT_APP_DEV_BACKEND : process.env.REACT_APP_PROD_BACKEND}/playlists`, {
+            const res = await axios.post(`${environment}/playlists`, {
                 playlistId: discoverPlaylistId
             }, 
             {
@@ -41,12 +47,8 @@ const DiscoverPlaylist = () => {
                 }
             })
 
-            const newPlaylistInfo = res.data
-            const localStoragePlaylistInfo = window?.localStorage?.playlistInfo
-            var parsedLocalStoragePlaylistInfo = localStoragePlaylistInfo ? JSON.parse(localStoragePlaylistInfo) : []
-            parsedLocalStoragePlaylistInfo.push(newPlaylistInfo)
-            window.localStorage.setItem("playlistInfo", JSON.stringify(parsedLocalStoragePlaylistInfo))
-            navigate(`/playlist/${discoverPlaylistId}`, {state: { playlist: newPlaylistInfo }})
+            addNewPlaylistInfoToLocalStorage(res.data)
+            navigate(`/playlist/${discoverPlaylistId}`, {state: { playlist: res.data }})
         } catch (err) {
             console.log(err)
         }

@@ -6,6 +6,11 @@ import PlaylistTile from '../../components/PlaylistTile/PlaylistTile'
 import AboutSPA from './AboutSPA'
 import { useNavigate } from 'react-router-dom'
 import DiscoverPlaylist from "../../components/DiscoverPlaylist/DiscoverPlaylist"
+import {
+  setUserPlaylistInfoInLocalStorage,
+  getPlaylistInfoFromLocalStorage,
+  environment
+} from '../../utils/components'
 import "./home.css"
 
 
@@ -19,11 +24,12 @@ const Home = () => {
 
   const fetchPlaylists = React.useCallback(async (update=false, playlistId=false) => {
     // check if info already in localstorage
-    if(window?.localStorage?.playlistInfo && !update) {
-      setPlaylists(JSON.parse(window.localStorage.playlistInfo))
+    const playlistInfo = getPlaylistInfoFromLocalStorage()
+    if(playlistInfo.length && !update) {
+      setPlaylists(playlistInfo)
     } else {
       try {
-        const res = await axios.get(`${process.env.NODE_ENV === "development" ? process.env.REACT_APP_DEV_BACKEND : process.env.REACT_APP_PROD_BACKEND}/playlists/user`, {
+        const res = await axios.get(`${environment}/playlists/user`, {
           headers: {
             authorization: `Bearer ${cookies.access_token}`,
           }
@@ -32,12 +38,13 @@ const Home = () => {
         if(playlistId) {
           navigate(`/playlist/${playlistId}`, {state: {playlist: res.data.find((playlist) => { return playlist.playlistId === playlistId })}})
         }
-        window.localStorage.setItem("playlistInfo", Array.isArray(res.data) ? JSON.stringify(res.data) : JSON.stringify([]))
+
+        setUserPlaylistInfoInLocalStorage(Array.isArray(res.data) ? JSON.stringify(res.data) : JSON.stringify([]))
       } catch (error) {
 
         // get new access token if expired
         if(error?.response?.status === 403) {
-          const refreshRes = await axios.get(`${process.env.NODE_ENV === "development" ? process.env.REACT_APP_DEV_BACKEND : process.env.REACT_APP_PROD_BACKEND}/refresh`, {
+          const refreshRes = await axios.get(`${environment}/refresh`, {
             withCredentials: true,
             credentials: 'include'
           })
@@ -45,7 +52,7 @@ const Home = () => {
             maxAge: 900
           })
 
-          const res = await axios.get(`${process.env.NODE_ENV === "development" ? process.env.REACT_APP_DEV_BACKEND : process.env.REACT_APP_PROD_BACKEND}/user`, {
+          const res = await axios.get(`${environment}/user`, {
             headers: {
               authorization: `Bearer ${refreshRes.data.accessToken}`,
             }
@@ -57,7 +64,6 @@ const Home = () => {
 
         // }
         console.log(error)
-
       }
     }
   }, [])

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import FormInput from '../../components/FormInput/FormInput'
 import InputWarning from '../../components/InputWarning/InputWarning'
+import { environment } from '../../utils/components'
 import './auth.css'
 
 
@@ -21,7 +22,7 @@ const Register = () => {
     event.preventDefault()
     setLoader(!loader)
     try {
-      const result = await axios.post(`${process.env.NODE_ENV === "development" ? process.env.REACT_APP_DEV_BACKEND : process.env.REACT_APP_PROD_BACKEND}/register`, registerUserData)
+      const result = await axios.post(`${environment}/register`, registerUserData)
       navigate('/login', {state: {email: registerUserData.email}})
 
     } catch (err) {

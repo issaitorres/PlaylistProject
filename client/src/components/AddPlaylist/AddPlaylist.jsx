@@ -4,16 +4,23 @@ import { useCookies } from 'react-cookie'
 import axios from 'axios'
 import FormInput from '../FormInput/FormInput'
 import Banner from "../../components/Banner/Banner"
+import {
+  validPlaylistIdChecker,
+  addNewPlaylistInfoToLocalStorage,
+  playlistExistsInLocalStorage,
+  environment
+} from '../../utils/components'
 import "./AddPlaylist.css"
 
 
 const AddPlaylist = ({ accessToken }) => {
   const [playlistId, setPlaylistId] = useState("")
   const [loader, setLoader] = useState(false)
-  const navigate = useNavigate()
-  const [ , , removeCookie] = useCookies(["access_token"])
   const [notice, setNotice] = useState(false)
   const displayNoticeRef = useRef(null)
+  const [ , , removeCookie] = useCookies(["access_token"])
+  const navigate = useNavigate()
+
 
   const displayNoticeInterval = (time=0) => {
     displayNoticeRef.current = setInterval(() => {
@@ -35,33 +42,24 @@ const AddPlaylist = ({ accessToken }) => {
   const submitPlaylistId = async (event) => {
     event.preventDefault()
 
-    const playlistIdRegex1 = /playlist\/.{22}/
-    const playlistIdRegex2 = /.{22}/
-    if(playlistIdRegex1.test(playlistId) || playlistIdRegex2.test(playlistId)) {
-      var extractedPlaylistId = playlistIdRegex2.test(playlistId) ? playlistId.split('/').pop() : playlistId
-
-      // compare with localstorage
-      const localStoragePlaylistInfo = window?.localStorage?.playlistInfo
-      if(localStoragePlaylistInfo) {
-        const currentPlaylistIds = JSON.parse(localStoragePlaylistInfo).map((info) => info.playlistId)
-        if(currentPlaylistIds.includes(extractedPlaylistId)) {
-          // navigate to playlist and exit - this would submit another playlist without this return
-          navigate(`/playlist/${extractedPlaylistId}`)
-          return
-        }
+    const validPlaylistId = validPlaylistIdChecker(playlistId)
+    if(validPlaylistId) {
+      if(playlistExistsInLocalStorage(validPlaylistId)) {
+        navigate(`/playlist/${validPlaylistId}`)
+        return
       }
 
       setLoader(!loader)
       try {
-        const res = await axios.post(`${process.env.NODE_ENV === "development" ? process.env.REACT_APP_DEV_BACKEND : process.env.REACT_APP_PROD_BACKEND}/playlists`, {
-          playlistId: extractedPlaylistId
-        }, 
-        {
-          headers: {
-            authorization: `Bearer ${accessToken}`
+        const res = await axios.post(`${environment}/playlists`, {
+            playlistId: validPlaylistId
+          },
+          {
+            headers: {
+              authorization: `Bearer ${accessToken}`
+            }
           }
-        })
-
+        )
 
         if(res.status === 204) {
           // couldn't find that playlist id
@@ -71,12 +69,8 @@ const AddPlaylist = ({ accessToken }) => {
           return
         }
 
-        const newPlaylistInfo = res.data
-        const localStoragePlaylistInfo = window?.localStorage?.playlistInfo
-        var parsedLocalStoragePlaylistInfo = localStoragePlaylistInfo ? JSON.parse(localStoragePlaylistInfo) : []
-        parsedLocalStoragePlaylistInfo.push(newPlaylistInfo)
-        window.localStorage.setItem("playlistInfo", JSON.stringify(parsedLocalStoragePlaylistInfo))
-        navigate(`/playlist/${extractedPlaylistId}`, {state: { playlist: newPlaylistInfo }})
+        addNewPlaylistInfoToLocalStorage(res.data)
+        navigate(`/playlist/${validPlaylistId}`, {state: { playlist: res.data }})
       } catch (err) {
         console.log(err)
         if(err.response.status === 403) {

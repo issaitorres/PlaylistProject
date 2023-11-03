@@ -13,6 +13,10 @@ import Carousel from '../Carousel/Carousel';
 import getGraphGridData from "../../data/getGraphGridData"
 import PlaylistQuickFacts from '../PlaylistQuickFacts/PlaylistQuickFacts';
 import About from '../About/About';
+import {
+  deletePlaylistInfoFromLocalStorage,
+  environment
+} from '../../utils/components'
 import "./PlaylistContainer.css"
 
 
@@ -29,7 +33,8 @@ const PlaylistContainer = ({ playlist, refreshPlaylist }) => {
     missingTracks,
     trackTable
   } = playlist
-  var filteredTracktable = filterTracktable(trackTable) // remove missing tracks
+  // filter out all missing tracks so they don't impact quick facts and carousel stats
+  var filteredTracktable = filterTracktable(trackTable)
   var artistSongsInfo = getArtistSongsInfo(filteredTracktable)
   var genreSongs = getGenreSongs(filteredTracktable)
   var yearSongs = getYearSongs(filteredTracktable)
@@ -38,7 +43,7 @@ const PlaylistContainer = ({ playlist, refreshPlaylist }) => {
   const removePlaylist = async (playlistObjectId) => {
     setDeleteLoader(!deleteLoader)
     try {
-      const res = await axios.delete(`${process.env.NODE_ENV === "development" ? process.env.REACT_APP_DEV_BACKEND : process.env.REACT_APP_PROD_BACKEND}/playlists`,
+      const res = await axios.delete(`${environment}/playlists`,
       {
        headers: {
          authorization: `Bearer ${cookies.access_token}`
@@ -48,12 +53,7 @@ const PlaylistContainer = ({ playlist, refreshPlaylist }) => {
        }
      })
 
-     // remove playlist from localstorage
-     if(window.localStorage.playlistInfo) {
-       var newLocalStorage = JSON.parse(window.localStorage.playlistInfo).filter((info) => info._id !== playlistObjectId)
-       window.localStorage.setItem("playlistInfo", JSON.stringify(newLocalStorage))
-     }
-
+     deletePlaylistInfoFromLocalStorage(playlistObjectId)
      setDeleteLoader(false)
      navigate('/')
     } catch (err) {
@@ -94,7 +94,7 @@ const PlaylistContainer = ({ playlist, refreshPlaylist }) => {
         <TrackGrid
           playlistDuplicates={playlistDuplicates}
           missingTracks={missingTracks}
-          trackTable={trackTable} // original tracktable
+          trackTable={trackTable} // original tracktable including missing tracks
         />
       </div>
       <div className='flex-container'>

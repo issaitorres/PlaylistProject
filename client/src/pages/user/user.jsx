@@ -5,6 +5,13 @@ import axios from 'axios'
 import FormInput from '../../components/FormInput/FormInput'
 import Banner from "../../components/Banner/Banner"
 import InputWarning from '../../components/InputWarning/InputWarning'
+import {
+  getUserInfoFromLocalStorage,
+  setUserInfoInLocalStorage,
+  getPlaylistInfoFromLocalStorage,
+  deleteAllPlaylistInfoFromLocalStorage,
+  environment
+} from '../../utils/components'
 import "./user.css"
 
 
@@ -14,15 +21,10 @@ const User = () => {
   const [deleteLoader, setDeleteLoader] = useState(false)
   const [warning, setWarning] = useState(false)
   const [successfulUpdate, setSuccessfulUpdate] = useState(false)
-  const playlistInfo = window?.localStorage?.playlistInfo ? JSON.parse(window.localStorage.playlistInfo) : []
+  const playlistInfo = getPlaylistInfoFromLocalStorage()
   const navigate = useNavigate()
 
-
-  var userInfo
-  if(window?.localStorage?.userInfo) {
-    userInfo = JSON.parse(window.localStorage.userInfo)
-  }
-
+  var userInfo = getUserInfoFromLocalStorage()
   const [updatedUserData, setUpdatedUserData] = useState({
     email: userInfo?.email || "",
     username: userInfo?.username || "",
@@ -46,7 +48,7 @@ const User = () => {
 
       setUpdateLoader(!updateLoader)
     try {
-      const result = await axios.patch(`${process.env.NODE_ENV === "development" ? process.env.REACT_APP_DEV_BACKEND : process.env.REACT_APP_PROD_BACKEND}/user`, updatedUserData, {
+      const result = await axios.patch(`${environment}/user`, updatedUserData, {
         headers: {
           authorization: `Bearer ${cookies.access_token}`
         }
@@ -54,10 +56,8 @@ const User = () => {
       const newUsername = result.data.newUsername
       const newEmail = result.data.newEmail
 
-      var userInfo
-      if(window?.localStorage?.userInfo) {
-        userInfo = JSON.parse(window.localStorage.userInfo)
-
+      var userInfo = getUserInfoFromLocalStorage()
+      if(userInfo) {
         if(userInfo.email !== newEmail) {
           userInfo.email = newEmail
         }
@@ -65,8 +65,7 @@ const User = () => {
         if(userInfo.username !== newUsername) {
           userInfo.username = newUsername
         }
-  
-        window.localStorage.setItem("userInfo", JSON.stringify(userInfo))
+        setUserInfoInLocalStorage(userInfo)
       }
       
       setUpdateLoader(false)
@@ -89,14 +88,13 @@ const User = () => {
   const deleteAllUserPlaylists = async () => {
     setDeleteLoader(!deleteLoader)
     try {
-      const result = await axios.delete(`${process.env.NODE_ENV === "development" ? process.env.REACT_APP_DEV_BACKEND : process.env.REACT_APP_PROD_BACKEND}/user/deletemyplaylists`, {
+      const result = await axios.delete(`${environment}/user/deletemyplaylists`, {
         headers: {
           authorization: `Bearer ${cookies.access_token}`
         }
       })
 
-      window.localStorage.removeItem("playlistInfo")
-
+      deleteAllPlaylistInfoFromLocalStorage()
       setSuccessfulUpdate(true)
       setDeleteLoader(false)
       setTimeout(() => {

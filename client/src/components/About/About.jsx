@@ -52,7 +52,9 @@ const About = ({ removePlaylist, deleteLoader }) => {
         </h2>
         <p>
           Public playlists submitted are saved to this website only for ease of accessability. Feel free to remove your playlist by clicking below.
-          {/* All playlists submitted are automatically deleted after one week. - Figure how to do this when app is deployed!*/}
+          {/* All playlists submitted are automatically deleted after one week.
+              - update: need OnRender premium to run background jobs
+          */}
         </p>
         <div>
         <button className="button danger-theme about-button" onClick={removePlaylist}>

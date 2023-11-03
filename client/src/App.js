@@ -1,15 +1,17 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import Home from './pages/home/home';
-import Register from './pages/auth/register';
-import Login from './pages/auth/login';
-import Logout from './pages/auth/logout';
+import {
+  Home,
+  Restricted,
+  Protected,
+  Register,
+  Login,
+  Logout,
+  Playlist,
+  User,
+  Error
+} from "./pages"
 import Navbar from './components/NavBar/Navbar';
 import Footer from './components/Footer/Footer';
-import Playlist from './pages/playlist/playlist';
-import Error from './pages/404/error'
-import User from './pages/user/user'
-import Restricted from './pages/auth/Restricted'
-import Protected from "./pages/auth/Protected"
 import { AudioProvider } from "./AudioContext"
 import './App.css';
 
@@ -23,10 +25,10 @@ function App() {
           <Route path="/" element={<Home />} />
            <Route element={<Protected />}> {/* user must be logged in to access these pages */}
             <Route path="/logout" element={<Logout />} />
+            <Route path="/user" element={<User/>} />
             <Route element={<AudioProvider />}>
               <Route path="/playlist/:id" element={<Playlist/>} />
             </Route>
-            <Route path="/user" element={<User/>} />
           </Route>
           <Route element={<Restricted />}>{/* user cannot access these pages while logged in*/}
             <Route path="/login" element={<Login />} />
