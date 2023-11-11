@@ -42,7 +42,6 @@ const handleLogin = async (req, res) => {
             maxAge: 24 * 60 * 60 * 1000, // matches with refresh token - uses milliseconds,
             sameSite: 'None', 
             secure: true
-
         })
 
         res.json({ 

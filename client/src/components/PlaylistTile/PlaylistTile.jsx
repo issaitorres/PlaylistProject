@@ -11,16 +11,16 @@ const PlaylistTile = ({playlist}) => {
   }
 
   return (
-        <Link
-          to={`/playlist/${playlist.playlistId}`}
-          state={{playlist: playlist}}
-          className="playlist-tile"
-        >
-          <img src={playlist.playlistImage} alt="playlist" />
-          <div>
-            {shortenPlaylistName}
-          </div>
-        </Link>
+    <Link
+      to={`/playlist/${playlist.playlistId}`}
+      state={{playlist: playlist}}
+      className="playlist-tile"
+    >
+      <img src={playlist.playlistImage} alt="playlist" />
+      <div>
+        {shortenPlaylistName}
+      </div>
+    </Link>
   )
 }
 

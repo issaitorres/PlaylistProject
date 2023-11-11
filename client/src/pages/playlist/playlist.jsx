@@ -9,6 +9,7 @@ import {
   addNewPlaylistInfoToLocalStorage,
   updatePlaylistInfoInLocalStorage,
   playlistExistsInLocalStorage,
+  removeItemFromLocalStorage,
   environment
 } from '../../utils/components';
 import "./playlist.css"
@@ -34,9 +35,12 @@ const Playlist = () => {
           try {
             const res = await axios.post(`${environment}/playlists`,
               {
-                playlistId: playlistIdFromURL
+                playlistId: playlistIdFromURL,
+                savePlaylist: location?.state?.savePlaylist,
+                useAccessTokenWithScope: location?.state?.useAccessTokenWithScope
               },
               {
+                withCredentials: true,
                 headers: {
                   authorization: `Bearer ${cookies.access_token}`
                 }
@@ -47,6 +51,18 @@ const Playlist = () => {
               // couldn't find that playlist id
               alert("Could not find a playlist with that id. Please check that this playlist is public on Spotify and submit again.")
               navigate('/')
+              return
+            } else if(res.status === 205) {
+              // both spotify user access and refresh tokens are expired
+              removeItemFromLocalStorage("spotifyPlaylistUserData")
+              navigate('/')
+              alert("Spotify access has expired. Please Login with Spotify again to view this information.")
+              return
+            }
+
+            if(!res.data.trackTable.length) {
+              alert("This playlist does not have any tracks.")
+              navigate("/")
               return
             }
 
@@ -63,7 +79,12 @@ const Playlist = () => {
       submitPlaylistId()
 
     } else {
-      setPlaylist(foundPlaylist)
+      if(foundPlaylist.trackTable.length) {
+        setPlaylist(foundPlaylist)
+      } else {
+        alert("This playlist does not have any tracks.")
+        navigate("/")
+      }
     }
   }, [navigate])
 

@@ -1,0 +1,70 @@
+.spotify-playlist-tile {
+    margin: 5px;
+    background-color: var(--background-secondary-color);
+    border-radius: var(--form-border-radius);
+    text-align: center;
+    max-width: 220px;
+    max-height: 250px;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.spotify-playlist-tile:hover {
+    -webkit-filter: brightness(var(--playlist-tile-brightness));
+    /* -webkit-filter: brightness(85%); */
+    -webkit-transition: all 10ms ease;
+    -moz-transition: all 10ms ease;
+    -o-transition: all 10ms ease;
+    -ms-transition: all 10ms ease;
+    transition: all 10ms ease;
+}
+
+.spotify-playlist-tile img {
+    border-top-left-radius: var(--form-border-radius);
+    border-top-right-radius: var(--form-border-radius);
+    margin: 0px auto;
+    width: 100%;
+    height: 70%;
+}
+
+.spotify-playlist-tile__details-container {
+    padding: 5px;
+}
+
+.spotify-playlist-tile__details-container div {
+    text-decoration: none;
+    text-decoration-line: none;
+    color: var(--text-dark);
+
+}
+
+.spotify-playlist-tile__playlist-name {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.spotify-playlist-tile__playlist-owner {
+    font-size: 18px;
+}
+
+.spotify-playlist-tile__playlist-trackcount {
+    font-size: 16px;
+}
+
+
+
+.spotify-playlist-tile:link {
+    text-decoration: none;
+}
+
+.spotify-playlist-tile:visited {
+    text-decoration: none;
+}
+
+.spotify-playlist-tile:hover {
+    text-decoration: none;
+}
+
+.spotify-playlist-tile:active {
+    text-decoration: none;
+}

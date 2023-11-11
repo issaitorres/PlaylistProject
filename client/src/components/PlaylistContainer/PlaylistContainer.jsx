@@ -26,6 +26,7 @@ const PlaylistContainer = ({ playlist, refreshPlaylist }) => {
   const [deleteLoader, setDeleteLoader] = useState(false)
   const { 
     _id: playlistObjectId,
+    playlistId,
     playlistName,
     playlistOwner,
     playlistImage,
@@ -40,20 +41,23 @@ const PlaylistContainer = ({ playlist, refreshPlaylist }) => {
   var yearSongs = getYearSongs(filteredTracktable)
 
 
-  const removePlaylist = async (playlistObjectId) => {
+  const removePlaylist = async (playlistObjectId, playlistId) => {
     setDeleteLoader(!deleteLoader)
     try {
-      const res = await axios.delete(`${environment}/playlists`,
-      {
-       headers: {
-         authorization: `Bearer ${cookies.access_token}`
-       },
-       data: {
-         "playlistObjectId": playlistObjectId
-       }
-     })
+      if(playlistObjectId) {
+        const res = await axios.delete(`${environment}/playlists`,
+        {
+         headers: {
+           authorization: `Bearer ${cookies.access_token}`
+         },
+         data: {
+           "playlistObjectId": playlistObjectId
+         }
+       })
+      }
 
-     deletePlaylistInfoFromLocalStorage(playlistObjectId)
+    // delete by playlistId since playlist isn't neccesarily saved by user in db
+     deletePlaylistInfoFromLocalStorage(playlistId)
      setDeleteLoader(false)
      navigate('/')
     } catch (err) {
@@ -98,7 +102,10 @@ const PlaylistContainer = ({ playlist, refreshPlaylist }) => {
         />
       </div>
       <div className='flex-container'>
-        <About removePlaylist={() => removePlaylist(playlistObjectId)} deleteLoader={deleteLoader}/>
+        <About
+          removePlaylist={() => removePlaylist(playlistObjectId, playlistId)}
+          deleteLoader={deleteLoader}
+        />
       </div>
     </>
   )

@@ -1,6 +1,13 @@
 const { Playlist } = require('../model/Playlist')
 const { User } = require('../model/User')
 const { getPlaylistInfo } = require('../config/playlistInformation')
+const { generateNewSpotifyUserTokens } = require('../config/GetAccessToken')
+const {
+    encodeSpotifyUserAccessToken,
+    encodeSpotifyUserRefreshToken,
+    decodeSpotifyUserAccessToken,
+    decodeSpotifyUserRefreshToken
+} = require('../controllers/spotifyLoginController')
 
 
 const getAllPlaylists = async (req, res) => {
@@ -15,10 +22,16 @@ const getAllPlaylists = async (req, res) => {
 
 
 const addPlaylist = async (req, res) => {
-    const { playlistId } = req.body
+    const {
+        playlistId,
+        savePlaylist,
+        useAccessTokenWithScope
+    } = req.body
+
     const mongoUserId = req.mongoUserId
     if (!playlistId || !mongoUserId) return res.status(400).json({ 'message': 'missing playlistID or mongoUserId' })
 
+    const savePlaylistToDB = (savePlaylist || savePlaylist === undefined) ? true : false
     // check if playlistObject already exists
     const playlistObject = await Playlist.findOne({ playlistId: playlistId }, excludedProperties).exec()
     if(playlistObject) {
@@ -26,39 +39,129 @@ const addPlaylist = async (req, res) => {
         addPlaylistObjectIdToUserPlaylistObjectIds(mongoUserId, playlistObject._id)
         addUserIdToPlaylistObjectOwnerUser(mongoUserId, playlistObject._id)
     } else {
-        const playlistInfo = await getPlaylistInfo(playlistId)
-        if(playlistInfo) {
-            const playlistObject = await Playlist.create({
-                playlistId: playlistId,
-                userOwner: mongoUserId,
-                playlistName: playlistInfo.playlistName,
-                playlistOwner: playlistInfo.playlistOwner,
-                playlistImage: playlistInfo.playlistImage,
-                totalTracks: playlistInfo.totalTracks,
-                snapshotId: playlistInfo.snapshotId,
-                playlistDuplicates: playlistInfo.duplicates,
-                missingTracks: playlistInfo.missingTracks,
-                trackTable: playlistInfo.trackTable
-            })
-
-            // filter out the excludedProperties by only returning properties we need
-            const filteredPlaylistObject = {
-                _id: playlistObject._id,
-                playlistId: playlistObject.playlistId,
-                playlistName: playlistObject.playlistName,
-                playlistOwner: playlistObject.playlistOwner,
-                playlistImage: playlistObject.playlistImage,
-                playlistDuplicates: playlistObject.playlistDuplicates,
-                missingTracks: playlistInfo.missingTracks,
-                trackTable: playlistObject.trackTable
+        var accessTokenWithScope = false
+        if(useAccessTokenWithScope) {
+            var accessTokenExpirationTime
+            const accessTokenAndExpirationTime = decodeSpotifyUserAccessToken(req.cookies.spotifyUserAccessToken)
+            if(accessTokenAndExpirationTime) {
+                accessTokenWithScope = accessTokenAndExpirationTime.accessTokenWithScope
+                accessTokenExpirationTime = accessTokenAndExpirationTime.accessTokenExpirationTime
+            } else {
+                // if missing spotifyUserAccessToken, then we know its expired
+                if(req.cookies.spotifyUserAccessToken === undefined) {
+                    accessTokenExpirationTime = 0
+                } else {
+                    return res.status(403).json({ 'message': 'could not decode the access jwt'})
+                }
             }
 
+            // if accessToken is expired, get new one
+            if(Date.now() > accessTokenExpirationTime) {
+                var refreshTokenWithScope
+                var refreshTokenExpirationTime
+
+                const refreshTokenAndExpirationTime = decodeSpotifyUserRefreshToken(req.cookies.spotifyUserRefreshToken)
+                if(refreshTokenAndExpirationTime) {
+                    refreshTokenWithScope = refreshTokenAndExpirationTime.refreshTokenWithScope
+                    refreshTokenExpirationTime = refreshTokenAndExpirationTime.refreshTokenExpirationTime
+                } else {
+                    if(req.cookies.spotifyUserRefreshToken === undefined) {
+                        refreshTokenExpirationTime = 0
+                    } else {
+                        return res.status(403).json({ 'message': 'could not decode the refresh jwt'})
+                    }
+                }
+
+                if(Date.now() < refreshTokenExpirationTime) {
+                    // get new access token using the refresh token
+                    const tokens = await generateNewSpotifyUserTokens(refreshTokenWithScope)
+                    if(tokens) {
+                        accessTokenWithScope = tokens.accessToken
+                        const encodedSpotifyUserAccessToken = encodeSpotifyUserAccessToken(tokens.accessToken, Date.now())
+                        const encodedSpotifyUserRefreshToken = encodeSpotifyUserRefreshToken(tokens.refreshToken, Date.now())
+
+                        res.cookie('spotifyUserAccessToken', encodedSpotifyUserAccessToken, {
+                            httpOnly: true,
+                            maxAge: 60 * 60 * 1000, // uses milliseconds
+                            sameSite: 'None',
+                            secure: true,
+                            overwrite: true
+                        })
+                        res.cookie('spotifyUserRefreshToken', encodedSpotifyUserRefreshToken, {
+                            httpOnly: true,
+                            maxAge: 24 * 60 * 60 * 1000, // uses milliseconds
+                            sameSite: 'None',
+                            secure: true,
+                            overwrite: true
+                        })
+
+                    } else {
+                        // if refreshtoken is also expired return to page
+                        // and user just needs to login in again with spotify
+                        return res.status(400).json({ 'message' : 'error generating access and refresh tokens'})
+                    }
+
+                } else {
+                    // both access and refresh are expired
+                    res.clearCookie('spotifyUserAccessToken', { httpOnly: true, sameSite: 'None', secure: true });
+                    res.clearCookie('spotifyUserRefreshToken', { httpOnly: true, sameSite: 'None', secure: true });
+                    return res.status(205).json({ 'message' : 'refresh and access have expired'})
+                }
+            }
+
+        }
+
+        const playlistInfo = await getPlaylistInfo(playlistId, false, accessTokenWithScope)
+
+        if(playlistInfo) {
+            var filteredPlaylistObject
+            if(savePlaylistToDB) {
+                const playlistObject = await Playlist.create({
+                    playlistId: playlistId,
+                    userOwner: mongoUserId,
+                    playlistName: playlistInfo.playlistName,
+                    playlistOwner: playlistInfo.playlistOwner,
+                    playlistImage: playlistInfo.playlistImage,
+                    totalTracks: playlistInfo.totalTracks,
+                    snapshotId: playlistInfo.snapshotId,
+                    playlistDuplicates: playlistInfo.duplicates,
+                    missingTracks: playlistInfo.missingTracks,
+                    trackTable: playlistInfo.trackTable
+                })
+
+                // filter out the excludedProperties by only returning properties we need
+                filteredPlaylistObject = {
+                    _id: playlistObject._id,
+                    playlistId: playlistObject.playlistId,
+                    playlistName: playlistObject.playlistName,
+                    playlistOwner: playlistObject.playlistOwner,
+                    playlistImage: playlistObject.playlistImage,
+                    playlistDuplicates: playlistObject.playlistDuplicates,
+                    missingTracks: playlistInfo.missingTracks,
+                    trackTable: playlistObject.trackTable
+                }
+            } else {
+                filteredPlaylistObject = {
+                    playlistId: playlistId,
+                    userOwner: mongoUserId,
+                    playlistName: playlistInfo.playlistName,
+                    playlistOwner: playlistInfo.playlistOwner,
+                    playlistImage: playlistInfo.playlistImage,
+                    playlistDuplicates: playlistInfo.duplicates,
+                    missingTracks: playlistInfo.missingTracks,
+                    trackTable: playlistInfo.trackTable
+                }
+            }
+
+
             res.status(200).json(filteredPlaylistObject)
-            addPlaylistObjectIdToUserPlaylistObjectIds(mongoUserId, playlistObject._id)
+
+            if(savePlaylistToDB) {
+                addPlaylistObjectIdToUserPlaylistObjectIds(mongoUserId, playlistObject._id)
+            }
         } else {
             res.status(204).json({ 'message' : 'Playlist Id not found'})
         }
-
     }
 }
 

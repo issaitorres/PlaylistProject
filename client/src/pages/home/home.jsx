@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import { useCookies } from 'react-cookie'
+import { useSearchParams } from "react-router-dom";
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import AddPlaylist from '../../components/AddPlaylist/AddPlaylist'
 import PlaylistTile from '../../components/PlaylistTile/PlaylistTile'
+import SpotifyPlaylistTile from '../../components/SpotifyPlaylistTile/SpotifyPlaylistTile'
 import AboutSPA from './AboutSPA'
-import { useNavigate } from 'react-router-dom'
 import DiscoverPlaylist from "../../components/DiscoverPlaylist/DiscoverPlaylist"
 import {
   setUserPlaylistInfoInLocalStorage,
   getPlaylistInfoFromLocalStorage,
+  getSpotifyUserPlaylistDataInLocalStorage,
+  setSpotifyUserPlaylistDataInLocalStorage,
   environment
 } from '../../utils/components'
 import "./home.css"
@@ -17,9 +21,11 @@ import "./home.css"
 const Home = () => {
   const [cookies, setCookies] = useCookies(["access_token"])
   const [playlists, setPlaylists] = useState([])
+  const [spotifyUserPlaylists, setSpotifyUserPlaylists] = useState([])
   const userInfo = window?.localStorage?.userInfo
   const userID = userInfo ? JSON.parse(userInfo).id : null
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams();
 
 
   const fetchPlaylists = React.useCallback(async (update=false, playlistId=false) => {
@@ -68,16 +74,66 @@ const Home = () => {
     }
   }, [])
 
+  const generateAccessTokenAndGetSpotifyUserPlaylistData = async (spotifyCode, spotifyState) => {
+    try {
+      const res = await axios.post(`${environment}/spotify-login/accessToken`,
+          {
+              authorizationCode: spotifyCode,
+              state: spotifyState
+          },
+          {
+            withCredentials: true,
+            headers: {
+                authorization: `Bearer ${cookies.access_token}`
+              }
+          }
+      )
+      return res.data.userPlaylistData
+    } catch (err) {
+      console.log(err)
+      return false
+    }
+  }
+
+  const fetchSpotifyUserPlaylists = async (spotifyCode, spotifyState) => {
+    const data = await generateAccessTokenAndGetSpotifyUserPlaylistData(spotifyCode, spotifyState)
+    setSpotifyUserPlaylistDataInLocalStorage(Array.isArray(data) ? JSON.stringify(data) : JSON.stringify([]))
+    setSpotifyUserPlaylists(data)
+  }
+
+
   useEffect(()=> {
     if(cookies.access_token && userID) {
       fetchPlaylists()
+    }
+
+    // get spotify user playlists from redirect with code and state in url
+    const spotifyCode = searchParams.get("code")
+    const spotifyState = searchParams.get("state")
+    const error = searchParams.get("error") // returns null if no error found in urlparams
+
+    // maybe add a loader here for user spotify tile playlists
+    if(spotifyCode && spotifyState) {
+      fetchSpotifyUserPlaylists(spotifyCode, spotifyState)
+      navigate("/")
+    } else {
+      const userPlaylistData = getSpotifyUserPlaylistDataInLocalStorage()
+      if(userPlaylistData.length) {
+        setSpotifyUserPlaylists(userPlaylistData)
+      } else {
+        console.log(error)
+      }
     }
   }, [])
 
 
   return (
     <div className="page-container">
-      <AddPlaylist accessToken={cookies.access_token} />
+      <AddPlaylist
+        accessToken={cookies.access_token}
+        spotifyUserPlaylists={spotifyUserPlaylists}
+        setSpotifyUserPlaylists={setSpotifyUserPlaylists}
+      />
       {
         !cookies.access_token
           ?
@@ -88,8 +144,9 @@ const Home = () => {
                 ?
                   <DiscoverPlaylist />
                 :
+                <>
                   <div className="home__playlist-tile-wrapper">
-                    <h1> Your Playlists</h1>
+                    <h1> Submitted Playlists</h1>
                     <div className="home__playlist-tile-container">
                       {playlists.map((playlist, index) => (
                         <PlaylistTile
@@ -99,6 +156,20 @@ const Home = () => {
                       ))}
                     </div>
                   </div>
+                  {spotifyUserPlaylists.length > 0 &&
+                    <div className="home__playlist-tile-wrapper">
+                      <h1> Your Spotify Playlists</h1>
+                      <div className="home__playlist-tile-container">
+                        {spotifyUserPlaylists.map((playlist, index) => (
+                          <SpotifyPlaylistTile
+                            key={index}
+                            playlist={playlist}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  }
+                </>
             )
       }
     </div>

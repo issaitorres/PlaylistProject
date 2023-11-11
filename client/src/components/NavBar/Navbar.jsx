@@ -8,8 +8,6 @@ import './NavBar.css'
 
 const Navbar = () => {
   const [cookies] = useCookies(["access_token"])
-  const userInfo = window?.localStorage?.userInfo
-  const username = userInfo ? JSON.parse(userInfo).username : "user"
   const { isDark, setIsDark } = useColorScheme();
 
   const triggerDarkMode = () => {
@@ -43,7 +41,7 @@ const Navbar = () => {
                 </>
               :
                 <>
-                  <NavLink to="/user" activeclassname="active"> Account: {username} </NavLink>
+                  <NavLink to="/user" activeclassname="active"> Account </NavLink>
                   <NavLink to="/logout" activeclassname="active">Logout </NavLink>
                 </>
           }

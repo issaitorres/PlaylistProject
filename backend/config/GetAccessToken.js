@@ -1,4 +1,7 @@
 const axios = require('axios');
+var querystring = require('querystring');
+const { environment } = require("../config/utilities")
+
 
 const GenerateAccessTokenOrGetFromEnvVar = async () => {
     const spotifyAccessToken = process.env.SPOTIFY_ACCESS_TOKEN
@@ -72,4 +75,93 @@ const EditEnvValue = async (envKey, envNewValue) => {
     }
 }
 
-module.exports = { GenerateAccessTokenOrGetFromEnvVar }
+const generateTokensWithScope = async (authorizationCode) => {
+    const spotifyAPITokenUrl = "https://accounts.spotify.com/api/token"
+    const redirectUri = environment
+
+    try {
+        const res = await axios.post(spotifyAPITokenUrl,
+            {
+                code: authorizationCode,
+                redirect_uri: redirectUri,
+                grant_type: 'authorization_code'
+            },
+            {
+                headers: {
+                    'content-type': 'application/x-www-form-urlencoded',
+                    'Authorization': 'Basic ' + (new Buffer.from(process.env.SPOTIFY_CLIENT_ID + ':' + process.env.SPOTIFY_CLIENT_SECRET).toString('base64'))
+                }
+            }
+        )
+
+        return {
+            accessToken: res.data.access_token,
+            refreshToken: res.data.refresh_token,
+        }
+
+    } catch (err) {
+        console.log(err)
+        return false
+    }
+}
+
+const generateSpotifyServiceUrl = () => {
+    const spotify_multiple_albums_url = 'https://accounts.spotify.com/authorize?'
+    const state = generateRandomString(16);
+    const redirectUri = environment
+    const scope = 'playlist-read-private'
+
+    const queryString = querystring.stringify({
+      response_type: 'code',
+      client_id: process.env.SPOTIFY_CLIENT_ID,
+      scope: scope,
+      redirect_uri: redirectUri,
+      state: state
+    });
+
+    return [spotify_multiple_albums_url + queryString, state]
+}
+
+const generateRandomString = function(length) {
+    var text = '';
+    var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+    for (var i = 0; i < length; i++) {
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return text;
+}
+
+const generateNewSpotifyUserTokens = async (refreshToken) => {
+    const spotify_access_token_url = "https://accounts.spotify.com/api/token";
+
+    try {
+        const res = await axios.post(spotify_access_token_url,
+            {
+                refresh_token: refreshToken,
+                grant_type: 'refresh_token'
+            },
+            {
+                headers: {
+                    'content-type': 'application/x-www-form-urlencoded',
+                    'Authorization': 'Basic ' + (new Buffer.from(process.env.SPOTIFY_CLIENT_ID + ':' + process.env.SPOTIFY_CLIENT_SECRET).toString('base64'))
+                }
+            }
+        )
+        return {
+            accessToken: res.data.access_token,
+            refreshToken: res.data.refresh_token
+        }
+    } catch (err) {
+        return false
+    }
+
+}
+
+
+module.exports = {
+    GenerateAccessTokenOrGetFromEnvVar,
+    generateSpotifyServiceUrl,
+    generateTokensWithScope,
+    generateNewSpotifyUserTokens
+}

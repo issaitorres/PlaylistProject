@@ -23,8 +23,12 @@ app.use(express.json());
 app.use(logger)
 
 app.use(cors({
-    origin: ["http://localhost:3000", "http://127.0.0.1:3000", "https://spotifyplaylistanalyzer.onrender.com" ],
-    credentials: true
+    origin: [
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "https://spotifyplaylistanalyzer.onrender.com"
+    ],
+    credentials: true,
 }))
 
 //middleware for cookies
@@ -36,6 +40,7 @@ app.use('/register', require('./routes/register'));
 app.use('/login', require('./routes/login'));
 app.use('/refresh', require('./routes/refresh'));
 app.use('/logout', require('./routes/logout'))
+app.use('/spotify-login', require('./routes/spotifyLogin'))
 
 // special route only for mongo db queries
     // - add middleware only for this route to verify this command comes from server

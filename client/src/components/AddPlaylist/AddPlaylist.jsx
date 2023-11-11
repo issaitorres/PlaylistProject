@@ -8,12 +8,15 @@ import {
   validPlaylistIdChecker,
   addNewPlaylistInfoToLocalStorage,
   playlistExistsInLocalStorage,
+  removeItemFromLocalStorage,
   environment
 } from '../../utils/components'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSpotify } from '@fortawesome/free-brands-svg-icons'
 import "./AddPlaylist.css"
 
 
-const AddPlaylist = ({ accessToken }) => {
+const AddPlaylist = ({ accessToken, spotifyUserPlaylists, setSpotifyUserPlaylists }) => {
   const [playlistId, setPlaylistId] = useState("")
   const [loader, setLoader] = useState(false)
   const [notice, setNotice] = useState(false)
@@ -84,6 +87,35 @@ const AddPlaylist = ({ accessToken }) => {
     }
   }
 
+  const spotifyLogin = async () => {
+    try {
+      const res = await axios.post(`${environment}/spotify-login`, {},
+        {
+          withCredentials: true,
+          headers: {
+            authorization: `Bearer ${accessToken}`,
+          }
+        }
+      )
+      window.open(res.data.spotifyServiceUrl);
+
+      } catch (err) {
+        console.log(err)
+      }
+  }
+
+  const spotifyLogout = async () => {
+    try {
+      const res = axios.get(`${environment}/logout/spotify`, {})
+    } catch (err) {
+      console.log(err)
+    }
+
+    removeItemFromLocalStorage("spotifyPlaylistUserData")
+    navigate("/")
+    navigate(0)
+  }
+
   return (
     <div className="addplaylist__container">
       {
@@ -103,13 +135,39 @@ const AddPlaylist = ({ accessToken }) => {
               >
                 <h1 className="addplaylist__form-title"> Spotify Playlist Analyzer</h1>
                 <h4 className="addplaylist__form-subtitle"> Get information on any Spotify playlist!</h4>
+                <div className="addplaylist__spotify-login-container">
+                {spotifyUserPlaylists.length > 0
+                  ?
+                    <button
+                      onClick={() => spotifyLogout()}
+                      className="addplaylist__spotify-login-button"
+                    >
+                      <FontAwesomeIcon
+                        icon={faSpotify}
+                        className="addplaylist__spotify-login-button-icon"
+                      />
+                      Logout from Spotify
+                    </button>
+                  :
+                    <button
+                      onClick={() => spotifyLogin()}
+                      className="addplaylist__spotify-login-button"
+                    >
+                      <FontAwesomeIcon
+                        icon={faSpotify}
+                        className="addplaylist__spotify-login-button-icon"
+                      />
+                      Login with Spotify
+                    </button>
+                }
+                </div>
                 <FormInput
                   id="playlistInput"
                   key={1}
                   value={playlistId}
                   onChange={(event) => setPlaylistId(event.target.value)}
                   pattern=".*playlist\/.{22}|.{22}"
-                  placeholder="Playlist URL or playlist ID"
+                  placeholder="Enter a playlist URL or playlist ID"
                   className="addplaylist__formInput-overrides"
                   errorMessage={
                     <div

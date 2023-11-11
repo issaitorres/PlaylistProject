@@ -15,9 +15,9 @@ const ShortestLongestTrack = ({ shortestTrack, longestTrack }) => {
           <AlbumArtAudio track={shortestTrack} size="160" className={"shortestlongeststyles"} />
         </div>
         <div className="shortestlongesttrack__artist">
-            {shortestTrack.trackName} by {
-              Object.values(shortestTrack.trackArtists)
-                .map((artistInfo) => artistInfo.name)
+            {shortestTrack?.trackName} by {
+              Object.values(shortestTrack?.trackArtists)
+                .map((artistInfo) => artistInfo?.name)
                 .join(' & ')
             }
         </div>

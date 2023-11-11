@@ -44,9 +44,9 @@ export const updatePlaylistInfoInLocalStorage = (newPlaylistInfo) => {
     window.localStorage.setItem("playlistInfo", JSON.stringify(parsedLocalStoragePlaylistInfo))
 }
 
-export const deletePlaylistInfoFromLocalStorage = (playlistObjectId) => {
+export const deletePlaylistInfoFromLocalStorage = (playlistId) => {
     const localStoragePlaylistInfo = window?.localStorage?.playlistInfo
-    var newLocalStorage = JSON.parse(localStoragePlaylistInfo).filter((info) => info._id !== playlistObjectId)
+    var newLocalStorage = JSON.parse(localStoragePlaylistInfo).filter((info) => info.playlistId !== playlistId)
     window.localStorage.setItem("playlistInfo", JSON.stringify(newLocalStorage))
 }
 
@@ -84,8 +84,23 @@ export const getUserInfoFromLocalStorage = () => {
     return false
 }
 
+export const setSpotifyUserPlaylistDataInLocalStorage = (data) => {
+    window.localStorage.setItem("spotifyPlaylistUserData", data)
+}
+
+export const getSpotifyUserPlaylistDataInLocalStorage = (data) => {
+    const localStorageSpotifyUserPlaylistData = window?.localStorage?.spotifyPlaylistUserData
+    const spotifyUserplaylistData = localStorageSpotifyUserPlaylistData
+        ? JSON.parse(localStorageSpotifyUserPlaylistData)
+        : []
+    return spotifyUserplaylistData}
+
 export const deleteAllPlaylistInfoFromLocalStorage = () => {
     window.localStorage.removeItem("playlistInfo")
+}
+
+export const removeItemFromLocalStorage = (item) => {
+    window.localStorage.removeItem(item)
 }
 
 export const clearAppInfo = () => {

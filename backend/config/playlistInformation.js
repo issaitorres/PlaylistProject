@@ -2,8 +2,15 @@ const axios = require('axios');
 const { GenerateAccessTokenOrGetFromEnvVar } = require('./GetAccessToken')
 
 
-const getPlaylistInfo = async (playlistId, refreshPlaylistId=false) => {
-    const accessToken = await GenerateAccessTokenOrGetFromEnvVar()
+const getPlaylistInfo = async (playlistId, refreshPlaylistId=false, accessTokenWithScope=false) => {
+    var accessToken
+    if(!accessTokenWithScope) {
+        // access token without scope
+        accessToken = await GenerateAccessTokenOrGetFromEnvVar()
+    } else {
+        // access token with scope
+        accessToken = accessTokenWithScope
+    }
     var spotify_playlists_endpoint = `https://api.spotify.com/v1/playlists/${playlistId}`
     var trackTable = []
     const playlistArtistIds = new Set()

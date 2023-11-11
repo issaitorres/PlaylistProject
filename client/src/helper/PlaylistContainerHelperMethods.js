@@ -74,6 +74,21 @@ const getGenreSongs = (trackTable) => {
                         }
                     }
                 }
+
+                // artistGenres can be an empty array, if there are no genres, then genre is unknown
+                if(artistInfo.artistGenres.length === 0) {
+                    if(genreSongs["Unknown"]) {
+                        genreSongs["Unknown"].trackNames.add(trackInfo.trackName)
+                        Object.values(trackInfo.trackArtists).map((artistInfo) => genreSongs["Unknown"].trackArtists.add(artistInfo.name))
+                    } else {
+                        trackNamesSet.add(trackInfo.trackName)
+                        Object.values(trackInfo.trackArtists).map((artistInfo) => trackArtistsSet.add(artistInfo.name))
+                        genreSongs["Unknown"] = {
+                            "trackNames": trackNamesSet,
+                            "trackArtists": trackArtistsSet
+                        }
+                    }
+                }
             }
         }
     }

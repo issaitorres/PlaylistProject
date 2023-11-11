@@ -15,9 +15,35 @@
 }
 
 .addplaylist__form-subtitle {
-    margin-top: 8px;
+    margin: 8px;
     font-weight: normal;
     font-size: 18px;
+}
+
+.addplaylist__spotify-login-container {
+    margin: 5px 0px 15px 0px;
+}
+
+.addplaylist__spotify-login-button {
+    padding: 5px;
+    border: 2px solid black;
+    border-radius: var(--button-border-radius);
+    font-size: 16px;
+    cursor: pointer;
+    transition-duration: 0.2s;
+    background-color: var(--login-register-form-background);
+    margin: 0px auto;
+    display: flex;
+    align-items: center;
+}
+
+.addplaylist__spotify-login-button:hover {
+    border: 2px solid var(--default-green);
+}
+
+.addplaylist__spotify-login-button-icon {
+    font-size: 24px;
+    padding: 1px 5px 1px 0px;
 }
 
 .addplaylist__formInput-overrides {
