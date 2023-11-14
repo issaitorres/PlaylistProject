@@ -2,7 +2,12 @@ const axios = require('axios');
 const { GenerateAccessTokenOrGetFromEnvVar } = require('./GetAccessToken')
 
 
-const getPlaylistInfo = async (playlistId, refreshPlaylistId=false, accessTokenWithScope=false) => {
+const getPlaylistInfo = async (
+    playlistId,
+    refreshPlaylistId=false,
+    accessTokenWithScope=false,
+    likedSongsEndpoint=false
+    ) => {
     var accessToken
     if(!accessTokenWithScope) {
         // access token without scope
@@ -12,6 +17,10 @@ const getPlaylistInfo = async (playlistId, refreshPlaylistId=false, accessTokenW
         accessToken = accessTokenWithScope
     }
     var spotify_playlists_endpoint = `https://api.spotify.com/v1/playlists/${playlistId}`
+    if(likedSongsEndpoint) {
+        spotify_playlists_endpoint = "https://api.spotify.com/v1/me/tracks"
+    }
+
     var trackTable = []
     const playlistArtistIds = new Set()
     const playlistAlbumIds = new Set()
@@ -30,6 +39,7 @@ const getPlaylistInfo = async (playlistId, refreshPlaylistId=false, accessTokenW
         var res
         try {
             res = await axios.get(spotify_playlists_endpoint, {
+                params: { limit: 50 },
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }

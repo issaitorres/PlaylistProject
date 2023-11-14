@@ -2,6 +2,7 @@
 export const environment = `${process.env.NODE_ENV === "development" ? process.env.REACT_APP_DEV_BACKEND : process.env.REACT_APP_PROD_BACKEND}`
 
 export const validPlaylistIdChecker = (playlistId) => {
+    if(playlistId === "likedSongs") return "likedSongs"
     const playlistIdRegex1 = /playlist\/.{22}/
     const playlistIdRegex2 = /.{22}/
 
@@ -93,10 +94,24 @@ export const getSpotifyUserPlaylistDataInLocalStorage = (data) => {
     const spotifyUserplaylistData = localStorageSpotifyUserPlaylistData
         ? JSON.parse(localStorageSpotifyUserPlaylistData)
         : []
-    return spotifyUserplaylistData}
+    return spotifyUserplaylistData
+}
 
 export const deleteAllPlaylistInfoFromLocalStorage = () => {
     window.localStorage.removeItem("playlistInfo")
+}
+
+export const setSpotifyProfileDataInLocalStorage = (data) => {
+    window.localStorage.setItem("spotifyUserProfileData", data)
+}
+
+export const getSpotifyProfileData = () => {
+    const localStorageSpotifyUserProfileData = window?.localStorage?.spotifyUserProfile
+    const spotifyUserProfileData = localStorageSpotifyUserProfileData
+        ? JSON.parse(localStorageSpotifyUserProfileData)
+        : false
+
+    return spotifyUserProfileData
 }
 
 export const removeItemFromLocalStorage = (item) => {

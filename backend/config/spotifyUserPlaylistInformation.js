@@ -1,4 +1,5 @@
 const axios = require('axios');
+const { getPlaylistInfo } = require('../config/playlistInformation')
 
 
 const getUserPlaylists = async (accessToken) => {
@@ -50,10 +51,29 @@ const getUserPlaylists = async (accessToken) => {
     return filteredUserPlaylists
 }
 
+const getUserDisplayName = async (accessToken) => {
+    const spotifyUserProfileEndpoint = "https://api.spotify.com/v1/me"
 
+    var res
+    try {
+        res = await axios.get(spotifyUserProfileEndpoint, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+    } catch (err) {
+        console.log(err)
+        return false
+    }
 
+    return {
+        displayName: res?.data?.display_name,
+        spotifyUserUrl: res?.data?.external_urls?.spotify
+    }
 
-const getUserPlaylistData = async () => {
 }
 
-module.exports = { getUserPlaylists }
+module.exports = {
+    getUserPlaylists,
+    getUserDisplayName
+}

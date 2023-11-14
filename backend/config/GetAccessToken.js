@@ -109,7 +109,7 @@ const generateSpotifyServiceUrl = () => {
     const spotify_multiple_albums_url = 'https://accounts.spotify.com/authorize?'
     const state = generateRandomString(16);
     const redirectUri = environment
-    const scope = 'playlist-read-private'
+    const scope = 'playlist-read-private user-library-read'
 
     const queryString = querystring.stringify({
       response_type: 'code',

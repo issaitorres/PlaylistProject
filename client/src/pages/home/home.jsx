@@ -6,6 +6,7 @@ import axios from 'axios'
 import AddPlaylist from '../../components/AddPlaylist/AddPlaylist'
 import PlaylistTile from '../../components/PlaylistTile/PlaylistTile'
 import SpotifyPlaylistTile from '../../components/SpotifyPlaylistTile/SpotifyPlaylistTile'
+import LikedSongsPlaylistTile from '../../components/LikedSongsPlaylistTile/LikedSongsPlaylistTile'
 import AboutSPA from './AboutSPA'
 import DiscoverPlaylist from "../../components/DiscoverPlaylist/DiscoverPlaylist"
 import {
@@ -13,6 +14,7 @@ import {
   getPlaylistInfoFromLocalStorage,
   getSpotifyUserPlaylistDataInLocalStorage,
   setSpotifyUserPlaylistDataInLocalStorage,
+  setSpotifyProfileDataInLocalStorage,
   environment
 } from '../../utils/components'
 import "./home.css"
@@ -88,6 +90,11 @@ const Home = () => {
               }
           }
       )
+
+      if(res.data.profileData){
+        setSpotifyProfileDataInLocalStorage(JSON.stringify(res.data.profileData))
+      }
+
       return res.data.userPlaylistData
     } catch (err) {
       console.log(err)
@@ -160,6 +167,7 @@ const Home = () => {
                     <div className="home__playlist-tile-wrapper">
                       <h1> Your Spotify Playlists</h1>
                       <div className="home__playlist-tile-container">
+                        <LikedSongsPlaylistTile />
                         {spotifyUserPlaylists.map((playlist, index) => (
                           <SpotifyPlaylistTile
                             key={index}

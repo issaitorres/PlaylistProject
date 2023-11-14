@@ -25,7 +25,8 @@ const addPlaylist = async (req, res) => {
     const {
         playlistId,
         savePlaylist,
-        useAccessTokenWithScope
+        useAccessTokenWithScope,
+        likedSongsEndpoint
     } = req.body
 
     const mongoUserId = req.mongoUserId
@@ -33,7 +34,12 @@ const addPlaylist = async (req, res) => {
 
     const savePlaylistToDB = (savePlaylist || savePlaylist === undefined) ? true : false
     // check if playlistObject already exists
-    const playlistObject = await Playlist.findOne({ playlistId: playlistId }, excludedProperties).exec()
+    var playlistObject
+    if(playlistId === "likedSongs") {
+        playlistObject = false
+    } else {
+        playlistObject = await Playlist.findOne({ playlistId: playlistId }, excludedProperties).exec()
+    }
     if(playlistObject) {
         res.status(200).json(playlistObject)
         addPlaylistObjectIdToUserPlaylistObjectIds(mongoUserId, playlistObject._id)
@@ -108,10 +114,9 @@ const addPlaylist = async (req, res) => {
                     return res.status(205).json({ 'message' : 'refresh and access have expired'})
                 }
             }
-
         }
 
-        const playlistInfo = await getPlaylistInfo(playlistId, false, accessTokenWithScope)
+        const playlistInfo = await getPlaylistInfo(playlistId, false, accessTokenWithScope, likedSongsEndpoint)
 
         if(playlistInfo) {
             var filteredPlaylistObject
@@ -150,6 +155,10 @@ const addPlaylist = async (req, res) => {
                     playlistDuplicates: playlistInfo.duplicates,
                     missingTracks: playlistInfo.missingTracks,
                     trackTable: playlistInfo.trackTable
+                }
+
+                if(playlistId === "likedSongs") {
+                    filteredPlaylistObject["playlistName"] = "Liked Songs"
                 }
             }
 

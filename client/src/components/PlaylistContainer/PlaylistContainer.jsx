@@ -75,7 +75,8 @@ const PlaylistContainer = ({ playlist, refreshPlaylist }) => {
   return (
     <>
       <div className="flex-container">
-        <PlaylistQuickFacts 
+        <PlaylistQuickFacts
+          playlistId={playlistId}
           artistSongsInfo={artistSongsInfo}
           genreSongs={genreSongs}
           playlistDuplicates={playlistDuplicates}

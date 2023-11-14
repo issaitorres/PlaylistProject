@@ -12,6 +12,7 @@ import {
   deleteAllPlaylistInfoFromLocalStorage,
   environment
 } from '../../utils/components'
+import likedSongsAlbumCover from "../../Assets/liked-songs-album-art.png"
 import "./user.css"
 
 
@@ -229,7 +230,14 @@ const User = () => {
                         <li key={index} className="user__grid">
 
                           <div className="user__grid-item">
-                            <img src={playlist.playlistImage} alt="playlistimage" width="65px" height="65px"/>
+                            <img
+                              src={playlist.playlistId === "likedSongs"
+                                ? likedSongsAlbumCover
+                                : playlist.playlistImage}
+                              alt="playlistimage"
+                              width="65px"
+                              height="65px"
+                            />
                           </div>
 
                           <div className="user__grid-item">

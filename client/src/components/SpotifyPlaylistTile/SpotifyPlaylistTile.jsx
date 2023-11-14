@@ -28,7 +28,7 @@ const SpotifyPlaylistTile = ({ playlist }) => {
       }}
       className="spotify-playlist-tile"
     >
-      <img src={playlist?.playlistImage ? playlist?.playlistImage : missingAlbum} alt="playlist" />
+      <img src={playlist?.playlistImage ? playlist?.playlistImage : missingAlbum} alt="spotify-playlist" />
       <div className="spotify-playlist-tile__details-container">
           <div className="spotify-playlist-tile__playlist-name">
             {shortenPlaylistName}

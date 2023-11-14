@@ -5,10 +5,13 @@ import {
     convertMStoFormat,
     groupTopItemsByTrackcount,
 } from "../../helper/PlaylistContainerHelperMethods"
+import likedSongsAlbumCover from "../../Assets/liked-songs-album-art.png"
+import { getSpotifyProfileData } from "../../utils/components"
 import "./PlaylistQuickFacts.css"
 
 
 const PlaylistQuickFacts = ({
+    playlistId,
     playlistImage, 
     playlistName, 
     playlistOwner,
@@ -32,6 +35,16 @@ const PlaylistQuickFacts = ({
     const avgTrackDuration = totalPlaylistDuration / trackCount
     const totalBPM = Object.values(trackTable).map((track) => track.trackTempo ? track.trackTempo : 0).reduce((acc, val) => acc + val)
     const avgBPM = Math.ceil(totalBPM / trackCount)
+    var playlistCover = playlistImage
+    var playlistCreator = playlistOwner
+
+
+    if(playlistId == "likedSongs") {
+        playlistCover = likedSongsAlbumCover
+        const profileData = getSpotifyProfileData()
+        const displayName = profileData?.displayName
+        playlistCreator = displayName
+    }
 
     const [refresh, setRefresh] = useState(false)
     const getRefreshData = async () => {
@@ -43,7 +56,7 @@ const PlaylistQuickFacts = ({
   return (
     <>
         <div className="quickfacts__section">
-            <img src={playlistImage} alt="playlist" height="350" width="350"/>
+            <img src={playlistCover} alt="playlist" height="350" width="350"/>
         </div>
         <div className="quickfacts__section">
             <div>
@@ -54,7 +67,7 @@ const PlaylistQuickFacts = ({
                         </h2>
                     </div>
                     <div className='quickfacts__section-playlist-author'>
-                        by <b>{playlistOwner}</b>
+                        by <b>{playlistCreator}</b>
                     </div>
                 </div>
                 <div>

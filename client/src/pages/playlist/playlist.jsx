@@ -37,7 +37,8 @@ const Playlist = () => {
               {
                 playlistId: playlistIdFromURL,
                 savePlaylist: location?.state?.savePlaylist,
-                useAccessTokenWithScope: location?.state?.useAccessTokenWithScope
+                useAccessTokenWithScope: location?.state?.useAccessTokenWithScope,
+                likedSongsEndpoint: location?.state?.likedSongsEndpoint
               },
               {
                 withCredentials: true,

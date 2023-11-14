@@ -2,7 +2,10 @@ const {
     generateSpotifyServiceUrl,
     generateTokensWithScope
 } = require('../config/GetAccessToken')
-const { getUserPlaylists } = require('../config/spotifyUserPlaylistInformation')
+const {
+    getUserPlaylists,
+    getUserDisplayName
+} = require('../config/spotifyUserPlaylistInformation')
 const jwt = require('jsonwebtoken');
 
 const ONE_HOUR = 60 * 60 * 1000; /* ms */
@@ -34,9 +37,7 @@ const getAccessToken = async (req, res) => {
             const accessToken = tokens.accessToken
             const refreshToken = tokens.refreshToken
             const userPlaylistData = await getUserPlaylists(accessToken)
-
-            // come back to this for liked songs
-            // const userLikedSongsData = getSpotifyUserLikedSongs(accessToken)
+            const profileData = await getUserDisplayName(accessToken)
 
             if(userPlaylistData) {
                 const currentTime = Date.now()
@@ -59,7 +60,8 @@ const getAccessToken = async (req, res) => {
                 res.status(200).json({ 
                     'userPlaylistData': userPlaylistData,
                     'spotifyUserAccessToken': spotifyUserAccessToken,
-                    'spotifyUserRefreshToken': spotifyUserRefreshToken
+                    'spotifyUserRefreshToken': spotifyUserRefreshToken,
+                    'profileData': profileData
                 });
             } else {
                 res.status(400).json({"message": "error retrieving user playlists"})
@@ -70,14 +72,6 @@ const getAccessToken = async (req, res) => {
     } else {
         res.status(400).json({'message': "spotify login states don't match"})
     }
-}
-
-const getSpotifyUserLikedSongs = async (accessToken) => {
-
-
-
-
-
 }
 
 const encodeSpotifyUserAccessToken = (accessToken, currentTime) => {
