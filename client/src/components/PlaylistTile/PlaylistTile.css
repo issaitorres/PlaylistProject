@@ -4,6 +4,9 @@
     border-radius: var(--form-border-radius);
     text-align: center;
     max-width: 220px;
+    max-height: 250px;
+    cursor: pointer;
+    overflow: hidden;
 }
 
 .playlist-tile:hover {
@@ -21,17 +24,30 @@
     border-top-right-radius: var(--form-border-radius);
     margin: 0px auto;
     width: 100%;
-    height: 85%;
-    text-align: center;
+    height: 70%;
 }
 
-.playlist-tile div {
-    color: var(--text-dark);
-    font-size: 20px;
-    margin: 0px 5px;
-    font-weight: bold;
+.playlist-tile__details-container {
+    padding: 5px;
+}
+
+.playlist-tile__details-container div {
     text-decoration: none;
     text-decoration-line: none;
+    color: var(--text-dark);
+}
+
+.playlist-tile__playlist-name {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.playlist-tile__playlist-owner {
+    font-size: 18px;
+}
+
+.playlist-tile__playlist-trackcount {
+    font-size: 16px;
 }
 
 .playlist-tile:link {

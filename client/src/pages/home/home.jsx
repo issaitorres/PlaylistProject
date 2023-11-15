@@ -5,8 +5,6 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import AddPlaylist from '../../components/AddPlaylist/AddPlaylist'
 import PlaylistTile from '../../components/PlaylistTile/PlaylistTile'
-import SpotifyPlaylistTile from '../../components/SpotifyPlaylistTile/SpotifyPlaylistTile'
-import LikedSongsPlaylistTile from '../../components/LikedSongsPlaylistTile/LikedSongsPlaylistTile'
 import AboutSPA from './AboutSPA'
 import DiscoverPlaylist from "../../components/DiscoverPlaylist/DiscoverPlaylist"
 import {
@@ -159,6 +157,9 @@ const Home = () => {
                         <PlaylistTile
                           key={index}
                           playlist={playlist}
+                          savePlaylist={true}
+                          useAccessTokenWithScope={false}
+                          likedSongsEndpoint={false}
                         />
                       ))}
                     </div>
@@ -167,11 +168,19 @@ const Home = () => {
                     <div className="home__playlist-tile-wrapper">
                       <h1> Your Spotify Playlists</h1>
                       <div className="home__playlist-tile-container">
-                        <LikedSongsPlaylistTile />
+                        <PlaylistTile
+                          playlist={{playlistId: "likedSongs"}}
+                          savePlaylist={false}
+                          useAccessTokenWithScope={true}
+                          likedSongsEndpoint={true}
+                        />
                         {spotifyUserPlaylists.map((playlist, index) => (
-                          <SpotifyPlaylistTile
+                          <PlaylistTile
                             key={index}
                             playlist={playlist}
+                            savePlaylist={false}
+                            useAccessTokenWithScope={true}
+                            likedSongsEndpoint={false}
                           />
                         ))}
                       </div>

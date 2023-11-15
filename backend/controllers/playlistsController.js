@@ -141,8 +141,9 @@ const addPlaylist = async (req, res) => {
                     playlistName: playlistObject.playlistName,
                     playlistOwner: playlistObject.playlistOwner,
                     playlistImage: playlistObject.playlistImage,
+                    totalTracks: playlistObject.totalTracks,
                     playlistDuplicates: playlistObject.playlistDuplicates,
-                    missingTracks: playlistInfo.missingTracks,
+                    missingTracks: playlistObject.missingTracks,
                     trackTable: playlistObject.trackTable
                 }
             } else {
@@ -152,6 +153,7 @@ const addPlaylist = async (req, res) => {
                     playlistName: playlistInfo.playlistName,
                     playlistOwner: playlistInfo.playlistOwner,
                     playlistImage: playlistInfo.playlistImage,
+                    totalTracks: playlistInfo.totalTracks,
                     playlistDuplicates: playlistInfo.duplicates,
                     missingTracks: playlistInfo.missingTracks,
                     trackTable: playlistInfo.trackTable
@@ -222,6 +224,7 @@ const refreshPlaylist = async (req, res) => {
                 playlistName: playlistInfo.playlistName,
                 playlistOwner: playlistInfo.playlistOwner,
                 playlistImage: playlistInfo.playlistImage,
+                totalTracks: playlistInfo.totalTracks,
                 playlistDuplicates: playlistInfo.duplicates,
                 missingTracks: playlistInfo.missingTracks,
                 trackTable: playlistInfo.trackTable
@@ -332,7 +335,6 @@ const excludedProperties = {
     createdAt: 0,
     updatedAt: 0,
     __v: 0,
-    totalTracks: 0,
     snapshotId: 0
 }
 

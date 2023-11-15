@@ -17,7 +17,7 @@ import "./playlist.css"
 
 const Playlist = () => {
   const location = useLocation();
-  const [playlist, setPlaylist] = useState(location?.state?.playlist)
+  const [playlist, setPlaylist] = useState(false)
   const [cookies] = useCookies(["access_token"])
   const navigate = useNavigate()
 

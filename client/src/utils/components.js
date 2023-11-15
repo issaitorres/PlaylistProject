@@ -1,6 +1,14 @@
 
 export const environment = `${process.env.NODE_ENV === "development" ? process.env.REACT_APP_DEV_BACKEND : process.env.REACT_APP_PROD_BACKEND}`
 
+export const shortenString = (string, maxLength) => {
+    var shortenedString = string.slice(0, maxLength)
+    if(shortenedString.length === maxLength) {
+        shortenedString += "..."
+    }
+    return shortenedString
+}
+
 export const validPlaylistIdChecker = (playlistId) => {
     if(playlistId === "likedSongs") return "likedSongs"
     const playlistIdRegex1 = /playlist\/.{22}/
@@ -106,7 +114,7 @@ export const setSpotifyProfileDataInLocalStorage = (data) => {
 }
 
 export const getSpotifyProfileData = () => {
-    const localStorageSpotifyUserProfileData = window?.localStorage?.spotifyUserProfile
+    const localStorageSpotifyUserProfileData = window?.localStorage?.spotifyUserProfileData
     const spotifyUserProfileData = localStorageSpotifyUserProfileData
         ? JSON.parse(localStorageSpotifyUserProfileData)
         : false
