@@ -39,7 +39,6 @@ const getPlaylistInfo = async (
         var res
         try {
             res = await axios.get(spotify_playlists_endpoint, {
-                params: { limit: 50 },
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }

@@ -121,7 +121,7 @@ const addPlaylist = async (req, res) => {
         if(playlistInfo) {
             var filteredPlaylistObject
             if(savePlaylistToDB) {
-                const playlistObject = await Playlist.create({
+                playlistObject = await Playlist.create({
                     playlistId: playlistId,
                     userOwner: mongoUserId,
                     playlistName: playlistInfo.playlistName,

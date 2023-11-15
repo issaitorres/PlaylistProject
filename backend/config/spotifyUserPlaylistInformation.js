@@ -15,6 +15,7 @@ const getUserPlaylists = async (accessToken) => {
         var res
         try {
             res = await axios.get(spotifyUserPlaylistsEndpoint, {
+                params: { limit: 50 },
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
